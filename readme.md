@@ -1,0 +1,1 @@
+This system is an intelligent crime detective platform that reads historical homicide files to help investigators find hidden connections between unsolved murders, predict where a suspect might live or operate, and estimate whether a case is likely to be solved.
