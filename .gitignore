@@ -55,6 +55,7 @@ models/*
 # Generated outputs & evaluation figures
 outputs/*
 !outputs/.gitkeep
+!outputs/*.md
 
 # Environment variables, credentials, and secrets
 .env
