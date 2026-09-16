@@ -149,3 +149,143 @@ def calculate_crime_rate_per_lakh(
     # Replace zero population with NaN to avoid division by zero
     valid_pop = pop.replace(0, np.nan)
     return (inc / valid_pop).round(2)
+
+
+def identify_feature_types(
+    df: pd.DataFrame,
+    target_cols: Optional[List[str]] = None,
+    id_cols: Optional[List[str]] = None,
+    exclude_cols: Optional[List[str]] = None,
+) -> dict:
+    """Classify DataFrame columns into analytical and modeling categories.
+
+    Distinguishes numerical, nominal categorical, temporal, geographic,
+    identifier, and target/leakage features.
+
+    Args:
+        df: Input DataFrame.
+        target_cols: Columns considered target or outcome labels.
+        id_cols: Primary keys or record IDs.
+        exclude_cols: Columns explicitly excluded from modeling.
+
+    Returns:
+        dict: Mapping of category names to lists of column names.
+    """
+    target_cols = target_cols or []
+    id_cols = id_cols or []
+    exclude_cols = exclude_cols or []
+
+    roles = {
+        "numerical": [],
+        "categorical": [],
+        "temporal": [],
+        "geographic": [],
+        "identifier": [],
+        "target": [],
+        "excluded": [],
+    }
+
+    geo_keywords = ["lat", "lon", "district", "city", "state", "coord", "jurisdiction"]
+    temporal_keywords = ["date", "year", "month", "day", "time", "hour"]
+
+    for col in df.columns:
+        if col in target_cols or any(kw in col.lower() for kw in LEAKAGE_INDICATOR_KEYWORDS):
+            roles["target"].append(col)
+        elif col in id_cols or col.lower() in ["uid", "id", "sl_no"]:
+            roles["identifier"].append(col)
+        elif col in exclude_cols:
+            roles["excluded"].append(col)
+        elif any(kw in col.lower() for kw in temporal_keywords):
+            roles["temporal"].append(col)
+        elif any(kw in col.lower() for kw in geo_keywords):
+            roles["geographic"].append(col)
+        elif pd.api.types.is_numeric_dtype(df[col]):
+            roles["numerical"].append(col)
+        else:
+            roles["categorical"].append(col)
+
+    return roles
+
+
+def build_feature_preprocessor(
+    numeric_features: List[str],
+    categorical_features: List[str],
+    impute_strategy: str = "median",
+    scale_numeric: bool = True,
+):
+    """Construct a scikit-learn ColumnTransformer for reproducible preprocessing.
+
+    Encodes nominal categoricals with OneHotEncoder(handle_unknown='ignore')
+    and handles missing continuous numerical values via SimpleImputer followed by StandardScaler.
+
+    Args:
+        numeric_features: Names of numeric columns.
+        categorical_features: Names of categorical columns.
+        impute_strategy: Strategy for SimpleImputer ('median', 'mean').
+        scale_numeric: Whether to apply StandardScaler to numeric columns.
+
+    Returns:
+        ColumnTransformer: Configured preprocessor pipeline.
+    """
+    from sklearn.compose import ColumnTransformer
+    from sklearn.impute import SimpleImputer
+    from sklearn.pipeline import Pipeline
+    from sklearn.preprocessing import OneHotEncoder, StandardScaler
+
+    transformers = []
+
+    if numeric_features:
+        num_steps = [("imputer", SimpleImputer(strategy=impute_strategy))]
+        if scale_numeric:
+            num_steps.append(("scaler", StandardScaler()))
+        num_pipeline = Pipeline(num_steps)
+        transformers.append(("num", num_pipeline, numeric_features))
+
+    if categorical_features:
+        cat_pipeline = Pipeline([
+            ("imputer", SimpleImputer(strategy="constant", fill_value="Unknown")),
+            ("onehot", OneHotEncoder(handle_unknown="ignore", sparse_output=False)),
+        ])
+        transformers.append(("cat", cat_pipeline, categorical_features))
+
+    preprocessor = ColumnTransformer(
+        transformers=transformers,
+        remainder="drop",
+        verbose_feature_names_out=False,
+    )
+    return preprocessor
+
+
+def get_preprocessor_feature_names(
+    preprocessor,
+    numeric_features: List[str],
+    categorical_features: List[str],
+) -> List[str]:
+    """Retrieve output feature names from a fitted ColumnTransformer.
+
+    Safely falls back across scikit-learn versions.
+
+    Args:
+        preprocessor: Fitted ColumnTransformer instance.
+        numeric_features: List of input numeric column names.
+        categorical_features: List of input categorical column names.
+
+    Returns:
+        List[str]: List of transformed output feature names.
+    """
+    if hasattr(preprocessor, "get_feature_names_out"):
+        try:
+            return list(preprocessor.get_feature_names_out())
+        except Exception:
+            pass
+
+    feature_names = list(numeric_features)
+    if categorical_features and "cat" in preprocessor.named_transformers_:
+        cat_step = preprocessor.named_transformers_["cat"]
+        onehot = cat_step.named_steps.get("onehot")
+        if onehot and hasattr(onehot, "get_feature_names_out"):
+            feature_names.extend(list(onehot.get_feature_names_out(categorical_features)))
+        else:
+            feature_names.extend(categorical_features)
+    return feature_names
+
