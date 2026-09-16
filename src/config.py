@@ -18,6 +18,7 @@ PROCESSED_DATA_DIR: Path = DATA_DIR / "processed"
 MODELS_DIR: Path = PROJECT_ROOT / "models"
 NOTEBOOKS_DIR: Path = PROJECT_ROOT / "notebooks"
 OUTPUTS_DIR: Path = PROJECT_ROOT / "outputs"
+GEOGRAPHIC_OUTPUTS_DIR: Path = OUTPUTS_DIR / "geographic"
 ASSETS_DIR: Path = PROJECT_ROOT / "assets"
 SRC_DIR: Path = PROJECT_ROOT / "src"
 TESTS_DIR: Path = PROJECT_ROOT / "tests"
@@ -45,6 +46,7 @@ def get_project_paths() -> Dict[str, Path]:
         "MODELS_DIR": MODELS_DIR,
         "NOTEBOOKS_DIR": NOTEBOOKS_DIR,
         "OUTPUTS_DIR": OUTPUTS_DIR,
+        "GEOGRAPHIC_OUTPUTS_DIR": GEOGRAPHIC_OUTPUTS_DIR,
         "ASSETS_DIR": ASSETS_DIR,
         "SRC_DIR": SRC_DIR,
         "TESTS_DIR": TESTS_DIR,
