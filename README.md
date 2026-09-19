@@ -40,9 +40,9 @@ The project is developed collaboratively by a two-member engineering team with c
 | **Tamil Nadu Crime Analytics** | - | **Primary Owner** | Completed (Day 3) |
 | **Locally Weighted Regression (LWR) / Spatial Profiling** | - | **Primary Owner** | Completed (Day 4) |
 | **Folium Geospatial Visualization** | - | **Primary Owner** | Completed (Day 4) |
-| **ID3 Decision Tree Classifier** | - | **Primary Owner** | Planned (Day 5) |
-| **Naive Bayes Classifier** | - | **Primary Owner** | Planned (Day 5) |
-| **k-Nearest Neighbors (k-NN) Classifier** | - | **Primary Owner** | Planned (Day 5) |
+| **ID3 Decision Tree Classifier** | - | **Primary Owner** | Completed (Day 5) |
+| **Naive Bayes Classifier** | - | **Primary Owner** | Completed (Day 5) |
+| **k-Nearest Neighbors (k-NN) Classifier** | - | **Primary Owner** | Completed (Day 5) |
 | **Artificial Neural Networks (ANN)** | Primary Owner | Clean Interface Integration | Person A |
 | **Bayesian Belief Networks (BBN)** | Primary Owner | Clean Interface Integration | Person A |
 | **K-Means & Hierarchical Clustering** | Primary Owner | Clean Interface Integration | Person A |
@@ -53,7 +53,7 @@ The project is developed collaboratively by a two-member engineering team with c
 
 ## 4. Current Development Progress
 
-**Phase: Day 4 Complete — Geographic Profiling and Locally Weighted Regression (LWR)**
+**Phase: Day 5 Complete — Classical Machine Learning Models for Case Solvability**
 
 - [x] **Day 1: Foundation & Data Engineering Setup**
   - Portable configuration module ([`src/config.py`](file:///home/Dharsit/ML-Project/Crimora/src/config.py))
@@ -85,7 +85,38 @@ The project is developed collaboratively by a two-member engineering team with c
   - Interactive Folium web map ([`outputs/geographic/geographic_profile.html`](file:///home/Dharsit/ML-Project/Crimora/outputs/geographic/geographic_profile.html))
   - Person B analytics notebook updated ([`notebooks/PersonB_Analytics.ipynb`](file:///home/Dharsit/ML-Project/Crimora/notebooks/PersonB_Analytics.ipynb))
   - Spatial unit and integration tests ([`tests/test_geographic.py`](file:///home/Dharsit/ML-Project/Crimora/tests/test_geographic.py))
-- [ ] **Day 5 (Upcoming): Classification Models (Decision Trees, Naive Bayes, k-NN)**
+- [x] **Day 5: Classical Machine Learning Models (Decision Trees, Naive Bayes, k-NN)**
+  - Target variable audit (`is_solved`: 50.8% Class 0 vs 49.2% Class 1; natural balance verified)
+  - Strict target leakage prevention (excluding `disposition`, PII, and identifiers)
+  - Preprocessing ColumnTransformer fitted strictly on training data
+  - ID3 Decision Tree (`criterion="entropy"`, regularized `max_depth=8`)
+  - Naive Bayes (`GaussianNB`) baseline probabilistic solver
+  - Scaled k-NN (`KNeighborsClassifier`, $k=15$, distance-weighted with `StandardScaler`)
+  - Reusable modeling module ([`src/classical_models.py`](src/classical_models.py))
+  - Evaluation diagnostics module ([`src/model_evaluation.py`](src/model_evaluation.py))
+  - Classical pipeline runner ([`src/run_classical_pipeline.py`](src/run_classical_pipeline.py))
+  - Serialized model artifacts in `models/classical/`
+  - Metric reports in `outputs/classical/model_metrics.csv` and `outputs/classical/classification_reports.csv`
+  - Diagnostic figures in `outputs/classical/confusion_matrices/` and `outputs/classical/roc_curves/`
+  - Person B analytics notebook updated with all 12 Day 5 sections
+  - Classical modeling unit tests ([`tests/test_classical_models.py`](tests/test_classical_models.py))
+- [ ] **Day 6 (Upcoming): Advanced / Ensemble Modeling**
+
+### Day 5 Classical Model Performance Summary
+
+#### Holdout Test Set ($N=10,436$ stratified test samples)
+| Model | Accuracy | Precision (Solved) | Recall (Solved) | F1-Score (Solved) | ROC-AUC |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **ID3 Decision Tree** | 0.5887 | 0.5586 | 0.7829 | 0.6520 | 0.6347 |
+| **Naive Bayes (Gaussian)** | 0.5894 | 0.6055 | 0.4750 | 0.5324 | 0.6352 |
+| **k-NN (Scaled, $k=15$)** | 0.5959 | 0.5915 | 0.5776 | 0.5845 | 0.6312 |
+
+#### Stratified 5-Fold Cross-Validation ($N=41,743$ training samples)
+| Model | CV Accuracy (Mean $\pm$ Std) | CV Precision | CV Recall | CV F1-Score | CV ROC-AUC |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **ID3 Decision Tree** | 0.5911 $\pm$ 0.0051 | 0.5666 | 0.7235 | 0.6348 | 0.6344 |
+| **Naive Bayes (Gaussian)** | 0.5855 $\pm$ 0.0050 | 0.6024 | 0.4650 | 0.5241 | 0.6288 |
+| **k-NN (Scaled, $k=15$)** | 0.5950 $\pm$ 0.0028 | 0.5904 | 0.5771 | 0.5837 | 0.6339 |
 
 ---
 
@@ -112,11 +143,15 @@ Crimora/
 │       └── tn_murder_2023_clean.csv
 │
 ├── models/                             # Serialized model artifacts
-│   └── pca_model.joblib                # Fitted PCA pipeline bundle
+│   ├── pca_model.joblib                # Fitted PCA pipeline bundle
+│   └── classical/                      # Day 5 Classical ML models
+│       ├── decision_tree_id3.joblib    # ID3 Decision Tree classifier
+│       ├── naive_bayes.joblib          # Gaussian Naive Bayes classifier
+│       └── knn.joblib                  # Scaled k-NN classifier
 │
 ├── notebooks/
 │   ├── PersonA_Model_Training.ipynb    # Person A modeling notebook
-│   └── PersonB_Analytics.ipynb         # Person B analytics notebook (Days 1–4)
+│   └── PersonB_Analytics.ipynb         # Person B analytics notebook (Days 1–5)
 │
 ├── src/                                # Core reusable Python modules
 │   ├── __init__.py
@@ -129,8 +164,11 @@ Crimora/
 │   ├── tn_analytics.py                 # Tamil Nadu district analytics
 │   ├── geo_utils.py                    # Coordinate validation, distance, grids
 │   ├── lwr_profiler.py                 # Kernel spatial profiling and LWR solver
+│   ├── classical_models.py             # Day 5 Classical ML pipelines
+│   ├── model_evaluation.py             # Evaluation metrics, CV, and plots
 │   ├── run_cleaning_pipeline.py        # Day 2 pipeline runner
-│   └── run_geographic_pipeline.py      # Day 4 spatial profiling pipeline runner
+│   ├── run_geographic_pipeline.py      # Day 4 spatial profiling pipeline runner
+│   └── run_classical_pipeline.py       # Day 5 classical ML pipeline runner
 │
 ├── outputs/                            # Generated reports, CSVs, and visualizations
 │   ├── person_b_feature_dictionary.md  # Detailed feature documentation
@@ -150,23 +188,29 @@ Crimora/
 │   │   ├── yearly_crime_trends.png
 │   │   ├── crime_rate_vs_population_2022.png
 │   │   └── murder_rate_by_district_2023.png
-│   └── geographic/                     # Day 4 Geographic profiling artifacts
-│       ├── crime_coordinates.csv       # PII-free sanitized coordinate export
-│       ├── geographic_grid.csv         # Regular 2D mesh grid with intensity
-│       ├── hotspot_summary.csv         # Ranked analytical hotspot centroids
-│       ├── incident_distribution.png   # Point pattern scatter with KDE contours
-│       ├── intensity_surface.png       # Continuous normalized intensity heatmap
-│       ├── hotspot_analysis.png        # Hotspot centroids & 95th percentile boundary
-│       ├── incidents_vs_intensity.png  # Raw incidents vs activity area surface
-│       └── geographic_profile.html     # Interactive Folium map
+│   ├── geographic/                     # Day 4 Geographic profiling artifacts
+│   │   ├── crime_coordinates.csv       # PII-free sanitized coordinate export
+│   │   ├── geographic_grid.csv         # Regular 2D mesh grid with intensity
+│   │   ├── hotspot_summary.csv         # Ranked analytical hotspot centroids
+│   │   ├── incident_distribution.png   # Point pattern scatter with KDE contours
+│   │   ├── intensity_surface.png       # Continuous normalized intensity heatmap
+│   │   ├── hotspot_analysis.png        # Hotspot centroids & 95th percentile boundary
+│   │   ├── incidents_vs_intensity.png  # Raw incidents vs activity area surface
+│   │   └── geographic_profile.html     # Interactive Folium map
+│   └── classical/                      # Day 5 Classical ML outputs
+│       ├── model_metrics.csv           # Model performance and 5-fold CV metrics
+│       ├── classification_reports.csv  # Precision, recall, f1, support per class
+│       ├── confusion_matrices/         # Confusion matrix heatmaps
+│       └── roc_curves/                 # Multi-model ROC comparison curves
 │
-└── tests/                              # Automated test suites (39 passing tests)
+└── tests/                              # Automated test suites (47 passing tests)
     ├── __init__.py
     ├── test_config.py                  # Path and configuration tests
     ├── test_cleaning.py                # Data cleaning and feature tests
     ├── test_pca_analysis.py            # PCA pipeline and leakage isolation tests
-    ├── test_tn_analytics.py            # Tamil Nadu analytics and rate calculation tests
-    └── test_geographic.py             # Spatial validation, distance, and LWR tests
+    ├── test_tn_analytics.py            # Tamil Nadu analytics tests
+    ├── test_geographic.py             # Spatial validation, distance, and LWR tests
+    └── test_classical_models.py        # Classical ML and evaluation tests
 ```
 
 ---
@@ -185,26 +229,26 @@ Crimora/
 
 ## 7. Quickstart & Verification
 
-### Running the Test Suite
-Execute the comprehensive automated test suite (all 39 tests pass with 100% success):
+### Running the Complete Test Suite
+Execute all 47 automated tests (100% pass rate):
 ```bash
 pytest tests/ -v
 ```
 
-### Running the Day 2 Cleaning Pipeline
+### Running Pipeline Runners
 ```bash
+# Day 2 Data Cleaning Pipeline
 python src/run_cleaning_pipeline.py
-```
 
-### Running the Day 3 PCA & Tamil Nadu Analytics Pipelines
-```bash
+# Day 3 PCA & Tamil Nadu Analytics Pipelines
 python src/pca_analysis.py
 python src/tn_analytics.py
-```
 
-### Running the Day 4 Geographic Profiling Pipeline
-```bash
+# Day 4 Geographic Profiling & LWR Pipeline
 python src/run_geographic_pipeline.py
+
+# Day 5 Classical Machine Learning Pipeline
+python src/run_classical_pipeline.py
 ```
 
 ---
@@ -212,7 +256,9 @@ python src/run_geographic_pipeline.py
 ## 8. Data Ethics & Responsible-Use Statement
 
 This platform is strictly an academic decision-support prototype. In accordance with ethical machine learning principles:
-- **Decision-Support Only**: Outputs assist analysts in organizing historical patterns; they do not replace human investigative discretion.
-- **Defensible Terminology**: Results are framed as *historical crime concentrations*, *spatial patterns*, *geographic activity-area estimates*, and *analytical hotspots*.
-- **No Accusations or Residence Inference**: The system makes **no assertion** regarding an individual's residence, identity, or guilt.
-- **Privacy Safeguards**: All personally identifiable information (PII) such as victim names is excluded from analytical exports.
+- **Decision-Support Only**: Outputs assist human analysts in organizing historical patterns; they do not replace human investigative discretion.
+- **Defensible Terminology**: Results are framed as *case solvability predictions*, *model estimates*, and *historical patterns*.
+- **No Guarantees or Accusations**: The system makes **no assertion** that a real-world case will or will not be solved, nor does it establish individual culpability.
+- **Privacy Safeguards**: All personally identifiable information (PII) such as victim names is excluded from analytical models.
+- **Spatial Estimates**: Geographic profiling reflects historical activity areas and crime concentration surfaces, never suspect residence.
+
