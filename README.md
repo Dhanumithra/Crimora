@@ -43,17 +43,17 @@ The project is developed collaboratively by a two-member engineering team with c
 | **ID3 Decision Tree Classifier** | - | **Primary Owner** | Completed (Day 5) |
 | **Naive Bayes Classifier** | - | **Primary Owner** | Completed (Day 5) |
 | **k-Nearest Neighbors (k-NN) Classifier** | - | **Primary Owner** | Completed (Day 5) |
+| **Streamlit Dashboard UI Architecture & Multi-Page Shell** | - | **Primary Owner** | Completed (Day 6) |
 | **Artificial Neural Networks (ANN)** | Primary Owner | Clean Interface Integration | Person A |
 | **Bayesian Belief Networks (BBN)** | Primary Owner | Clean Interface Integration | Person A |
 | **K-Means & Hierarchical Clustering** | Primary Owner | Clean Interface Integration | Person A |
 | **Behavioral & Crime Linkage Models** | Primary Owner | Interface & Evaluation | Person A |
-| **Streamlit Dashboard UI Architecture** | - | **Primary Owner** | Planned (Day 9–10) |
 
 ---
 
 ## 4. Current Development Progress
 
-**Phase: Day 5 Complete — Classical Machine Learning Models for Case Solvability**
+**Phase: Day 6 Complete — Complete Streamlit Application Shell & Multi-Page Analytics Dashboard**
 
 - [x] **Day 1: Foundation & Data Engineering Setup**
   - Portable configuration module ([`src/config.py`](file:///home/Dharsit/ML-Project/Crimora/src/config.py))
@@ -98,9 +98,24 @@ The project is developed collaboratively by a two-member engineering team with c
   - Serialized model artifacts in `models/classical/`
   - Metric reports in `outputs/classical/model_metrics.csv` and `outputs/classical/classification_reports.csv`
   - Diagnostic figures in `outputs/classical/confusion_matrices/` and `outputs/classical/roc_curves/`
-  - Person B analytics notebook updated with all 12 Day 5 sections
   - Classical modeling unit tests ([`tests/test_classical_models.py`](tests/test_classical_models.py))
-- [ ] **Day 6 (Upcoming): Advanced / Ensemble Modeling**
+- [x] **Day 6: Streamlit Application Shell & Multi-Page Dashboard**
+  - Application entry point with responsive layout & navigation ([`app.py`](app.py))
+  - Custom UI theme & CSS stylesheet ([`src/ui/styles.py`](src/ui/styles.py))
+  - Modular UI component library ([`src/ui/components.py`](src/ui/components.py))
+  - Robust cached Data Service layer ([`src/services/data_service.py`](src/services/data_service.py))
+  - Cached Model & Real-Time Inference Service layer ([`src/services/model_service.py`](src/services/model_service.py))
+  - **7 Functional Multi-Page Dashboards:**
+    1. **Overview / Dashboard** ([`src/pages/overview.py`](src/pages/overview.py)): KPIs, architecture matrix, PCA variance tabs
+    2. **Crime Linkage** ([`src/pages/crime_linkage.py`](src/pages/crime_linkage.py)): Person A placeholder with similarity parameter controls
+    3. **Geographic Analysis** ([`src/pages/geographic_analysis.py`](src/pages/geographic_analysis.py)): Folium HTML map embed, hotspot rankings, spatial diagnostics
+    4. **Behavioral Profiling** ([`src/pages/behavioral_profiling.py`](src/pages/behavioral_profiling.py)): Person A placeholder with BBN schema specification
+    5. **Case Solvability** ([`src/pages/case_solvability.py`](src/pages/case_solvability.py)): Real-time case scoring form, confidence gauge, diagnostic plots
+    6. **Tamil Nadu Analytics** ([`src/pages/tamil_nadu_analytics.py`](src/pages/tamil_nadu_analytics.py)): District rankings, longitudinal trends (2020-2022), publication figures
+    7. **Model Comparison** ([`src/pages/model_comparison.py`](src/pages/model_comparison.py)): Holdout test leaderboard, 5-fold CV stability, ROC curves, Person A roadmap
+  - Streamlit test suite ([`tests/test_streamlit_app.py`](tests/test_streamlit_app.py))
+- [ ] **Day 7 (Upcoming): Final Integration, Full Pipeline Validation & Polish**
+
 
 ### Day 5 Classical Model Performance Summary
 
@@ -168,7 +183,24 @@ Crimora/
 │   ├── model_evaluation.py             # Evaluation metrics, CV, and plots
 │   ├── run_cleaning_pipeline.py        # Day 2 pipeline runner
 │   ├── run_geographic_pipeline.py      # Day 4 spatial profiling pipeline runner
-│   └── run_classical_pipeline.py       # Day 5 classical ML pipeline runner
+│   ├── run_classical_pipeline.py       # Day 5 classical ML pipeline runner
+│   ├── ui/                             # Day 6 UI Theme & Component system
+│   │   ├── __init__.py
+│   │   ├── styles.py                   # Executive styling tokens & CSS injection
+│   │   └── components.py               # Reusable headers, cards, badges, alerts
+│   ├── services/                       # Day 6 Cached data & model inference services
+│   │   ├── __init__.py
+│   │   ├── data_service.py             # Cached data artifact accessors
+│   │   └── model_service.py            # Cached model inference & scoring engine
+│   └── pages/                          # Day 6 Multi-page dashboard modules
+│       ├── __init__.py
+│       ├── overview.py                 # Executive Dashboard & PCA variance
+│       ├── crime_linkage.py            # Serial incident linkage (Person A)
+│       ├── geographic_analysis.py      # Spatial KDE, LWR & Folium map
+│       ├── behavioral_profiling.py     # M.O. & BBN causal modeling (Person A)
+│       ├── case_solvability.py         # Real-time scoring via ID3, NB, k-NN
+│       ├── tamil_nadu_analytics.py     # District rankings & longitudinal trends
+│       └── model_comparison.py         # Benchmarks, 5-fold CV & ROC curves
 │
 ├── outputs/                            # Generated reports, CSVs, and visualizations
 │   ├── person_b_feature_dictionary.md  # Detailed feature documentation
@@ -203,14 +235,15 @@ Crimora/
 │       ├── confusion_matrices/         # Confusion matrix heatmaps
 │       └── roc_curves/                 # Multi-model ROC comparison curves
 │
-└── tests/                              # Automated test suites (47 passing tests)
+└── tests/                              # Automated test suites (61 passing tests)
     ├── __init__.py
     ├── test_config.py                  # Path and configuration tests
     ├── test_cleaning.py                # Data cleaning and feature tests
     ├── test_pca_analysis.py            # PCA pipeline and leakage isolation tests
     ├── test_tn_analytics.py            # Tamil Nadu analytics tests
     ├── test_geographic.py             # Spatial validation, distance, and LWR tests
-    └── test_classical_models.py        # Classical ML and evaluation tests
+    ├── test_classical_models.py        # Classical ML and evaluation tests
+    └── test_streamlit_app.py           # Streamlit UI, services & inference tests
 ```
 
 ---
@@ -220,7 +253,7 @@ Crimora/
 - **Language**: Python 3.10+ (tested on Python 3.14)
 - **Data Engineering**: `pandas`, `numpy`, `scipy`
 - **Machine Learning**: `scikit-learn`, `joblib`
-- **Geographic Information Systems**: `folium`
+- **Geographic Information Systems**: `folium`, `streamlit-folium`
 - **Visualization**: `matplotlib`, `seaborn`
 - **Web Interface**: `streamlit`
 - **Testing & Quality Assurance**: `pytest`, `unittest`
@@ -229,11 +262,18 @@ Crimora/
 
 ## 7. Quickstart & Verification
 
+### Launching the Interactive Streamlit Dashboard
+```bash
+streamlit run app.py
+```
+*Access the multi-page dashboard locally at `http://localhost:8501`.*
+
 ### Running the Complete Test Suite
-Execute all 47 automated tests (100% pass rate):
+Execute all 61 automated tests across Days 1–6 (100% pass rate):
 ```bash
 pytest tests/ -v
 ```
+
 
 ### Running Pipeline Runners
 ```bash
