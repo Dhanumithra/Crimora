@@ -1,7 +1,7 @@
-"""src/pages/model_comparison.py - Classical & Advanced Model Benchmarking.
+"""src/pages/model_comparison.py - Comprehensive Model Benchmarking & Status.
 
-Presents rigorous comparative evaluation of Day 5 Classical ML models
-(Decision Tree, Naive Bayes, k-NN) alongside reserved slots for Person A advanced models.
+Day 7 Enhancement: Full model registry view showing all integrated and
+unavailable models, Day 5 classical benchmarks, and diagnostic visualizations.
 """
 
 from __future__ import annotations
@@ -20,6 +20,7 @@ from src.services.data_service import (
     get_classical_model_metrics,
     get_classification_reports,
 )
+from src.services.model_service import get_model_registry
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 OUTPUTS_DIR = BASE_DIR / "outputs" / "classical"
@@ -28,148 +29,174 @@ OUTPUTS_DIR = BASE_DIR / "outputs" / "classical"
 def render_model_comparison_page() -> None:
     """Render the Model Comparison & Benchmarking page."""
     render_page_header(
-        title="Comprehensive Model Benchmarking & Evaluation",
-        subtitle="Empirical performance audit of classical machine learning models evaluated on stratified test split and 5-fold cross-validation.",
+        title="Model Benchmarking & Integration Status",
+        subtitle="Complete registry of all trained models, integration status, and empirical performance metrics.",
+        icon="📈",
         badge_text="Module 07",
-        badge_color="purple",
+        badge_type="active",
     )
 
-    metrics_df = get_classical_model_metrics()
-    reports_df = get_classification_reports()
-
     tab1, tab2, tab3, tab4 = st.tabs([
+        "Model Registry",
         "Benchmark Leaderboard",
-        "Cross-Validation Stability",
         "Diagnostic Curves",
-        "Roadmap: Advanced Models (Person A)",
+        "Roadmap",
     ])
 
     with tab1:
-        _render_leaderboard_tab(metrics_df)
-
+        _render_registry_tab()
     with tab2:
-        _render_cv_stability_tab(metrics_df)
-
+        _render_leaderboard_tab()
     with tab3:
         _render_curves_tab()
-
     with tab4:
         _render_roadmap_tab()
 
     render_responsible_notice()
 
 
-def _render_leaderboard_tab(metrics_df: pd.DataFrame) -> None:
-    """Render test split leaderboard comparing models across accuracy, F1, and AUC."""
+def _render_registry_tab() -> None:
+    """Show full model registry with real availability status."""
     render_section_header(
-        title="Stratified Holdout Evaluation Leaderboard (20% Test Split)",
-        description="Models trained without target leakage and evaluated on unseen cases. Resampling (SMOTE) applied strictly within training folds.",
+        title="Model Integration Registry (Day 7)",
+        description="Real-time availability check of all model artifacts in the models/ directory.",
     )
 
+    registry = get_model_registry()
+    rows = []
+    for key, info in registry.items():
+        rows.append({
+            "Model": info["name"],
+            "Owner": info["owner"],
+            "Task": info["task"],
+            "Status": "✅ Loaded" if info["available"] else "❌ Unavailable",
+            "Reason / Note": info.get("reason", ""),
+        })
+
+    df_reg = pd.DataFrame(rows)
+    # Style available vs unavailable
+    def highlight_status(row):
+        if "✅" in row["Status"]:
+            return ["background-color: #f0fdf4"] * len(row)
+        else:
+            return ["background-color: #fef2f2"] * len(row)
+
+    st.dataframe(
+        df_reg.style.apply(highlight_status, axis=1),
+        use_container_width=True,
+        hide_index=True,
+    )
+
+    loaded = sum(1 for v in registry.values() if v["available"])
+    total = len(registry)
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Models Loaded", f"{loaded}/{total}")
+    with col2:
+        st.metric("Person B Models", f"{sum(1 for v in registry.values() if v['available'] and v['owner']=='Person B')}")
+    with col3:
+        st.metric("Person A Models Active", f"{sum(1 for v in registry.values() if v['available'] and v['owner']=='Person A')}")
+
+
+def _render_leaderboard_tab(metrics_df: pd.DataFrame = None) -> None:
+    """Render test split leaderboard."""
+    render_section_header(
+        title="Stratified Holdout Evaluation (20% Test Split)",
+        description="Classical models trained without target leakage on 41,743 samples, evaluated on 10,436 held-out cases.",
+    )
+
+    metrics_df = get_classical_model_metrics()
     if metrics_df.empty:
-        st.warning("Model metrics file (outputs/classical/model_metrics.csv) not found.")
+        st.warning("outputs/classical/model_metrics.csv not found.")
         return
 
-    # Filter columns for holdout test
-    test_cols = [c for c in metrics_df.columns if "test" in c or c in ["model", "model_name"]]
-    if test_cols:
-        st.dataframe(metrics_df[test_cols], use_container_width=True, hide_index=True)
-    else:
-        st.dataframe(metrics_df, use_container_width=True, hide_index=True)
+    st.dataframe(metrics_df, use_container_width=True, hide_index=True)
 
-    # Best performer highlight
-    if "test_roc_auc" in metrics_df.columns:
-        best_model_row = metrics_df.sort_values(by="test_roc_auc", ascending=False).iloc[0]
-        st.markdown(
-            f"""
-            > **Top Performing Architecture:** **{best_model_row.get('model_name', best_model_row.get('model', 'N/A'))}** 
-            > achieved highest discriminant power with **ROC-AUC: {best_model_row['test_roc_auc']:.4f}** 
-            > and **Test F1-Score: {best_model_row.get('test_f1', 0.0):.4f}**.
-            """
+    # Best performer
+    if "roc_auc" in metrics_df.columns:
+        best = metrics_df.sort_values("roc_auc", ascending=False).iloc[0]
+        st.info(
+            f"**Top ROC-AUC:** **{best.get('model', 'N/A')}** — "
+            f"AUC: {best['roc_auc']:.4f} | "
+            f"F1: {best.get('f1_score', 0.0):.4f} | "
+            f"Accuracy: {best.get('accuracy', 0.0):.4f}"
         )
 
-    # Bar chart comparison of test metrics
-    chart_cols = [c for c in ["test_accuracy", "test_precision", "test_recall", "test_f1", "test_roc_auc"] if c in metrics_df.columns]
-    if chart_cols and "model_name" in metrics_df.columns:
-        chart_data = metrics_df.set_index("model_name")[chart_cols]
-        st.markdown("#### Multi-Metric Comparison")
-        st.bar_chart(chart_data, use_container_width=True)
+    # Chart
+    chart_cols = [c for c in ["accuracy", "precision", "recall", "f1_score", "roc_auc"] if c in metrics_df.columns]
+    if chart_cols and "model" in metrics_df.columns:
+        st.markdown("#### Performance Comparison")
+        st.bar_chart(metrics_df.set_index("model")[chart_cols], use_container_width=True)
 
+    # Classification reports
+    reports_df = get_classification_reports()
+    if not reports_df.empty:
+        st.markdown("#### Detailed Per-Class Reports")
+        st.dataframe(reports_df, use_container_width=True, hide_index=True)
 
-def _render_cv_stability_tab(metrics_df: pd.DataFrame) -> None:
-    """Render 5-fold cross-validation stability analysis."""
-    render_section_header(
-        title="5-Fold Cross-Validation Stability Analysis",
-        description="Assessing model variance and generalization consistency across stratified folds.",
-    )
-
-    if metrics_df.empty:
-        st.warning("Model metrics data unavailable.")
-        return
-
-    cv_cols = [c for c in metrics_df.columns if "cv" in c or c in ["model", "model_name"]]
-    if cv_cols:
+    # 5-fold CV metrics
+    cv_cols = [c for c in metrics_df.columns if "cv" in c or c == "model"]
+    if len(cv_cols) > 1:
+        st.markdown("#### 5-Fold Cross-Validation Stability")
         st.dataframe(metrics_df[cv_cols], use_container_width=True, hide_index=True)
-    else:
-        st.info("Cross-validation specific columns not found in metrics summary.")
 
 
 def _render_curves_tab() -> None:
-    """Render combined ROC curves and confusion matrix artifacts."""
+    """Render combined diagnostic images."""
     render_section_header(
-        title="Comparative ROC Curves & Confusion Matrices",
-        description="Diagnostic curves visual comparison across ID3 Decision Tree, Naive Bayes, and k-NN.",
+        title="ROC Curves & Confusion Matrices",
+        description="Generated during Day 5 classical pipeline execution.",
     )
-
     col1, col2 = st.columns(2)
     with col1:
-        roc_img = OUTPUTS_DIR / "roc_curves_combined.png"
-        if roc_img.exists():
-            st.image(str(roc_img), caption="Combined ROC Curves (Holdout Split)", use_container_width=True)
+        roc = OUTPUTS_DIR / "roc_curves_combined.png"
+        if roc.exists():
+            st.image(str(roc), caption="Combined ROC Curves", use_container_width=True)
         else:
             st.info("Combined ROC plot not found.")
-
     with col2:
-        cm_img = OUTPUTS_DIR / "confusion_matrices_combined.png"
-        if cm_img.exists():
-            st.image(str(cm_img), caption="Normalized Confusion Matrices Comparison", use_container_width=True)
+        cm = OUTPUTS_DIR / "confusion_matrices" / "confusion_matrices_combined.png"
+        if cm.exists():
+            st.image(str(cm), caption="Confusion Matrices", use_container_width=True)
         else:
-            st.info("Combined Confusion Matrix plot not found.")
+            st.info("Combined confusion matrix plot not found.")
 
 
 def _render_roadmap_tab() -> None:
-    """Display upcoming advanced models roadmap (Person A)."""
+    """Display dependency requirements and upcoming model roadmap."""
     render_section_header(
-        title="Person A Advanced Models Integration Roadmap",
-        description="Reserved benchmarking slots for Person A deep learning and probabilistic models.",
+        title="Person A Models — Activation Requirements",
+        description="Model artifacts are present on disk. Runtime dependencies prevent loading.",
     )
 
     col1, col2 = st.columns(2)
     with col1:
-        st.markdown("#### Artificial Neural Network (ANN / MLP)")
+        st.markdown("#### 🧠 ANN — Artificial Neural Network")
         st.markdown(
             """
-            * **Status:** Scheduled for Person A Day 5/7 integration
-            * **Architecture:** Multi-Layer Perceptron (MLP) with Dropout and ReLU activations
-            * **Loss Function:** Binary Cross-Entropy with class weight calibration
-            * **Expected Role:** Capture non-linear feature interactions between temporal rhythms and spatial coordinates
+            | Item | Status |
+            |:---|:---|
+            | **Artifact file** | `models/solvability_ann.keras` (1.47 MB) ✅ |
+            | **ANN Scaler** | `models/ann_scaler.pkl` — sklearn version mismatch ⚠️ |
+            | **Runtime** | TensorFlow / Keras — NOT installed ❌ |
+            | **Activation** | `pip install tensorflow` |
             """
         )
-        st.info("ANN benchmark results will be displayed once Person A completes model training.")
 
     with col2:
-        st.markdown("#### Bayesian Belief Network (BBN)")
+        st.markdown("#### 🕸️ BBN — Bayesian Belief Network")
         st.markdown(
             """
-            * **Status:** Scheduled for Person A Day 5/7 integration
-            * **Inference Engine:** Exact variable elimination / Loopy belief propagation
-            * **Structural Form:** Directed Acyclic Graph (DAG) over observable crime attributes
-            * **Expected Role:** Transparent causal reasoning and probabilistic query answering under missing evidence
+            | Item | Status |
+            |:---|:---|
+            | **Artifact file** | `models/bbn_profile.pkl` (1.96 KB) ✅ |
+            | **Runtime** | pgmpy — NOT installed ❌ |
+            | **Activation** | `pip install pgmpy` |
             """
         )
-        st.info("BBN benchmark results will be displayed once Person A completes model training.")
 
     render_alert(
-        "Benchmarking tables will dynamically incorporate ANN and BBN metrics upon completion without altering classical ML baseline benchmarks.",
-        alert_type="info",
+        "Installing the required libraries will enable ANN and BBN inference without any code changes. "
+        "The model service will automatically detect and load them on the next app restart.",
+        "info",
     )
