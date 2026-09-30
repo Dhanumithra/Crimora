@@ -133,6 +133,27 @@ The project is developed collaboratively by a two-member engineering team with c
     - ❌ BBN — `bbn_profile.pkl` present, requires `pip install pgmpy`
   - Expanded test suite ([`tests/test_streamlit_app.py`](tests/test_streamlit_app.py)): 32 tests covering all model integrations, cluster assignments, registry validation
   - **Total test coverage: 79/79 passing across all test modules**
+- [x] **Day 8: UI Polish, Input Validation, Hardening & Final Pre-Deployment QA**
+  - **UI Polish:**
+    - Added Inter font via Google Fonts for professional typographic rendering
+    - Refined CSS: card variants (`crimora-card-success/warning/error`), consistent spacing, improved badge sizing, form element border-radius, empty-state helper class
+    - Fixed deprecated `use_column_width=True` → `use_container_width=True` across all pages
+  - **Bug Fixes:**
+    - Fixed `tamil_nadu_analytics.py`: wrong column `total_crimes` → `total_crime_2020_2022`; wrong yearly column → `total_crime_count`; `badge_color` param → `badge_type`
+    - Fixed figure filenames to reference only files that exist in `outputs/tamil_nadu/`
+    - Fixed architecture table in overview: K-Means/Hierarchical now shows "Integrated (Day 7)", BBN shows "Dep. Missing"
+  - **Input Validation (`src/ui/components.py`):**
+    - `validate_numeric_input()` — range, NaN, Inf, None, non-numeric
+    - `validate_categorical_input()` — blank, None, allowed-set checking
+    - `validate_coordinate()` — lat [-90,90], lon [-180,180]
+    - `show_validation_errors()` — renders error list, returns bool
+  - **Geographic Page:** Coordinate validation before hotspot table render; renamed columns for readability (Rank, Latitude, Longitude, Est./Norm. Intensity); search filter XSS-safe
+  - **Responsible Use Notice:** Expanded with explicit bullet list of what outputs must NOT be interpreted as
+  - **`render_placeholder_interface`:** Accepts legacy kwargs from Day 6/7 callers without crash
+  - **`render_model_score_badge`:** Guarded probability against NaN/Inf
+  - **Performance:** Verified all 7 data-loading and 4 model-loading functions are decorated with `@st.cache_data` / `@st.cache_resource`
+  - **New test file:** [`tests/test_day8_polish.py`](tests/test_day8_polish.py) — 53 tests covering validation, TN column correctness, geographic coordinate checks, model service hardening, caching decoration, and full startup import
+  - **Total test coverage: 132/132 passing (79 existing + 53 new)**
 
 
 ### Day 5 Classical Model Performance Summary

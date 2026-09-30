@@ -2,6 +2,7 @@
 
 import os
 from pathlib import Path
+import pandas as pd
 import streamlit as st
 import streamlit.components.v1 as components
 
@@ -85,26 +86,50 @@ def render_geographic_analysis_page() -> None:
     )
 
     hotspots_df = geo_artifacts.get("hotspot_summary")
-    if not hotspots_df.empty:
+    if hotspots_df is not None and not hotspots_df.empty:
+        # Validate coordinates before display
+        valid_mask = (
+            hotspots_df["latitude"].between(-90, 90) &
+            hotspots_df["longitude"].between(-180, 180)
+        ) if "latitude" in hotspots_df.columns and "longitude" in hotspots_df.columns else pd.Series([True] * len(hotspots_df))
+        if not valid_mask.all():
+            st.warning(f"{(~valid_mask).sum()} hotspot row(s) have invalid coordinates and are excluded.")
+        hotspots_df = hotspots_df[valid_mask].copy()
+
+        # Rename columns for readability
+        rename_map = {
+            "hotspot_id": "Rank",
+            "latitude": "Latitude",
+            "longitude": "Longitude",
+            "estimated_intensity": "Est. Intensity",
+            "normalized_intensity": "Norm. Intensity",
+            "relative_rank": "Rank (Relative)",
+            "percentile_tier": "Percentile Tier",
+            "city": "City",
+        }
+        display_hs = hotspots_df.rename(columns={k: v for k, v in rename_map.items() if k in hotspots_df.columns})
+
         col_t1, col_t2 = st.columns([0.7, 0.3])
         with col_t1:
+            fmt = {}
+            if "Latitude" in display_hs.columns: fmt["Latitude"] = "{:.5f}"
+            if "Longitude" in display_hs.columns: fmt["Longitude"] = "{:.5f}"
+            if "Est. Intensity" in display_hs.columns: fmt["Est. Intensity"] = "{:.4e}"
+            if "Norm. Intensity" in display_hs.columns: fmt["Norm. Intensity"] = "{:.3f}"
             st.dataframe(
-                hotspots_df.style.format({
-                    "latitude": "{:.5f}",
-                    "longitude": "{:.5f}",
-                    "estimated_intensity": "{:.4e}",
-                    "normalized_intensity": "{:.3f}",
-                }),
+                display_hs.style.format(fmt) if fmt else display_hs,
                 use_container_width=True,
             )
         with col_t2:
             st.markdown(
                 """
                 <div class='crimora-card'>
-                    <h6 style='color: #1e293b; margin: 0 0 6px 0;'>Hotspot Interpretive Guide</h6>
-                    <p style='font-size: 0.8rem; color: #64748b; line-height: 1.5;'>
-                        <b>Normalized Intensity:</b> Relative density scaled to [0, 1] where 1.0 represents peak municipal concentration.<br><br>
-                        <b>Spatial Suppression:</b> Centroids enforce a 1.0 km minimum geodesic buffer to isolate distinct neighborhood corridors.
+                    <h6 style='color:#1e293b;margin:0 0 6px 0;'>Interpretive Guide</h6>
+                    <p style='font-size:0.8rem;color:#64748b;line-height:1.5;'>
+                        <b>Norm. Intensity:</b> Relative density scaled to [0, 1].
+                        A value of 1.0 represents peak municipal concentration.<br><br>
+                        <b>Spatial Suppression:</b> 1.0 km minimum buffer between
+                        centroids isolates distinct neighborhood corridors.
                     </p>
                 </div>
                 """,
@@ -135,25 +160,25 @@ def render_geographic_analysis_page() -> None:
 
     with tab1:
         if plots["dist"].exists():
-            st.image(str(plots["dist"]), use_column_width=True, caption="Historical Crime Incident Spatial Distribution with 2D KDE Contours")
+            st.image(str(plots["dist"]), use_container_width=True, caption="Historical Crime Incident Spatial Distribution with 2D KDE Contours")
         else:
             st.info("Incident distribution plot not found.")
 
     with tab2:
         if plots["surface"].exists():
-            st.image(str(plots["surface"]), use_column_width=True, caption="Continuous Geographic Activity-Area Intensity Surface (Magma Colormap)")
+            st.image(str(plots["surface"]), use_container_width=True, caption="Continuous Geographic Activity-Area Intensity Surface (Magma Colormap)")
         else:
             st.info("Intensity surface plot not found.")
 
     with tab3:
         if plots["hotspot"].exists():
-            st.image(str(plots["hotspot"]), use_column_width=True, caption="Hotspot Centroids Overlaid on 95th Percentile Intensity Boundary")
+            st.image(str(plots["hotspot"]), use_container_width=True, caption="Hotspot Centroids Overlaid on 95th Percentile Intensity Boundary")
         else:
             st.info("Hotspot analysis plot not found.")
 
     with tab4:
         if plots["compare"].exists():
-            st.image(str(plots["compare"]), use_column_width=True, caption="Side-by-Side Comparison: Raw Point Incidents vs. Distance-Weighted Activity Surface")
+            st.image(str(plots["compare"]), use_container_width=True, caption="Side-by-Side Comparison: Raw Point Incidents vs. Distance-Weighted Activity Surface")
         else:
             st.info("Comparison plot not found.")
 

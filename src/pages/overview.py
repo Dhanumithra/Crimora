@@ -12,6 +12,7 @@ from src.ui.components import (
     render_page_header,
     render_responsible_notice,
     render_section_header,
+    render_empty_state,
 )
 
 
@@ -52,7 +53,7 @@ def render_overview_page() -> None:
         render_metric_card(
             title="Spatial Grid Nodes",
             value="2,500",
-            subtitle="50x50 resolution mesh",
+            subtitle="50×50 resolution mesh",
             delta="Haversine Metric",
         )
 
@@ -111,16 +112,16 @@ def render_overview_page() -> None:
                             <td style='padding: 6px 8px;'><span class='badge badge-active'>Complete (Day 5)</span></td>
                         </tr>
                         <tr style='border-bottom: 1px solid #f1f5f9;'>
-                            <td style='padding: 6px 8px;'><b>Crime Linkage Modeling</b></td>
-                            <td style='padding: 6px 8px;'>K-Means & Hierarchical Serial Grouping</td>
+                            <td style='padding: 6px 8px;'><b>Crime Linkage Clustering</b></td>
+                            <td style='padding: 6px 8px;'>K-Means &amp; Hierarchical Agglomerative (k=5)</td>
                             <td style='padding: 6px 8px;'>Person A</td>
-                            <td style='padding: 6px 8px;'><span class='badge badge-pending'>Upcoming (Day 7)</span></td>
+                            <td style='padding: 6px 8px;'><span class='badge badge-active'>Integrated (Day 7)</span></td>
                         </tr>
                         <tr>
-                            <td style='padding: 6px 8px;'><b>Behavioral Profiling</b></td>
-                            <td style='padding: 6px 8px;'>Bayesian Belief Networks (BBN) & M.O.</td>
+                            <td style='padding: 6px 8px;'><b>Behavioral Profiling (BBN)</b></td>
+                            <td style='padding: 6px 8px;'>Bayesian Belief Networks &mdash; pgmpy required</td>
                             <td style='padding: 6px 8px;'>Person A</td>
-                            <td style='padding: 6px 8px;'><span class='badge badge-pending'>Upcoming (Day 8)</span></td>
+                            <td style='padding: 6px 8px;'><span class='badge badge-pending'>Dep. Missing</span></td>
                         </tr>
                     </tbody>
                 </table>
