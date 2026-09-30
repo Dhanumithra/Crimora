@@ -14,7 +14,7 @@ Executes the complete Day 5 workflow:
 
 from pathlib import Path
 import sys
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 import pandas as pd
 from sklearn.model_selection import train_test_split

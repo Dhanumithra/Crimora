@@ -167,7 +167,7 @@ class TestTamilNaduColumnFix:
     def test_page_uses_correct_total_column(self):
         """The TN page must use COL_TOTAL which maps to the real CSV column."""
         from pathlib import Path
-        src_text = Path("src/pages/tamil_nadu_analytics.py").read_text()
+        src_text = Path("src/pages/tamil_nadu_analytics.py").read_text(encoding="utf-8")
         # The real CSV column must be referenced
         assert "total_crime_2020_2022" in src_text
         # The module-level constant must map to the correct column

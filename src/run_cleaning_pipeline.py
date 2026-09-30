@@ -7,6 +7,7 @@ and generates clean datasets in data/processed/.
 
 import sys
 from pathlib import Path
+from typing import Tuple
 
 # Ensure project root is in sys.path when executed directly
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
