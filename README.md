@@ -1,343 +1,295 @@
-# Intelligent Crime Detective Platform
+# Intelligent Crime Detective Platform (Crimora)
 
-An academic machine learning decision-support platform designed to assist investigative analysis through pattern discovery, geographic activity-area estimation, crime linkage analysis, and case solvability estimation.
+An academic machine learning decision-support platform designed to assist investigative crime analysis through unsupervised pattern discovery, geographic activity-area estimation, crime linkage analysis, and case solvability prediction.
 
 ---
 
-## 1. Project Description
+## 1. Project Overview
 
-The **Intelligent Crime Detective Platform** is an analytical system developed as a collaborative academic machine learning project. The system investigates methods of extracting actionable statistical insights from reported crime incident datasets. By combining unsupervised pattern discovery, spatial regression techniques, and supervised classification models, the platform serves as an investigative decision-support tool.
+The **Intelligent Crime Detective Platform** (**Crimora**) is an end-to-end analytical decision-support system developed as a collaborative academic machine learning project. The system extracts actionable statistical insights from historical crime incident datasets by synthesizing:
+
+- **Unsupervised Pattern Discovery:** Clustering multi-attribute incident profiles to discover potential serial crime linkages.
+- **Geographic Profiling & Spatial Regression:** Distance-weighted spatial intensity estimation and Locally Weighted Regression (LWR) over incident coordinates to identify macro-hotspots and activity surfaces.
+- **Dimensionality Reduction:** Scikit-learn Principal Component Analysis (PCA) pipeline with strict target leakage isolation.
+- **Supervised Classical Machine Learning:** Probabilistic and distance-based solvability classification pipelines (ID3 Decision Tree, Gaussian Naive Bayes, Scaled k-NN).
+- **Macro Longitudinal Analytics:** District-level Indian Penal Code (IPC) and murder statistics across Tamil Nadu jurisdictions (2014–2023).
+- **Interactive Multi-Page Web Dashboard:** A hardened executive Streamlit interface with interactive Folium geospatial maps and live scoring engines.
 
 > [!NOTE]
-> **Academic Prototype Notice:** This system is an academic decision-support prototype intended strictly for research and statistical analysis. It does not replace professional investigative judgment, nor does it make definitive assertions regarding criminal culpability, psychological diagnoses, or individual residential locations.
+> **Academic Prototype Notice:** This system is an academic decision-support prototype intended strictly for statistical research and analytical exploration. It does not replace professional investigative judgment, nor does it make definitive assertions regarding criminal culpability, psychological diagnoses, or individual residential locations.
 
 ---
 
-## 2. Project Objectives
+## 2. Key Features
 
-The platform provides a unified pipeline addressing several analytical goals:
-
-1. **Potential Crime Linkage Analysis**: Exploring statistical similarities and behavioral signatures across incident reports to suggest potential crime series.
-2. **Geographic / Spatial Crime Analysis**: Estimating geographic activity areas and spatial density surfaces using distance-weighted spatial intensity estimation and locally weighted regression (LWR).
-3. **Behavioral Pattern Profiling**: Clustering multi-attribute incident characteristics into behavioral archetypes.
-4. **Case Solvability Estimation**: Estimating the likelihood of case clearance based on incident-level characteristics and investigative markers.
-5. **Tamil Nadu Crime Analytics**: Analyzing district-level IPC patterns and longitudinally tracking crime trends across Tamil Nadu jurisdictions.
-6. **Machine Learning Model Comparison**: Evaluating diverse classification, regression, and clustering algorithms using standardized metrics.
-7. **Interactive Visualization**: Providing an intuitive Streamlit interface equipped with interactive Folium geospatial mapping.
+1. **Executive Overview & KPI Dashboard:**
+   - Real-time key metrics: 52,179 processed records, 50 major US metropolitan areas, 50.8% natural baseline clearance.
+   - Live architectural status matrix tracking Person A and Person B deliverables.
+   - PCA variance decomposition tabs with cumulative variance charts and principal component loadings.
+2. **Crime Linkage & Cold Case Clustering:**
+   - Unsupervised victim age segmentation using K-Means ($k=5$) and Agglomerative Hierarchical Clustering (Ward linkage, $k=5$).
+   - Real-time victim age cluster assignment with Euclidean distance-to-centroid computation.
+   - Interactive unsolved case pool explorer with dynamic state and weapon filtering.
+3. **Geographic Profiling & Hotspot Analytics:**
+   - Haversine distance-weighted kernel intensity estimation and LWR surface modeling.
+   - High-resolution interactive Folium spatial map with layered density contours and hotspot centroids.
+   - Ranked spatial hotspot summaries with analytical percentile tiers.
+4. **Behavioral Profiling & Causal Modeling (Person A):**
+   - Architectural framework for Bayesian Belief Network (BBN) probabilistic suspect profiling.
+   - Prior distribution baselines and evidence node specifications.
+5. **Case Solvability & Clearance Scoring:**
+   - Multi-model real-time solvability scoring (ID3 Decision Tree, Gaussian Naive Bayes, Scaled k-NN).
+   - Dynamic confidence gauges and executive risk/solvability classification badges.
+   - Diagnostic confusion matrices and ROC curves.
+6. **Tamil Nadu Longitudinal Analytics:**
+   - Longitudinal crime trend monitoring across 38+ Tamil Nadu revenue districts (2020–2022).
+   - District-level IPC crime volume distributions and categorical distributions.
+   - Publication-quality analytical visualization gallery.
+7. **Model Comparison & Evaluation Benchmarks:**
+   - Standardized holdout test set benchmarks ($N=10,436$) and stratified 5-fold cross-validation ($N=41,743$).
+   - Live Model Availability Registry dynamically tracking runtime activation status across all 8 models.
 
 ---
 
-## 3. Two-Member Team Responsibilities
+## 3. Platform Architecture
 
-The project is developed collaboratively by a two-member engineering team with clear separation of concerns:
+The platform follows a layered, modular architecture designed for maintainability, portability, and robust error handling:
 
-| Component / Focus Area | Person A | Person B (Active Track) | Status |
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                   STREAMLIT WEB APPLICATION (app.py)                   │
+├────────────────────────────────────────────────────────────────────────┤
+│  Overview  │  Linkage  │  Geographic  │  Behavioral  │  Solvability    │
+│  Dashboard │  Cluster  │   Analysis   │   Profiling  │   & Scoring     │
+├────────────┴───────────┴──────────────┴──────────────┴─────────────────┤
+│                     UI COMPONENT & STYLING LAYER                       │
+│  src/ui/styles.py (Executive CSS) │ src/ui/components.py (Cards/Badges) │
+├────────────────────────────────────────────────────────────────────────┤
+│                     SERVICE & ORCHESTRATION LAYER                      │
+│  src/services/data_service.py     │ src/services/model_service.py      │
+│  - @st.cache_data                 │ - @st.cache_resource               │
+│  - Graceful missing file handling │ - Live model registry & inference  │
+├────────────────────────────────────────────────────────────────────────┤
+│                      ANALYTICAL & MODEL PIPELINES                      │
+│  src/geo_utils.py & lwr_profiler.py  │ src/classical_models.py (ID3/NB) │
+│  src/pca_analysis.py                 │ src/tn_analytics.py             │
+│  src/data_cleaning.py                │ src/feature_engineering.py      │
+├────────────────────────────────────────────────────────────────────────┤
+│                         SERIALIZED ARTIFACTS                           │
+│  models/classical/*.joblib  │ models/kmeans_serial.pkl │ models/pca_*.joblib│
+│  outputs/geographic/*       │ outputs/tamil_nadu/*     │ outputs/classical/*│
+├────────────────────────────────────────────────────────────────────────┤
+│                           DATASETS LAYER                               │
+│  data/processed/ (Cleaned CSVs)    │ data/raw/ (Immutable Source CSVs) │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 4. Two-Member Team Responsibilities
+
+| Component / Module | Person A | Person B (Active Track) | Current Status |
 | :--- | :---: | :---: | :---: |
-| **Data Engineering & Ingestion Pipeline** | - | **Primary Owner** | Completed (Day 1) |
-| **Dataset Cleaning & Schema Validation** | - | **Primary Owner** | Completed (Day 2) |
-| **Feature Engineering & Transformation** | - | **Primary Owner** | Completed (Day 2) |
+| **Data Ingestion & Cleaning Pipeline** | - | **Primary Owner** | Completed (Day 1–2) |
+| **Feature Engineering & Sanitization** | - | **Primary Owner** | Completed (Day 2) |
 | **Principal Component Analysis (PCA)** | - | **Primary Owner** | Completed (Day 3) |
 | **Tamil Nadu Crime Analytics** | - | **Primary Owner** | Completed (Day 3) |
-| **Locally Weighted Regression (LWR) / Spatial Profiling** | - | **Primary Owner** | Completed (Day 4) |
-| **Folium Geospatial Visualization** | - | **Primary Owner** | Completed (Day 4) |
+| **Geographic Profiling & LWR Surface** | - | **Primary Owner** | Completed (Day 4) |
+| **Interactive Folium Web Map** | - | **Primary Owner** | Completed (Day 4) |
 | **ID3 Decision Tree Classifier** | - | **Primary Owner** | Completed (Day 5) |
 | **Naive Bayes Classifier** | - | **Primary Owner** | Completed (Day 5) |
-| **k-Nearest Neighbors (k-NN) Classifier** | - | **Primary Owner** | Completed (Day 5) |
-| **Streamlit Dashboard UI Architecture & Multi-Page Shell** | - | **Primary Owner** | Completed (Day 6) |
-| **Artificial Neural Networks (ANN)** | Primary Owner | Clean Interface Integration | Person A |
-| **Bayesian Belief Networks (BBN)** | Primary Owner | Clean Interface Integration | Person A |
-| **K-Means & Hierarchical Clustering** | Primary Owner | Clean Interface Integration | Person A |
-| **Behavioral & Crime Linkage Models** | Primary Owner | Interface & Evaluation | Person A |
+| **k-Nearest Neighbors (k-NN)** | - | **Primary Owner** | Completed (Day 5) |
+| **Streamlit Multi-Page Shell & UI** | - | **Primary Owner** | Completed (Day 6) |
+| **Cross-Module Model Integration** | - | **Primary Owner** | Completed (Day 7) |
+| **UI Polish, Validation & Hardening** | - | **Primary Owner** | Completed (Day 8) |
+| **Deployment Readiness & E2E Testing** | - | **Primary Owner** | Completed (Day 9) |
+| **K-Means & Hierarchical Clustering** | Primary Owner | Integrated into UI | Active & Operational |
+| **Artificial Neural Network (ANN)** | Primary Owner | Graceful Fallback | Artifact present (Requires TF) |
+| **Bayesian Belief Network (BBN)** | Primary Owner | Architectural Frame | Artifact present (Requires pgmpy) |
 
 ---
 
-## 4. Current Development Progress
+## 5. Technology Stack
 
-**Phase: Day 7 Complete — Full Model Integration & Unified Dashboard**
+- **Core Runtime:** Python 3.10+ (tested on Python 3.14.7)
+- **Data Engineering:** `pandas` (>=2.2.0), `numpy` (>=1.26.0), `scipy` (>=1.12.0)
+- **Machine Learning:** `scikit-learn` (>=1.4.0), `joblib` (>=1.3.0)
+- **Geographic Information Systems (GIS):** `folium` (>=0.16.0), `geopy` (>=2.4.0), `streamlit-folium` (>=0.18.0)
+- **Visualization:** `matplotlib` (>=3.8.0), `seaborn` (>=0.13.0)
+- **Web Application & Interactive UI:** `streamlit` (>=1.32.0)
+- **Automated Testing & QA:** `pytest` (>=8.0.0)
 
-- [x] **Day 1: Foundation & Data Engineering Setup**
-  - Portable configuration module ([`src/config.py`](file:///home/Dharsit/ML-Project/Crimora/src/config.py))
-  - Read-only schema inspection utility ([`src/data_inspection.py`](file:///home/Dharsit/ML-Project/Crimora/src/data_inspection.py))
-  - Smoke tests and directory validation ([`tests/test_config.py`](file:///home/Dharsit/ML-Project/Crimora/tests/test_config.py))
-- [x] **Day 2: Data Cleaning & Feature Engineering Pipeline**
-  - Robust data cleaning utilities ([`src/data_cleaning.py`](file:///home/Dharsit/ML-Project/Crimora/src/data_cleaning.py))
-  - Quality reporting & audit utilities ([`src/data_quality.py`](file:///home/Dharsit/ML-Project/Crimora/src/data_quality.py))
-  - Temporal & spatial feature engineering ([`src/feature_engineering.py`](file:///home/Dharsit/ML-Project/Crimora/src/feature_engineering.py))
-  - Automated cleaning runner ([`src/run_cleaning_pipeline.py`](file:///home/Dharsit/ML-Project/Crimora/src/run_cleaning_pipeline.py))
-  - Cleaned datasets generated in `data/processed/`
-  - Comprehensive feature dictionary ([`outputs/person_b_feature_dictionary.md`](file:///home/Dharsit/ML-Project/Crimora/outputs/person_b_feature_dictionary.md))
-  - Cleaning unit tests ([`tests/test_cleaning.py`](file:///home/Dharsit/ML-Project/Crimora/tests/test_cleaning.py))
-- [x] **Day 3: PCA Dimensionality Reduction & Tamil Nadu Analytics**
-  - Scikit-learn PCA pipeline with target leakage isolation ([`src/pca_analysis.py`](file:///home/Dharsit/ML-Project/Crimora/src/pca_analysis.py))
-  - Serialized PCA bundle ([`models/pca_model.joblib`](file:///home/Dharsit/ML-Project/Crimora/models/pca_model.joblib))
-  - Scree plots, loadings matrices, and cumulative variance figures in `outputs/pca/`
-  - Tamil Nadu district crime aggregation and longitudinal trend analysis ([`src/tn_analytics.py`](file:///home/Dharsit/ML-Project/Crimora/src/tn_analytics.py))
-  - Tamil Nadu analytical figures in `outputs/tamil_nadu/`
-  - Unit tests ([`tests/test_pca_analysis.py`](file:///home/Dharsit/ML-Project/Crimora/tests/test_pca_analysis.py), [`tests/test_tn_analytics.py`](file:///home/Dharsit/ML-Project/Crimora/tests/test_tn_analytics.py))
-- [x] **Day 4: Geographic Profiling & Locally Weighted Regression (LWR)**
-  - Spatial utilities, spherical Haversine distance, and grid generation ([`src/geo_utils.py`](file:///home/Dharsit/ML-Project/Crimora/src/geo_utils.py))
-  - Kernel spatial intensity estimation and closed-form LWR solver ([`src/lwr_profiler.py`](file:///home/Dharsit/ML-Project/Crimora/src/lwr_profiler.py))
-  - End-to-end spatial pipeline runner ([`src/run_geographic_pipeline.py`](file:///home/Dharsit/ML-Project/Crimora/src/run_geographic_pipeline.py))
-  - PII-free coordinate export ([`outputs/geographic/crime_coordinates.csv`](file:///home/Dharsit/ML-Project/Crimora/outputs/geographic/crime_coordinates.csv))
-  - Regular 2D spatial grid ([`outputs/geographic/geographic_grid.csv`](file:///home/Dharsit/ML-Project/Crimora/outputs/geographic/geographic_grid.csv))
-  - Analytical hotspot summary ([`outputs/geographic/hotspot_summary.csv`](file:///home/Dharsit/ML-Project/Crimora/outputs/geographic/hotspot_summary.csv))
-  - Four publication-quality visual diagnostics in `outputs/geographic/`
-  - Interactive Folium web map ([`outputs/geographic/geographic_profile.html`](file:///home/Dharsit/ML-Project/Crimora/outputs/geographic/geographic_profile.html))
-  - Person B analytics notebook updated ([`notebooks/PersonB_Analytics.ipynb`](file:///home/Dharsit/ML-Project/Crimora/notebooks/PersonB_Analytics.ipynb))
-  - Spatial unit and integration tests ([`tests/test_geographic.py`](file:///home/Dharsit/ML-Project/Crimora/tests/test_geographic.py))
-- [x] **Day 5: Classical Machine Learning Models (Decision Trees, Naive Bayes, k-NN)**
-  - Target variable audit (`is_solved`: 50.8% Class 0 vs 49.2% Class 1; natural balance verified)
-  - Strict target leakage prevention (excluding `disposition`, PII, and identifiers)
-  - Preprocessing ColumnTransformer fitted strictly on training data
-  - ID3 Decision Tree (`criterion="entropy"`, regularized `max_depth=8`)
-  - Naive Bayes (`GaussianNB`) baseline probabilistic solver
-  - Scaled k-NN (`KNeighborsClassifier`, $k=15$, distance-weighted with `StandardScaler`)
-  - Reusable modeling module ([`src/classical_models.py`](src/classical_models.py))
-  - Evaluation diagnostics module ([`src/model_evaluation.py`](src/model_evaluation.py))
-  - Classical pipeline runner ([`src/run_classical_pipeline.py`](src/run_classical_pipeline.py))
-  - Serialized model artifacts in `models/classical/`
-  - Metric reports in `outputs/classical/model_metrics.csv` and `outputs/classical/classification_reports.csv`
-  - Diagnostic figures in `outputs/classical/confusion_matrices/` and `outputs/classical/roc_curves/`
-  - Classical modeling unit tests ([`tests/test_classical_models.py`](tests/test_classical_models.py))
-- [x] **Day 6: Streamlit Application Shell & Multi-Page Dashboard**
-  - Application entry point with responsive layout & navigation ([`app.py`](app.py))
-  - Custom UI theme & CSS stylesheet ([`src/ui/styles.py`](src/ui/styles.py))
-  - Modular UI component library ([`src/ui/components.py`](src/ui/components.py))
-  - Robust cached Data Service layer ([`src/services/data_service.py`](src/services/data_service.py))
-  - Cached Model & Real-Time Inference Service layer ([`src/services/model_service.py`](src/services/model_service.py))
-  - **7 Functional Multi-Page Dashboards:**
-    1. **Overview / Dashboard** ([`src/pages/overview.py`](src/pages/overview.py)): KPIs, architecture matrix, PCA variance tabs
-    2. **Crime Linkage** ([`src/pages/crime_linkage.py`](src/pages/crime_linkage.py)): Person A placeholder with similarity parameter controls
-    3. **Geographic Analysis** ([`src/pages/geographic_analysis.py`](src/pages/geographic_analysis.py)): Folium HTML map embed, hotspot rankings, spatial diagnostics
-    4. **Behavioral Profiling** ([`src/pages/behavioral_profiling.py`](src/pages/behavioral_profiling.py)): Person A placeholder with BBN schema specification
-    5. **Case Solvability** ([`src/pages/case_solvability.py`](src/pages/case_solvability.py)): Real-time case scoring form, confidence gauge, diagnostic plots
-    6. **Tamil Nadu Analytics** ([`src/pages/tamil_nadu_analytics.py`](src/pages/tamil_nadu_analytics.py)): District rankings, longitudinal trends (2020-2022), publication figures
-    7. **Model Comparison** ([`src/pages/model_comparison.py`](src/pages/model_comparison.py)): Holdout test leaderboard, 5-fold CV stability, ROC curves, Person A roadmap
-  - Streamlit test suite ([`tests/test_streamlit_app.py`](tests/test_streamlit_app.py))
-- [x] **Day 7: Full Model Integration & Unified Dashboard**
-  - Unified application shell ([`app.py`](app.py)): merges Person A and Person B modules; gracefully handles TF-missing ANN via lazy import
-  - Comprehensive Model Service ([`src/services/model_service.py`](src/services/model_service.py)):
-    - `load_kmeans_bundle()` — K-Means (k=5, feature: VicAge_Clean, 52,179 samples)
-    - `predict_kmeans_cluster()` — real-time victim age cluster assignment with label & distance
-    - `load_hierarchical_bundle()` — AgglomerativeClustering (Ward, k=5) training label distribution
-    - `get_cluster_distribution()` — cluster size statistics for both KMeans & Hierarchical
-    - `get_model_registry()` — live registry with accurate availability status for all 8 models
-  - **Crime Linkage page**: live K-Means cluster assignment UI, distribution charts for both clustering methods, unsolved case pool
-  - **Behavioral Profiling page**: real BBN availability status (pgmpy not installed), evidence schema, baseline statistical distributions
-  - **Case Solvability page**: model availability badges, ANN status (TF not installed), 3-model inference with live form
-  - **Model Comparison page**: live model registry table (8 models), ANN/BBN activation requirements
-  - **Sidebar system status**: real-time counts of loaded vs unavailable models on every page
-  - Model availability facts:
-    - ✅ ID3 / Naive Bayes / k-NN / KMeans / Hierarchical / PCA — all operational
-    - ❌ ANN — `solvability_ann.keras` present, requires `pip install tensorflow`
-    - ❌ BBN — `bbn_profile.pkl` present, requires `pip install pgmpy`
-  - Expanded test suite ([`tests/test_streamlit_app.py`](tests/test_streamlit_app.py)): 32 tests covering all model integrations, cluster assignments, registry validation
-  - **Total test coverage: 79/79 passing across all test modules**
-- [x] **Day 8: UI Polish, Input Validation, Hardening & Final Pre-Deployment QA**
-  - **UI Polish:**
-    - Added Inter font via Google Fonts for professional typographic rendering
-    - Refined CSS: card variants (`crimora-card-success/warning/error`), consistent spacing, improved badge sizing, form element border-radius, empty-state helper class
-    - Fixed deprecated `use_column_width=True` → `use_container_width=True` across all pages
-  - **Bug Fixes:**
-    - Fixed `tamil_nadu_analytics.py`: wrong column `total_crimes` → `total_crime_2020_2022`; wrong yearly column → `total_crime_count`; `badge_color` param → `badge_type`
-    - Fixed figure filenames to reference only files that exist in `outputs/tamil_nadu/`
-    - Fixed architecture table in overview: K-Means/Hierarchical now shows "Integrated (Day 7)", BBN shows "Dep. Missing"
-  - **Input Validation (`src/ui/components.py`):**
-    - `validate_numeric_input()` — range, NaN, Inf, None, non-numeric
-    - `validate_categorical_input()` — blank, None, allowed-set checking
-    - `validate_coordinate()` — lat [-90,90], lon [-180,180]
-    - `show_validation_errors()` — renders error list, returns bool
-  - **Geographic Page:** Coordinate validation before hotspot table render; renamed columns for readability (Rank, Latitude, Longitude, Est./Norm. Intensity); search filter XSS-safe
-  - **Responsible Use Notice:** Expanded with explicit bullet list of what outputs must NOT be interpreted as
-  - **`render_placeholder_interface`:** Accepts legacy kwargs from Day 6/7 callers without crash
-  - **`render_model_score_badge`:** Guarded probability against NaN/Inf
-  - **Performance:** Verified all 7 data-loading and 4 model-loading functions are decorated with `@st.cache_data` / `@st.cache_resource`
-  - **New test file:** [`tests/test_day8_polish.py`](tests/test_day8_polish.py) — 53 tests covering validation, TN column correctness, geographic coordinate checks, model service hardening, caching decoration, and full startup import
-  - **Total test coverage: 132/132 passing (79 existing + 53 new)**
+---
 
+## 6. Model Modules & Operational Status
 
-### Day 5 Classical Model Performance Summary
+The platform manages 8 distinct machine learning and statistical models via a centralized registry ([`src/services/model_service.py`](src/services/model_service.py)):
 
-#### Holdout Test Set ($N=10,436$ stratified test samples)
+| Model Identifier | Algorithm | Owner | Primary Task | Operational Status |
+| :--- | :--- | :---: | :--- | :---: |
+| `decision_tree_id3` | ID3 Decision Tree (`entropy`) | Person B | Solvability Scoring | ✅ Operational |
+| `naive_bayes` | Gaussian Naive Bayes | Person B | Solvability Scoring | ✅ Operational |
+| `knn` | Scaled k-NN ($k=15$) | Person B | Solvability Scoring | ✅ Operational |
+| `kmeans` | K-Means ($k=5$, VicAge) | Person A | Victim Age Clustering | ✅ Operational |
+| `hierarchical` | Agglomerative Clustering (Ward) | Person A | Pattern Clustering | ✅ Operational |
+| `pca` | Principal Component Analysis | Person B | Variance Analysis | ✅ Operational |
+| `ann` | Multilayer Perceptron (Keras) | Person A | Deep Solvability | ⚠️ Standby (`tensorflow` required) |
+| `bbn` | Bayesian Belief Network | Person A | Suspect Demographics | ⚠️ Standby (`pgmpy` required) |
+
+### Performance Leaderboard (Holdout Test Set: $N=10,436$)
+
 | Model | Accuracy | Precision (Solved) | Recall (Solved) | F1-Score (Solved) | ROC-AUC |
 | :--- | :---: | :---: | :---: | :---: | :---: |
-| **ID3 Decision Tree** | 0.5887 | 0.5586 | 0.7829 | 0.6520 | 0.6347 |
-| **Naive Bayes (Gaussian)** | 0.5894 | 0.6055 | 0.4750 | 0.5324 | 0.6352 |
-| **k-NN (Scaled, $k=15$)** | 0.5959 | 0.5915 | 0.5776 | 0.5845 | 0.6312 |
-
-#### Stratified 5-Fold Cross-Validation ($N=41,743$ training samples)
-| Model | CV Accuracy (Mean $\pm$ Std) | CV Precision | CV Recall | CV F1-Score | CV ROC-AUC |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **ID3 Decision Tree** | 0.5911 $\pm$ 0.0051 | 0.5666 | 0.7235 | 0.6348 | 0.6344 |
-| **Naive Bayes (Gaussian)** | 0.5855 $\pm$ 0.0050 | 0.6024 | 0.4650 | 0.5241 | 0.6288 |
-| **k-NN (Scaled, $k=15$)** | 0.5950 $\pm$ 0.0028 | 0.5904 | 0.5771 | 0.5837 | 0.6339 |
+| **ID3 Decision Tree** | 0.5887 | 0.5586 | **0.7829** | **0.6520** | 0.6347 |
+| **Naive Bayes (Gaussian)** | 0.5894 | **0.6055** | 0.4750 | 0.5324 | **0.6352** |
+| **k-NN (Scaled, $k=15$)** | **0.5959** | 0.5915 | 0.5776 | 0.5845 | 0.6312 |
 
 ---
 
-## 5. Repository Structure
+## 7. Setup & Installation Instructions
 
+### Prerequisites
+- Python 3.10 to 3.14
+- Git
+- Recommended: 4 GB+ RAM for spatial and k-NN inference
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/Dhanumithra/Crimora.git
+cd Crimora
 ```
-Crimora/
-├── app.py                              # Streamlit application entry point
-├── requirements.txt                    # Python dependencies
-├── README.md                           # Comprehensive project documentation
-├── .gitignore                          # Git exclusions (data, artifacts, caches)
-│
-├── data/
-│   ├── raw/                            # Ingested raw source datasets (immutable)
-│   │   ├── homicide-data.csv
-│   │   ├── dstrIPC_1_2014.csv
-│   │   ├── TN-murder-2023.csv
-│   │   └── TN-2020-2022-total.csv
-│   └── processed/                      # Cleaned, standardized datasets
-│       ├── homicide_clean.csv
-│       ├── homicide_spatial_clean.csv
-│       ├── dstr_ipc_2014_clean.csv
-│       ├── tn_crime_total_2020_2022_clean.csv
-│       └── tn_murder_2023_clean.csv
-│
-├── models/                             # Serialized model artifacts
-│   ├── pca_model.joblib                # Fitted PCA pipeline bundle
-│   └── classical/                      # Day 5 Classical ML models
-│       ├── decision_tree_id3.joblib    # ID3 Decision Tree classifier
-│       ├── naive_bayes.joblib          # Gaussian Naive Bayes classifier
-│       └── knn.joblib                  # Scaled k-NN classifier
-│
-├── notebooks/
-│   ├── PersonA_Model_Training.ipynb    # Person A modeling notebook
-│   └── PersonB_Analytics.ipynb         # Person B analytics notebook (Days 1–5)
-│
-├── src/                                # Core reusable Python modules
-│   ├── __init__.py
-│   ├── config.py                       # Project paths and directory management
-│   ├── data_inspection.py              # Read-only schema inspector
-│   ├── data_cleaning.py                # Cleaning and normalization utilities
-│   ├── data_quality.py                 # Summary and quality audit generators
-│   ├── feature_engineering.py          # Feature extraction and encoding
-│   ├── pca_analysis.py                 # PCA fitting, loadings, and scree plots
-│   ├── tn_analytics.py                 # Tamil Nadu district analytics
-│   ├── geo_utils.py                    # Coordinate validation, distance, grids
-│   ├── lwr_profiler.py                 # Kernel spatial profiling and LWR solver
-│   ├── classical_models.py             # Day 5 Classical ML pipelines
-│   ├── model_evaluation.py             # Evaluation metrics, CV, and plots
-│   ├── run_cleaning_pipeline.py        # Day 2 pipeline runner
-│   ├── run_geographic_pipeline.py      # Day 4 spatial profiling pipeline runner
-│   ├── run_classical_pipeline.py       # Day 5 classical ML pipeline runner
-│   ├── ui/                             # Day 6 UI Theme & Component system
-│   │   ├── __init__.py
-│   │   ├── styles.py                   # Executive styling tokens & CSS injection
-│   │   └── components.py               # Reusable headers, cards, badges, alerts
-│   ├── services/                       # Day 6 Cached data & model inference services
-│   │   ├── __init__.py
-│   │   ├── data_service.py             # Cached data artifact accessors
-│   │   └── model_service.py            # Cached model inference & scoring engine
-│   └── pages/                          # Day 6 Multi-page dashboard modules
-│       ├── __init__.py
-│       ├── overview.py                 # Executive Dashboard & PCA variance
-│       ├── crime_linkage.py            # Serial incident linkage (Person A)
-│       ├── geographic_analysis.py      # Spatial KDE, LWR & Folium map
-│       ├── behavioral_profiling.py     # M.O. & BBN causal modeling (Person A)
-│       ├── case_solvability.py         # Real-time scoring via ID3, NB, k-NN
-│       ├── tamil_nadu_analytics.py     # District rankings & longitudinal trends
-│       └── model_comparison.py         # Benchmarks, 5-fold CV & ROC curves
-│
-├── outputs/                            # Generated reports, CSVs, and visualizations
-│   ├── person_b_feature_dictionary.md  # Detailed feature documentation
-│   ├── pca/                            # Day 3 PCA artifacts and plots
-│   │   ├── explained_variance.csv
-│   │   ├── pca_components.csv
-│   │   ├── pca_feature_selection.csv
-│   │   ├── pca_transformed.csv
-│   │   ├── explained_variance_by_component.png
-│   │   ├── cumulative_explained_variance.png
-│   │   ├── pca_2d_projection.png
-│   │   └── pca_feature_contributions.png
-│   ├── tamil_nadu/                     # Day 3 Tamil Nadu analytics artifacts
-│   │   ├── district_summary.csv
-│   │   ├── yearly_trends.csv
-│   │   ├── district_crime_distribution.png
-│   │   ├── yearly_crime_trends.png
-│   │   ├── crime_rate_vs_population_2022.png
-│   │   └── murder_rate_by_district_2023.png
-│   ├── geographic/                     # Day 4 Geographic profiling artifacts
-│   │   ├── crime_coordinates.csv       # PII-free sanitized coordinate export
-│   │   ├── geographic_grid.csv         # Regular 2D mesh grid with intensity
-│   │   ├── hotspot_summary.csv         # Ranked analytical hotspot centroids
-│   │   ├── incident_distribution.png   # Point pattern scatter with KDE contours
-│   │   ├── intensity_surface.png       # Continuous normalized intensity heatmap
-│   │   ├── hotspot_analysis.png        # Hotspot centroids & 95th percentile boundary
-│   │   ├── incidents_vs_intensity.png  # Raw incidents vs activity area surface
-│   │   └── geographic_profile.html     # Interactive Folium map
-│   └── classical/                      # Day 5 Classical ML outputs
-│       ├── model_metrics.csv           # Model performance and 5-fold CV metrics
-│       ├── classification_reports.csv  # Precision, recall, f1, support per class
-│       ├── confusion_matrices/         # Confusion matrix heatmaps
-│       └── roc_curves/                 # Multi-model ROC comparison curves
-│
-└── tests/                              # Automated test suites (61 passing tests)
-    ├── __init__.py
-    ├── test_config.py                  # Path and configuration tests
-    ├── test_cleaning.py                # Data cleaning and feature tests
-    ├── test_pca_analysis.py            # PCA pipeline and leakage isolation tests
-    ├── test_tn_analytics.py            # Tamil Nadu analytics tests
-    ├── test_geographic.py             # Spatial validation, distance, and LWR tests
-    ├── test_classical_models.py        # Classical ML and evaluation tests
-    └── test_streamlit_app.py           # Streamlit UI, services & inference tests
+
+### 2. Create and Activate a Virtual Environment
+```bash
+# Linux / macOS
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Windows (PowerShell)
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+```
+
+### 3. Install Dependencies
+```bash
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+*(Optional) To enable Person A's Deep Learning (ANN) and Causal (BBN) modules:*
+```bash
+pip install tensorflow pgmpy
 ```
 
 ---
 
-## 6. Technology Stack
+## 8. Local Execution
 
-- **Language**: Python 3.10+ (tested on Python 3.14)
-- **Data Engineering**: `pandas`, `numpy`, `scipy`
-- **Machine Learning**: `scikit-learn`, `joblib`
-- **Geographic Information Systems**: `folium`, `streamlit-folium`
-- **Visualization**: `matplotlib`, `seaborn`
-- **Web Interface**: `streamlit`
-- **Testing & Quality Assurance**: `pytest`, `unittest`
-
----
-
-## 7. Quickstart & Verification
-
-### Launching the Interactive Streamlit Dashboard
+Launch the interactive multi-page dashboard:
 ```bash
 streamlit run app.py
 ```
-*Access the multi-page dashboard locally at `http://localhost:8501`.*
 
-### Running the Complete Test Suite
-Execute all 61 automated tests across Days 1–6 (100% pass rate):
-```bash
-pytest tests/ -v
+Once running, access the application in your browser at:
+```
+http://localhost:8501
 ```
 
-
-### Running Pipeline Runners
+### Running Pipeline Runners (Optional / Re-generation)
 ```bash
-# Day 2 Data Cleaning Pipeline
+# Day 2: Data Cleaning & Feature Engineering
 python src/run_cleaning_pipeline.py
 
-# Day 3 PCA & Tamil Nadu Analytics Pipelines
+# Day 3: PCA Analysis & Tamil Nadu Ingestion
 python src/pca_analysis.py
 python src/tn_analytics.py
 
-# Day 4 Geographic Profiling & LWR Pipeline
+# Day 4: Geographic Profiling & LWR Map Generation
 python src/run_geographic_pipeline.py
 
-# Day 5 Classical Machine Learning Pipeline
+# Day 5: Classical Model Training & Evaluation
 python src/run_classical_pipeline.py
 ```
 
 ---
 
-## 8. Data Ethics & Responsible-Use Statement
+## 9. Automated Testing & Quality Assurance
 
-This platform is strictly an academic decision-support prototype. In accordance with ethical machine learning principles:
-- **Decision-Support Only**: Outputs assist human analysts in organizing historical patterns; they do not replace human investigative discretion.
-- **Defensible Terminology**: Results are framed as *case solvability predictions*, *model estimates*, and *historical patterns*.
-- **No Guarantees or Accusations**: The system makes **no assertion** that a real-world case will or will not be solved, nor does it establish individual culpability.
-- **Privacy Safeguards**: All personally identifiable information (PII) such as victim names is excluded from analytical models.
-- **Spatial Estimates**: Geographic profiling reflects historical activity areas and crime concentration surfaces, never suspect residence.
+The project includes an end-to-end automated test suite containing **156 unit, integration, and E2E tests** (100% pass rate):
 
+```bash
+# Run the full automated test suite
+pytest -v
+
+# Run only Day 9 end-to-end and deployment tests
+pytest tests/test_day9_e2e.py -v
+```
+
+### Test Coverage Breakdown
+- `tests/test_config.py` (5 tests): Directory management and portable path resolution.
+- `tests/test_cleaning.py` (13 tests): Missing value imputation, age sanitization, target derivation.
+- `tests/test_pca_analysis.py` (4 tests): Dimensionality reduction and target leakage prevention.
+- `tests/test_tn_analytics.py` (7 tests): Tamil Nadu district crime metrics and schemas.
+- `tests/test_geographic.py` (10 tests): Haversine distance, LWR kernel solver, grid generation.
+- `tests/test_classical_models.py` (8 tests): ID3, Naive Bayes, and k-NN training pipelines.
+- `tests/test_streamlit_app.py` (32 tests): UI components, data services, model integrations.
+- `tests/test_day8_polish.py` (53 tests): Input validation, hardening, coordinate limits, caching.
+- `tests/test_day9_e2e.py` (24 tests): Multi-page AppTest workflows, model lifecycles, deployment hygiene.
+
+---
+
+## 10. Deployment Instructions
+
+### Deployment on Streamlit Community Cloud
+1. Push repository code to GitHub (`main` branch).
+2. Ensure `requirements.txt` is present at the repository root.
+3. Log in to [Streamlit Community Cloud](https://share.streamlit.io/).
+4. Select the repository, specify branch `main`, and set **Main file path** to:
+   ```
+   app.py
+   ```
+5. Deploy. Streamlit Cloud will automatically build dependencies and launch the platform.
+
+### Deployment on Linux / Virtual Machine (Systemd)
+Create a systemd service file at `/etc/systemd/system/crimora.service`:
+```ini
+[Unit]
+Description=Crimora Streamlit Platform
+After=network.target
+
+[Service]
+User=www-data
+WorkingDirectory=/var/www/Crimora
+ExecStart=/var/www/Crimora/.venv/bin/streamlit run app.py --server.port 8501 --server.headless true
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+Enable and start the service:
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable crimora
+sudo systemctl start crimora
+```
+
+---
+
+## 11. System Limitations
+
+1. **Historical Dataset Boundaries:** The primary homicide analysis corpus spans 52,179 reported incidents from 50 US cities. Patterns reflect jurisdictions with specific urban crime dynamics and may not directly generalize to rural jurisdictions or international contexts without domain adaptation.
+2. **Missing Feature Sensitivity:** Classical solvability models rely on situational incident variables (weapon, location, victim demographic markers). Unreported or unrecorded crime attributes can introduce variance in individual clearance probabilities.
+3. **Computational Scalability of Non-Parametric Models:** k-Nearest Neighbors ($k=15$) holds all training instances in memory (~33 MB serialized artifact). For deployments handling millions of records, approximate nearest-neighbor indexing (e.g., FAISS / HNSW) would be required.
+4. **Third-Party Dependency Standby:** Person A's ANN model (`solvability_ann.keras`) and BBN profile (`bbn_profile.pkl`) require heavy external libraries (`tensorflow` and `pgmpy`). To maintain a lightweight deployment footprint, these modules operate in graceful standby until the optional libraries are installed.
+
+---
+
+## 12. Responsible-Use Statement & Ethical Principles
+
+The Crimora platform is strictly an academic decision-support prototype. In adherence to responsible AI practices:
+
+- **Human-in-the-Loop Decision Support:** Model outputs are strictly advisory aids to help investigators explore patterns and prioritize investigative leads. They do **not** replace sworn investigative discretion or legal standards of proof.
+- **No Assertions of Guilt:** Under no circumstances should clearance probability scores or cluster assignments be cited as evidence of culpability or guilt.
+- **Privacy Protection:** All individual identifiers (victim names) are stripped during preprocessing and are never ingested into machine learning feature matrices or displayed in analytical views.
+- **Geographic Activity Surfaces vs. Residence:** Spatial density surfaces and hotspot clusters estimate historical incident concentrations; they do **not** indicate suspect residence or personal whereabouts.
+- **Bias Awareness:** Crime incident reporting practices vary historically across jurisdictions. Users and analysts must critically evaluate algorithmic recommendations in light of potential systemic reporting disparities.
