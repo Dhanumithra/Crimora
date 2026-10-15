@@ -243,6 +243,11 @@
 }
 .animate-in { animation: animateIn 0.2s ease-out both; }
 
+@keyframes scan {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(350%); }
+}
+
 /* ── Leaflet Dark Theme with Blue accents ── */
 .leaflet-container {
   width: 100%;

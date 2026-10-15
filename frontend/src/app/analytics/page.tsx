@@ -44,18 +44,13 @@ export default function AnalyticsPage() {
   useEffect(() => {
     async function loadData() {
       try {
-        const [distRes, trendRes] = await Promise.all([
+        const [distRes, trendRes, initialComp] = await Promise.all([
           crimoraApi.getTamilNaduDistricts(),
           crimoraApi.getYearlyTrends(),
+          crimoraApi.compareDistricts("Chennai City", "Madurai City"),
         ]);
         setDistricts(distRes);
         setTrends(trendRes);
-
-        // Run initial comparison
-        const initialComp = await crimoraApi.compareDistricts(
-          "Chennai City",
-          "Madurai City"
-        );
         setComparison(initialComp);
       } catch (err) {
         console.error("Failed to load analytics data:", err);

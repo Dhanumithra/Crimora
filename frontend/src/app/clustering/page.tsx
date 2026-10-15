@@ -71,11 +71,18 @@ export default function ClusteringPage() {
   useEffect(() => {
     async function init() {
       try {
-        const dist = await crimoraApi.getClusterDistributions();
+        setLoadingCases(true);
+        const [dist, res] = await Promise.all([
+          crimoraApi.getClusterDistributions(),
+          crimoraApi.queryColdCases(filters),
+        ]);
         setDistributions(dist);
-        loadCases();
+        setColdCases(res.cases || []);
+        setTotalMatched(res.total_matched || res.cases?.length || 0);
       } catch (err) {
         console.error("Failed to load pattern distributions:", err);
+      } finally {
+        setLoadingCases(false);
       }
     }
     init();

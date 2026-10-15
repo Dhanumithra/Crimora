@@ -1,9 +1,11 @@
+import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Navbar } from "@/components/layout/Navbar";
 import { CommandPalette } from "@/components/ui/CommandPalette";
+import { NavigationProgress } from "@/components/ui/NavigationProgress";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -40,6 +42,9 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} font-sans bg-background text-foreground min-h-screen antialiased flex flex-row selection:bg-blue-600/30 selection:text-blue-200`}
       >
+        <Suspense fallback={null}>
+          <NavigationProgress />
+        </Suspense>
         <Sidebar />
         <div className="flex-1 flex flex-col min-w-0 min-h-screen overflow-x-hidden">
           <Navbar />
