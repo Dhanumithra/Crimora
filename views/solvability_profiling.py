@@ -5,6 +5,19 @@ import pandas as pd
 import streamlit as st
 import tensorflow as tf
 
+# ── Scikit-learn backward compatibility patch ─────────────────────────────────
+# Models pickled with scikit-learn < 1.4 reference _RemainderColsList, which was
+# refactored out in newer scikit-learn versions.
+try:
+    import sklearn.compose._column_transformer as _ct
+    if not hasattr(_ct, "_RemainderColsList"):
+        class _RemainderColsList(list):
+            """Backward compatibility shim for deserializing older ColumnTransformers."""
+            pass
+        _ct._RemainderColsList = _RemainderColsList
+except Exception:
+    pass
+
 @st.cache_resource
 def load_ann_artifacts():
     """Loads and caches Keras ANN model and ColumnTransformer scaler."""
@@ -16,9 +29,15 @@ def load_ann_artifacts():
     scaler = None
 
     if os.path.exists(model_path):
-        model = tf.keras.models.load_model(model_path)
+        try:
+            model = tf.keras.models.load_model(model_path)
+        except Exception as exc:
+            st.warning(f"Could not load ANN model: {exc}")
     if os.path.exists(scaler_path):
-        scaler = joblib.load(scaler_path)
+        try:
+            scaler = joblib.load(scaler_path)
+        except Exception as exc:
+            st.warning(f"Could not load ANN scaler: {exc}")
 
     return model, scaler
 

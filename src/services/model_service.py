@@ -390,16 +390,16 @@ def get_model_registry() -> Dict[str, Dict[str, Any]]:
         },
         "ann": {
             "name": "Artificial Neural Network (MLP)",
-            "available": False,
+            "available": (MODELS_DIR / "solvability_ann.keras").exists(),
             "owner": "Person A",
             "task": "Case Solvability (Binary)",
-            "reason": "TensorFlow not installed in current environment",
+            "reason": "" if (MODELS_DIR / "solvability_ann.keras").exists() else "File not found",
         },
         "bbn": {
             "name": "Bayesian Belief Network",
-            "available": False,
+            "available": (MODELS_DIR / "bbn_profile.pkl").exists(),
             "owner": "Person A",
             "task": "Causal Behavioral Inference",
-            "reason": "pgmpy library not installed in current environment",
+            "reason": "" if (MODELS_DIR / "bbn_profile.pkl").exists() else "File not found",
         },
     }

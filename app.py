@@ -148,6 +148,12 @@ def main() -> None:
     total_count = len(registry)
     ann_ok = "✅" if _person_a_solvability is not None else "❌"
 
+    try:
+        import pgmpy
+        bbn_status = "✅ Active"
+    except ImportError:
+        bbn_status = "❌ pgmpy not installed"
+
     st.sidebar.markdown("---")
     st.sidebar.markdown(
         f"""
@@ -157,7 +163,7 @@ def main() -> None:
             <div>• ID3 / NB / k-NN: ✅ Active</div>
             <div>• KMeans / HC: ✅ Active</div>
             <div>• ANN (TF): {ann_ok} {'Active' if _person_a_solvability else 'TF not installed'}</div>
-            <div>• BBN (pgmpy): ❌ pgmpy not installed</div>
+            <div>• BBN (pgmpy): {bbn_status}</div>
             <div>• Corpus: 52,179 records</div>
         </div>
         """,
