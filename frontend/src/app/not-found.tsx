@@ -28,13 +28,13 @@ export default function NotFound() {
       </p>
 
       <div className="flex flex-wrap items-center justify-center gap-2.5">
-        <Link href="/">
+        <Link href="/" prefetch={true}>
           <Button variant="primary" size="sm" className="gap-1.5">
             <Home className="h-3.5 w-3.5" />
             Executive Overview
           </Button>
         </Link>
-        <Link href="/solvability">
+        <Link href="/solvability" prefetch={true}>
           <Button variant="secondary" size="sm" className="gap-1.5">
             <Search className="h-3.5 w-3.5" />
             Solvability Triage

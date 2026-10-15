@@ -526,7 +526,7 @@ export default function OverviewPage() {
             Crimora is an intelligent investigative analytics system designed to accelerate criminal investigations, connect cold cases, and prioritize evidence triage. Here is what each section allows you to do:
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-1">
-            <Link href="/solvability" className="p-3.5 rounded-xl bg-slate-900/80 border border-blue-900/40 hover:border-blue-500/60 hover:bg-blue-950/40 transition-all group">
+            <Link href="/solvability" prefetch={true} className="p-3.5 rounded-xl bg-slate-900/80 border border-blue-900/40 hover:border-blue-500/60 hover:bg-blue-950/40 transition-all group">
               <div className="font-bold text-blue-300 flex items-center gap-2 mb-1.5 group-hover:text-sky-300">
                 <Scale className="h-4 w-4 text-blue-400" />
                 Case Solvability
@@ -536,7 +536,7 @@ export default function OverviewPage() {
               </p>
             </Link>
 
-            <Link href="/clustering" className="p-3.5 rounded-xl bg-slate-900/80 border border-blue-900/40 hover:border-blue-500/60 hover:bg-blue-950/40 transition-all group">
+            <Link href="/clustering" prefetch={true} className="p-3.5 rounded-xl bg-slate-900/80 border border-blue-900/40 hover:border-blue-500/60 hover:bg-blue-950/40 transition-all group">
               <div className="font-bold text-blue-300 flex items-center gap-2 mb-1.5 group-hover:text-sky-300">
                 <Network className="h-4 w-4 text-blue-400" />
                 Serial Pattern Linkage
@@ -546,7 +546,7 @@ export default function OverviewPage() {
               </p>
             </Link>
 
-            <Link href="/geographic" className="p-3.5 rounded-xl bg-slate-900/80 border border-blue-900/40 hover:border-blue-500/60 hover:bg-blue-950/40 transition-all group">
+            <Link href="/geographic" prefetch={true} className="p-3.5 rounded-xl bg-slate-900/80 border border-blue-900/40 hover:border-blue-500/60 hover:bg-blue-950/40 transition-all group">
               <div className="font-bold text-blue-300 flex items-center gap-2 mb-1.5 group-hover:text-sky-300">
                 <MapPin className="h-4 w-4 text-blue-400" />
                 Geographic Profiling
@@ -556,7 +556,7 @@ export default function OverviewPage() {
               </p>
             </Link>
 
-            <Link href="/profiling" className="p-3.5 rounded-xl bg-slate-900/80 border border-blue-900/40 hover:border-blue-500/60 hover:bg-blue-950/40 transition-all group">
+            <Link href="/profiling" prefetch={true} className="p-3.5 rounded-xl bg-slate-900/80 border border-blue-900/40 hover:border-blue-500/60 hover:bg-blue-950/40 transition-all group">
               <div className="font-bold text-blue-300 flex items-center gap-2 mb-1.5 group-hover:text-sky-300">
                 <Target className="h-4 w-4 text-blue-400" />
                 Behavioral Profiling
@@ -868,13 +868,13 @@ export default function OverviewPage() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <Link href="/geographic">
+                  <Link href="/geographic" prefetch={true}>
                     <button className="px-3 py-1.5 rounded-lg bg-blue-600/15 border border-blue-500/30 text-blue-300 text-xs font-semibold hover:bg-blue-600/25 transition-all flex items-center gap-1.5">
                       <MapPin className="h-3.5 w-3.5" />
                       <span>Explore Heatmaps</span>
                     </button>
                   </Link>
-                  <Link href="/clustering">
+                  <Link href="/clustering" prefetch={true}>
                     <button className="px-3 py-1.5 rounded-lg bg-indigo-600/15 border border-indigo-500/30 text-indigo-300 text-xs font-semibold hover:bg-indigo-600/25 transition-all flex items-center gap-1.5">
                       <Network className="h-3.5 w-3.5" />
                       <span>Inspect Links</span>
@@ -1027,7 +1027,7 @@ export default function OverviewPage() {
               </div>
 
               {/* Action Button to launch full solvability */}
-              <Link href="/solvability">
+              <Link href="/solvability" prefetch={true}>
                 <Button className="w-full h-11 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs tracking-wide shadow-[0_0_20px_rgba(37,99,235,0.35)] border border-blue-400/30">
                   <span>Open Full Solvability Investigation Engine</span>
                   <ChevronRight className="h-4 w-4 ml-1" />
@@ -1053,7 +1053,7 @@ export default function OverviewPage() {
                   Unresolved incident dossiers flagged with high cross-case MO similarity signatures.
                 </CardDescription>
               </div>
-              <Link href="/clustering">
+              <Link href="/clustering" prefetch={true}>
                 <Button variant="outline" size="sm" className="h-8 text-xs gap-1.5 rounded-lg border-slate-700 bg-slate-900/60 hover:border-blue-500/40 hover:text-blue-300">
                   <span>View All Linkages</span>
                   <ChevronRight className="h-3.5 w-3.5" />
@@ -1078,7 +1078,7 @@ export default function OverviewPage() {
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Link href={`/solvability`}>
+                  <Link href={`/solvability`} prefetch={true}>
                     <button className="px-3 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-bold hover:bg-blue-500 transition-colors shadow-sm">
                       Run Solvability
                     </button>
@@ -1320,7 +1320,7 @@ export default function OverviewPage() {
 
         {/* 3 Quick Action Workspaces (7 Cols) */}
         <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-6">
-          <Link href="/solvability" className="group">
+          <Link href="/solvability" prefetch={true} className="group">
             <Card className="p-6 hover:border-blue-500/60 hover:shadow-[0_12px_30px_rgba(37,99,235,0.25)] transition-all h-full flex flex-col justify-between rounded-2xl hud-bracket glow-card-blue">
               <div>
                 <div className="flex items-center justify-between mb-4">
@@ -1343,7 +1343,7 @@ export default function OverviewPage() {
             </Card>
           </Link>
 
-          <Link href="/clustering" className="group">
+          <Link href="/clustering" prefetch={true} className="group">
             <Card className="p-6 hover:border-sky-500/60 hover:shadow-[0_12px_30px_rgba(14,165,233,0.25)] transition-all h-full flex flex-col justify-between rounded-2xl hud-bracket glow-card-cyan">
               <div>
                 <div className="flex items-center justify-between mb-4">
@@ -1366,7 +1366,7 @@ export default function OverviewPage() {
             </Card>
           </Link>
 
-          <Link href="/geographic" className="group">
+          <Link href="/geographic" prefetch={true} className="group">
             <Card className="p-6 hover:border-indigo-500/60 hover:shadow-[0_12px_30px_rgba(99,102,241,0.25)] transition-all h-full flex flex-col justify-between rounded-2xl hud-bracket glow-card-indigo">
               <div>
                 <div className="flex items-center justify-between mb-4">

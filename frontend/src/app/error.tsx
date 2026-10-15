@@ -48,7 +48,7 @@ export default function ErrorBoundary({
           <RotateCcw className="h-3.5 w-3.5" />
           Retry Subsystem
         </Button>
-        <Link href="/">
+        <Link href="/" prefetch={true}>
           <Button variant="secondary" size="sm" className="gap-1.5">
             <Home className="h-3.5 w-3.5" />
             Return to Dashboard

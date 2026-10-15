@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   ShieldAlert,
   Scale,
@@ -16,6 +16,7 @@ import {
   Radio,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { crimoraApi } from "@/lib/api_client";
 
 const navigationItems = [
   {
@@ -65,6 +66,30 @@ const navigationItems = [
 export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleWarmup = (href: string) => {
+    // 1. Instantly prefetch the route bundle into client memory
+    router.prefetch(href);
+
+    // 2. Pre-warm corresponding API data so it's instantly cached when route mounts
+    try {
+      if (href === "/geographic") {
+        crimoraApi.getGeographicSummary();
+      } else if (href === "/clustering") {
+        crimoraApi.getClusterDistributions();
+        crimoraApi.queryColdCases({ limit: 5, min_similarity: 0.88 });
+      } else if (href === "/analytics") {
+        crimoraApi.getTamilNaduDistricts();
+        crimoraApi.getYearlyTrends();
+      } else if (href === "/models" || href === "/") {
+        crimoraApi.getSystemStatus();
+        crimoraApi.getExecutiveOverview();
+      }
+    } catch {
+      // Non-blocking warmup
+    }
+  };
 
   return (
     <aside
@@ -123,6 +148,10 @@ export function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
+              prefetch={true}
+              onMouseEnter={() => handleWarmup(item.href)}
+              onTouchStart={() => handleWarmup(item.href)}
+              onFocus={() => handleWarmup(item.href)}
               className={cn(
                 "group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-medium transition-all duration-150",
                 isActive

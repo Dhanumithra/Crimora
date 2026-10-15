@@ -131,6 +131,7 @@ export function CommandPalette() {
                   <button
                     key={idx}
                     onClick={() => navigateTo(item.href)}
+                    onMouseEnter={() => router.prefetch(item.href)}
                     className="w-full flex items-center justify-between p-2 rounded-md text-left text-xs text-slate-200 hover:bg-slate-800/80 hover:text-blue-300 transition-colors group"
                   >
                     <div className="flex items-center gap-2.5">
