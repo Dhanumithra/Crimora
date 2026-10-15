@@ -92,8 +92,14 @@ export function CommandPalette() {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-150">
-      <div className="w-full max-w-lg overflow-hidden rounded-lg border border-slate-800 bg-slate-900 shadow-xl">
+    <div
+      onClick={() => setIsOpen(false)}
+      className="fixed inset-0 z-50 flex items-start justify-center pt-20 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-150 cursor-pointer"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-lg overflow-hidden rounded-lg border border-slate-800 bg-slate-900 shadow-xl cursor-default"
+      >
         <div className="flex items-center px-3.5 py-2.5 border-b border-slate-800">
           <Search className="h-4 w-4 text-blue-400 mr-2.5" />
           <input

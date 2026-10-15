@@ -386,9 +386,9 @@ export default function LeafletHotspotMap({
       <div ref={containerRef} className="w-full h-full" />
 
       {/* Layer Selector Toolbar (Top Left) */}
-      <div className="absolute top-3 left-14 z-[400] flex items-center bg-slate-950/90 backdrop-blur-md border border-blue-900/60 rounded-lg p-1 text-[11px] font-mono shadow-lg">
-        <span className="text-slate-400 px-2 uppercase tracking-wider text-[10px] font-semibold border-r border-blue-900/50 mr-1">
-          Map Layer:
+      <div className="absolute top-3 left-14 z-[1000] flex items-center bg-slate-950/90 backdrop-blur-md border border-blue-900/60 rounded-lg p-1 text-[11px] font-mono shadow-xl pointer-events-auto">
+        <span className="text-slate-400 px-2 uppercase tracking-wider text-[10px] font-semibold border-r border-blue-900/50 mr-1 hidden xs:inline">
+          Map:
         </span>
         <button
           type="button"
@@ -426,7 +426,7 @@ export default function LeafletHotspotMap({
       </div>
 
       {/* Dynamic Overlay Mode Indicator (Top Right) */}
-      <div className="absolute top-3 right-3 z-[400] bg-slate-950/90 backdrop-blur-md border border-blue-900/60 p-3 rounded-lg text-[11px] font-mono space-y-1.5 shadow-lg min-w-[190px]">
+      <div className="hidden sm:block absolute top-3 right-3 z-[1000] bg-slate-950/90 backdrop-blur-md border border-blue-900/60 p-3 rounded-lg text-[11px] font-mono space-y-1.5 shadow-xl min-w-[190px] pointer-events-auto">
         <div className="text-blue-300 font-semibold uppercase tracking-wider text-[10px] mb-1 flex items-center gap-1.5">
           <span className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-pulse" />
           Active Mode: {selectedOverlay}
@@ -473,7 +473,7 @@ export default function LeafletHotspotMap({
       </div>
 
       {/* Bottom Status Badge */}
-      <div className="absolute bottom-2 left-2 z-[400] bg-slate-950/80 backdrop-blur border border-blue-950 px-2.5 py-1 rounded text-[10px] font-mono text-slate-400 flex items-center gap-2">
+      <div className="absolute bottom-2 left-2 z-[1000] bg-slate-950/85 backdrop-blur border border-blue-900/60 px-2.5 py-1 rounded text-[10px] font-mono text-slate-400 flex items-center gap-2 pointer-events-auto shadow-md">
         <span className="h-2 w-2 rounded-full bg-blue-500" />
         <span>Jurisdiction: Tamil Nadu State Police &bull; Mode: {selectedOverlay}</span>
       </div>

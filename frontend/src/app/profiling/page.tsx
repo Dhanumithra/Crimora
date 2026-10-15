@@ -108,10 +108,11 @@ export default function ProfilingPage() {
   };
 
   // Convert distribution dict to chart arrays
-  const ageDistributionData = profile?.distributions.offender_age
-    ? Object.entries(profile.distributions.offender_age).map(([k, v]) => ({
+  const rawAge = profile?.distributions?.offender_age || (profile?.distributions as any)?.age;
+  const ageDistributionData = rawAge
+    ? Object.entries(rawAge).map(([k, v]) => ({
         bracket: k,
-        probability: Math.round(v * 100),
+        probability: Math.round(Number(v) * 100),
       }))
     : [
         { bracket: "Young Adult (18-29)", probability: 54 },
@@ -120,14 +121,12 @@ export default function ProfilingPage() {
         { bracket: "Juvenile (<18)", probability: 4 },
       ];
 
-  const relationshipDistributionData = profile?.distributions
-    .offender_relationship
-    ? Object.entries(profile.distributions.offender_relationship).map(
-        ([k, v]) => ({
-          relation: k,
-          probability: Math.round(v * 100),
-        })
-      )
+  const rawRel = profile?.distributions?.offender_relationship || (profile?.distributions as any)?.relationship;
+  const relationshipDistributionData = rawRel
+    ? Object.entries(rawRel).map(([k, v]) => ({
+        relation: k,
+        probability: Math.round(Number(v) * 100),
+      }))
     : [
         { relation: "Acquaintance", probability: 42 },
         { relation: "Intimate Partner", probability: 31 },

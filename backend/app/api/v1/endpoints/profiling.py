@@ -21,10 +21,22 @@ async def infer_suspect_profile(req: ProfilingRequest):
         vic_age=req.victim_age,
     )
 
+    raw_dist = res["distributions"]
+    dist_payload = {
+        "sex": raw_dist.get("sex", {}),
+        "age": raw_dist.get("age", {}),
+        "relationship": raw_dist.get("relationship", {}),
+        "race": raw_dist.get("race", {}),
+        "offender_sex": raw_dist.get("sex", {}),
+        "offender_age": raw_dist.get("age", {}),
+        "offender_relationship": raw_dist.get("relationship", {}),
+        "offender_race": raw_dist.get("race", {}),
+    }
+
     return ProfilingResponse(
         status="success",
         top_demographics=res["top_demographics"],
-        distributions=res["distributions"],
+        distributions=dist_payload,
         causal_deductions=res["causal_deductions"],
         evidence_evaluated=req.model_dump(),
     )
