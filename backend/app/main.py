@@ -14,7 +14,7 @@ from .services.ml_loader import ml_service
 async def lifespan(app: FastAPI):
     """Initializes and verifies models and data artifacts on startup."""
     print("=" * 60)
-    print("  🛡️ CRIMORA INTELLIGENCE PLATFORM — FASTAPI BACKEND")
+    print("  [CRIMORA] INTELLIGENCE PLATFORM -- FASTAPI BACKEND")
     print(f"  Version: {settings.VERSION} | Environment: {settings.ENVIRONMENT}")
     print(f"  Artifacts directory: {settings.ARTIFACTS_DIR}")
     print("=" * 60)
