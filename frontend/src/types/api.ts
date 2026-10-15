@@ -41,13 +41,26 @@ export interface SolvabilityPayload {
   victim_count: number;
   weapon: string;
   circumstance: string;
-  relationship: string;
+  relationship?: string;
+  suspect_lead_status?: string;
+  cctv_footage?: boolean;
+  forensic_dna_fingerprints?: boolean;
+  eyewitness_present?: boolean;
+  weapon_recovered?: boolean;
+  vehicle_identified?: boolean;
   city: string;
   state: string;
   year: number;
   month: number;
   is_weekend: number;
   day_of_week: number;
+}
+
+export interface EvidentiaryImpact {
+  factor: string;
+  impact_pct: number;
+  description: string;
+  status: "POSITIVE" | "NEGATIVE" | "NEUTRAL";
 }
 
 export interface SingleModelVerdict {
@@ -69,6 +82,7 @@ export interface SolvabilityResult {
   triage_priority: string;
   time_window_target: string;
   verdicts: SingleModelVerdict[];
+  evidentiary_factors?: EvidentiaryImpact[];
   investigative_guidelines: string[];
   input_features: Record<string, any>;
 }

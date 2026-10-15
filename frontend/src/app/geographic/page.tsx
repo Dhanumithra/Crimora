@@ -257,6 +257,7 @@ export default function GeographicPage() {
         <LeafletHotspotMap
           hotspots={hotspots}
           districts={districts}
+          selectedOverlay={selectedOverlay}
         />
       </Card>
 

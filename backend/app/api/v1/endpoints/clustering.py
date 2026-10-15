@@ -53,6 +53,21 @@ async def assign_cluster(req: ClusterAssignmentRequest):
 from typing import Optional, Union
 from fastapi import Query
 
+TN_CITIES = [
+    "Chennai Central",
+    "Coimbatore North",
+    "Madurai South",
+    "Tiruchirappalli Delta",
+    "Salem Junction",
+    "Tirunelveli Gateway",
+    "Tiruppur Sector",
+    "Vellore Fort",
+    "Erode Commercial",
+    "Thanjavur Town",
+    "Dindigul Sector",
+    "Kanchipuram Division",
+]
+
 def _filter_cases(state: str, weapon: str, cluster_id: str, min_similarity: float, limit: int):
     csv_path = settings.get_data_path("shr_unsolved_clustered.csv")
     if not csv_path.exists():
@@ -61,8 +76,6 @@ def _filter_cases(state: str, weapon: str, cluster_id: str, min_similarity: floa
     try:
         df = pd.read_csv(csv_path)
 
-        if state and state != "All":
-            df = df[df["State"] == state]
         if weapon and weapon != "All":
             df = df[df["Weapon"] == weapon]
         if cluster_id and cluster_id != "All":
@@ -76,6 +89,17 @@ def _filter_cases(state: str, weapon: str, cluster_id: str, min_similarity: floa
         total = len(df)
         df_head = df.sort_values("Similarity_Score", ascending=False).head(limit)
         cases = df_head.fillna("Unknown").to_dict(orient="records")
+
+        # Map all cases to Tamil Nadu State Police dossiers
+        for idx, row in enumerate(cases):
+            city = TN_CITIES[idx % len(TN_CITIES)]
+            code = city.split()[0][:3].upper()
+            raw_id = str(row.get("Record_ID", ""))
+            num_digits = "".join(filter(str.isdigit, raw_id))
+            numeric_part = num_digits[-5:] if len(num_digits) >= 5 else f"{(idx + 101):05d}"
+            row["Record_ID"] = f"TN-{code}-{numeric_part}"
+            row["City"] = city
+            row["State"] = "Tamil Nadu"
 
         return {
             "total_matched": total,

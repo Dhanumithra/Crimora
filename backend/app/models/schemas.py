@@ -33,18 +33,31 @@ class ExecutiveOverviewResponse(BaseModel):
 
 
 # ── Solvability Schemas ──────────────────────────────────────────────────────
+class EvidentiaryImpact(BaseModel):
+    factor: str
+    impact_pct: float
+    description: str
+    status: str = "POSITIVE"  # "POSITIVE" | "NEGATIVE" | "NEUTRAL"
+
+
 class SolvabilityRequest(BaseModel):
-    model: str = Field(default="ensemble", description="ann | decision_tree_id3 | naive_bayes | knn | ensemble")
+    model: str = Field(default="ann", description="ann | ensemble")
     victim_age: float = Field(default=28.0, ge=0.0, le=100.0)
     victim_sex: str = Field(default="Male")
-    victim_race: str = Field(default="Black")
+    victim_race: str = Field(default="Indian / General")
     victim_count: int = Field(default=0, ge=0)
-    weapon: str = Field(default="Handgun - pistol, revolver, etc")
+    weapon: str = Field(default="Personal Weapons (Hands/Fists)")
     circumstance: str = Field(default="Robbery")
-    relationship: str = Field(default="Acquaintance")
-    city: str = Field(default="Los Angeles")
-    state: str = Field(default="California")
-    year: int = Field(default=2022, ge=1976, le=2026)
+    relationship: Optional[str] = Field(default="Unknown / Stranger")
+    suspect_lead_status: Optional[str] = Field(default="UNKNOWN_OFFENDER")
+    cctv_footage: Optional[bool] = Field(default=False)
+    forensic_dna_fingerprints: Optional[bool] = Field(default=False)
+    eyewitness_present: Optional[bool] = Field(default=False)
+    weapon_recovered: Optional[bool] = Field(default=False)
+    vehicle_identified: Optional[bool] = Field(default=False)
+    city: str = Field(default="Chennai")
+    state: str = Field(default="Tamil Nadu")
+    year: int = Field(default=2024, ge=1976, le=2026)
     month: int = Field(default=7, ge=1, le=12)
     is_weekend: int = Field(default=1, ge=0, le=1)
     day_of_week: int = Field(default=4, ge=0, le=6)
@@ -69,6 +82,7 @@ class SolvabilityResponse(BaseModel):
     triage_priority: str
     time_window_target: str
     verdicts: List[SingleModelVerdict] = []
+    evidentiary_factors: List[EvidentiaryImpact] = []
     investigative_guidelines: List[str]
     input_features: Dict[str, Any]
 

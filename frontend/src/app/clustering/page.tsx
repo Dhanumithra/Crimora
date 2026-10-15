@@ -527,11 +527,8 @@ export default function ClusteringPage() {
               setFilters({ ...filters, state: e.target.value });
             }}
             options={[
-              { label: "All Jurisdictions", value: "All" },
-              { label: "Tamil Nadu", value: "Tamil Nadu" },
-              { label: "California", value: "California" },
-              { label: "Texas", value: "Texas" },
-              { label: "New York", value: "New York" },
+              { label: "All Tamil Nadu Sectors", value: "All" },
+              { label: "Tamil Nadu (Statewide)", value: "Tamil Nadu" },
             ]}
           />
 

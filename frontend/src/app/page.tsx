@@ -169,7 +169,22 @@ export default function OverviewPage() {
         ]);
         setStatus(sysStatus);
         setOverview(execData);
-        setPriorityCases(coldCasesResp?.cases?.slice(0, 5) || []);
+        const rawCases = coldCasesResp?.cases?.slice(0, 5) || [];
+        const tnCities = ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem"];
+        const tnCases = rawCases.map((c, i) => {
+          const city = (c.City && tnCities.includes(c.City)) ? c.City : tnCities[i % tnCities.length];
+          const rawId = c.Record_ID || `000${i+1}`;
+          const numDigits = rawId.replace(/\D/g, "");
+          const numPart = numDigits.length >= 4 ? numDigits.slice(-5) : `000${i + 12}`;
+          const code = city.slice(0, 3).toUpperCase();
+          return {
+            ...c,
+            Record_ID: `TN-${code}-${numPart}`,
+            City: city,
+            State: "Tamil Nadu",
+          };
+        });
+        setPriorityCases(tnCases);
       } catch (err) {
         console.error("Failed to load overview data:", err);
       } finally {

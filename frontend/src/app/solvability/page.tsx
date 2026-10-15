@@ -17,6 +17,13 @@ import {
   RotateCcw,
   CheckCircle2,
   Info,
+  Camera,
+  Fingerprint,
+  Eye,
+  Crosshair,
+  Car,
+  Check,
+  ShieldAlert,
 } from "lucide-react";
 import {
   ResponsiveContainer,
@@ -33,7 +40,6 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Slider } from "@/components/ui/Slider";
 import { Select } from "@/components/ui/Select";
-import { Table, TableHeader, TableHead, TableBody, TableRow, TableCell } from "@/components/ui/Table";
 import { crimoraApi } from "@/lib/api_client";
 import { SolvabilityPayload, SolvabilityResult } from "@/types/api";
 
@@ -47,17 +53,22 @@ const leadWindowRetentionData = [
 ];
 
 const DEFAULT_FORM: SolvabilityPayload = {
-  model: "ensemble",
-  victim_age: 28,
+  model: "ann",
+  victim_age: 32,
   victim_sex: "Male",
-  victim_race: "Black",
+  victim_race: "Indian / General",
   victim_count: 0,
-  weapon: "Handgun - pistol, revolver, etc",
+  weapon: "Knife or cutting instrument",
   circumstance: "Robbery",
-  relationship: "Acquaintance",
+  suspect_lead_status: "UNKNOWN_OFFENDER",
+  cctv_footage: false,
+  forensic_dna_fingerprints: false,
+  eyewitness_present: false,
+  weapon_recovered: false,
+  vehicle_identified: false,
   city: "Chennai",
   state: "Tamil Nadu",
-  year: 2022,
+  year: 2024,
   month: 7,
   is_weekend: 1,
   day_of_week: 5,
@@ -71,81 +82,101 @@ export default function SolvabilityPage() {
 
   const scenarioPresets = [
     {
-      label: "Armed Commercial Robbery (Chennai)",
-      badge: "High Clearance Pattern",
+      label: "High-Evidence Bank/Store Robbery (Chennai)",
+      badge: "High Clearance Window",
       payload: {
-        model: "ensemble",
-        victim_age: 32,
+        model: "ann",
+        victim_age: 34,
         victim_sex: "Male",
-        victim_race: "Black",
+        victim_race: "Indian / General",
         victim_count: 0,
-        weapon: "Handgun - pistol, revolver, etc",
+        weapon: "Knife or cutting instrument",
         circumstance: "Robbery",
-        relationship: "Acquaintance",
+        suspect_lead_status: "NAMED_SUSPECT",
+        cctv_footage: true,
+        forensic_dna_fingerprints: true,
+        eyewitness_present: true,
+        weapon_recovered: true,
+        vehicle_identified: true,
         city: "Chennai",
         state: "Tamil Nadu",
-        year: 2022,
+        year: 2024,
         month: 8,
         is_weekend: 1,
         day_of_week: 6,
       },
     },
     {
-      label: "Domestic Weapon Altercation (Coimbatore)",
-      badge: "Fast Track",
+      label: "Preceding Market Altercation (Salem)",
+      badge: "Witnessed Dispute",
       payload: {
-        model: "ensemble",
-        victim_age: 26,
-        victim_sex: "Female",
-        victim_race: "White",
+        model: "ann",
+        victim_age: 29,
+        victim_sex: "Male",
+        victim_race: "Indian / General",
         victim_count: 0,
-        weapon: "Knife or cutting instrument",
-        circumstance: "Lover triangle",
-        relationship: "Wife",
-        city: "Coimbatore",
+        weapon: "Blunt object - hammer, club, etc",
+        circumstance: "Brawl due to influence of alcohol",
+        suspect_lead_status: "CIRCUMSTANTIAL_DISPUTE",
+        cctv_footage: false,
+        forensic_dna_fingerprints: true,
+        eyewitness_present: true,
+        weapon_recovered: true,
+        vehicle_identified: false,
+        city: "Salem",
         state: "Tamil Nadu",
-        year: 2023,
-        month: 3,
+        year: 2024,
+        month: 5,
         is_weekend: 0,
-        day_of_week: 2,
+        day_of_week: 3,
       },
     },
     {
-      label: "Cold Case Night Homicide (Madurai)",
-      badge: "Complex Triage",
+      label: "Cold Transit Snatching Case (Madurai)",
+      badge: "Zero Immediate Leads",
       payload: {
-        model: "ensemble",
+        model: "ann",
         victim_age: 48,
-        victim_sex: "Male",
-        victim_race: "Asian",
+        victim_sex: "Female",
+        victim_race: "Indian / General",
         victim_count: 0,
-        weapon: "Blunt object - hammer, club, etc",
-        circumstance: "Argument over money",
-        relationship: "Unknown",
+        weapon: "Personal weapons, includes beating",
+        circumstance: "Robbery",
+        suspect_lead_status: "UNKNOWN_OFFENDER",
+        cctv_footage: false,
+        forensic_dna_fingerprints: false,
+        eyewitness_present: false,
+        weapon_recovered: false,
+        vehicle_identified: false,
         city: "Madurai",
         state: "Tamil Nadu",
-        year: 2020,
+        year: 2023,
         month: 11,
         is_weekend: 1,
         day_of_week: 7,
       },
     },
     {
-      label: "Transit Hub Theft Dispute (Salem)",
-      badge: "Sector Checkpoint",
+      label: "Night Industrial Break-In (Coimbatore)",
+      badge: "Optical CCTV Tracked",
       payload: {
-        model: "ensemble",
-        victim_age: 35,
+        model: "ann",
+        victim_age: 41,
         victim_sex: "Male",
-        victim_race: "White",
+        victim_race: "Indian / General",
         victim_count: 0,
-        weapon: "Personal weapons, includes beating",
-        circumstance: "Brawl due to influence of alcohol",
-        relationship: "Stranger",
-        city: "Salem",
+        weapon: "Blunt object - hammer, club, etc",
+        circumstance: "Robbery",
+        suspect_lead_status: "UNKNOWN_OFFENDER",
+        cctv_footage: true,
+        forensic_dna_fingerprints: true,
+        eyewitness_present: false,
+        weapon_recovered: false,
+        vehicle_identified: true,
+        city: "Coimbatore",
         state: "Tamil Nadu",
-        year: 2023,
-        month: 5,
+        year: 2024,
+        month: 2,
         is_weekend: 1,
         day_of_week: 6,
       },
@@ -175,34 +206,11 @@ export default function SolvabilityPage() {
     setResult(null);
   };
 
-  const getTriageBadge = (tier: string) => {
-    switch (tier) {
-      case "TIER-1":
-        return <Badge variant="success" className="text-xs px-3 py-1 font-mono">Tier-1 Immediate Clearance</Badge>;
-      case "TIER-2":
-        return <Badge variant="warning" className="text-xs px-3 py-1 font-mono">Tier-2 High Priority</Badge>;
-      default:
-        return <Badge variant="danger" className="text-xs px-3 py-1 font-mono">Tier-3 Cold Case Review</Badge>;
-    }
-  };
-
-  const getOperationalModelName = (name: string, key: string) => {
-    if (key === "ann" || name.toLowerCase().includes("ann") || name.toLowerCase().includes("deep") || name.toLowerCase().includes("mlp")) {
-      return "Deep Feature Analysis (ANN)";
-    }
-    if (key === "decision_tree_id3" || name.toLowerCase().includes("tree") || name.toLowerCase().includes("decision")) {
-      return "Standard Triage Analysis (ID3)";
-    }
-    if (key === "knn" || name.toLowerCase().includes("knn") || name.toLowerCase().includes("neighbor")) {
-      return "Historical Precedent Linker (k-NN)";
-    }
-    if (key === "naive_bayes" || name.toLowerCase().includes("bayes") || name.toLowerCase().includes("probabilistic")) {
-      return "Initial Scene Intake Screener (Naive Bayes)";
-    }
-    if (key === "ensemble" || name.toLowerCase().includes("ensemble")) {
-      return "Ensemble Consensus Verdict";
-    }
-    return name;
+  const toggleEvidence = (field: keyof SolvabilityPayload) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
   };
 
   return (
@@ -218,15 +226,15 @@ export default function SolvabilityPage() {
               </span>
               <span className="text-slate-600">&bull;</span>
               <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">
-                ACTIVE INCIDENT SCORER
+                TAMIL NADU STATE POLICE
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-3">
               <Scale className="h-6 w-6 text-blue-400 stroke-[2.3]" />
-              Case Solvability &amp; Triage Priority
+              Case Solvability &amp; Triage Assessment
             </h1>
             <p className="text-xs sm:text-sm text-slate-300/80 mt-1.5 max-w-2xl leading-relaxed">
-              Consensus clearance scoring, golden-hour triage timelines, and evidence-driven detective directives.
+              Scene evidence clearance likelihood evaluation, golden-hour triage prioritization, and investigative action directives.
             </p>
           </div>
 
@@ -245,7 +253,7 @@ export default function SolvabilityPage() {
               className="gap-2.5 px-5 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs tracking-wide shadow-[0_0_25px_rgba(37,99,235,0.4)] border border-blue-400/30"
             >
               <Sparkles className="h-4 w-4 text-blue-200" />
-              <span>Run Solvability Triage</span>
+              <span>Calculate Clearance Likelihood</span>
             </Button>
           </div>
         </div>
@@ -257,34 +265,34 @@ export default function SolvabilityPage() {
         <div className="p-5 rounded-2xl bg-blue-950/40 border border-blue-500/30 shadow-[0_4px_20px_rgba(37,99,235,0.15)] animate-fade-in text-xs text-slate-300 space-y-3">
           <div className="flex items-center gap-2 text-blue-300 font-semibold text-sm">
             <Info className="h-4.5 w-4.5 text-blue-400" />
-            Quick User Guide: How Solvability Triage Works
+            Investigative User Guide: How Solvability Assessment Works
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
             <div className="p-3 rounded-xl bg-slate-900/80 border border-blue-900/40">
               <div className="font-bold text-blue-300 mb-1 flex items-center gap-1.5">
                 <span className="h-5 w-5 rounded-full bg-blue-600/30 text-blue-300 text-[10px] flex items-center justify-center font-mono">1</span>
-                Choose or Preload Case
+                Initial Suspect Status
               </div>
               <p className="text-[11px] text-slate-400">
-                Click any of the quick scenario buttons below or select custom victim, weapon, and jurisdiction parameters in the left panel.
+                In an unsolved incident, the perpetrator is unknown. Select whether witnesses saw an altercation, if a named person of interest exists, or if the offender fled completely undetected.
               </p>
             </div>
             <div className="p-3 rounded-xl bg-slate-900/80 border border-blue-900/40">
               <div className="font-bold text-blue-300 mb-1 flex items-center gap-1.5">
                 <span className="h-5 w-5 rounded-full bg-blue-600/30 text-blue-300 text-[10px] flex items-center justify-center font-mono">2</span>
-                Evaluate Likelihood
+                Forensic &amp; Physical Leads
               </div>
               <p className="text-[11px] text-slate-400">
-                The multi-engine model (ANN Neural Net, Decision Tree, Naive Bayes, k-NN) evaluates evidence strength against 106,000+ cases.
+                Toggle the evidence recovered from the scene (CCTV, DNA, fingerprints, eyewitnesses, weapon). These are the strongest scientific determinants of case clearance.
               </p>
             </div>
             <div className="p-3 rounded-xl bg-slate-900/80 border border-blue-900/40">
               <div className="font-bold text-blue-300 mb-1 flex items-center gap-1.5">
                 <span className="h-5 w-5 rounded-full bg-blue-600/30 text-blue-300 text-[10px] flex items-center justify-center font-mono">3</span>
-                Follow Recommended Actions
+                Unified AI Prediction
               </div>
               <p className="text-[11px] text-slate-400">
-                Inspect the triage tier (Tier-1, Tier-2, or Tier-3), the critical response time window, and the forensic checklist.
+                The Crimora Deep Neural Engine evaluates the combined evidence to provide a single, authoritative solvability score and tailored tactical detective directives.
               </p>
             </div>
           </div>
@@ -324,10 +332,10 @@ export default function SolvabilityPage() {
               <div>
                 <CardTitle className="text-lg flex items-center gap-2 text-white">
                   <Layers className="h-5 w-5 text-blue-400" />
-                  Incident Parameters
+                  Incident Scene Parameters
                 </CardTitle>
                 <CardDescription className="text-xs mt-1">
-                  Provide crime scene details to evaluate case clearance likelihood.
+                  Input crime scene factors and physical evidence to assess clearance odds.
                 </CardDescription>
               </div>
               <Button
@@ -343,20 +351,133 @@ export default function SolvabilityPage() {
             </CardHeader>
             <CardContent>
               <form onSubmit={handlePredict} className="space-y-5">
+                {/* Jurisdiction - Pure Tamil Nadu */}
+                <div className="grid grid-cols-2 gap-4">
+                  <Select
+                    label="Jurisdiction City"
+                    value={formData.city}
+                    onChange={(e) =>
+                      setFormData({ ...formData, city: e.target.value })
+                    }
+                    options={[
+                      { label: "Chennai Metropolitan", value: "Chennai" },
+                      { label: "Coimbatore City", value: "Coimbatore" },
+                      { label: "Madurai South", value: "Madurai" },
+                      { label: "Tiruchirappalli Delta", value: "Tiruchirappalli" },
+                      { label: "Salem Junction", value: "Salem" },
+                      { label: "Tirunelveli Division", value: "Tirunelveli" },
+                      { label: "Tiruppur Industrial", value: "Tiruppur" },
+                      { label: "Vellore Fort", value: "Vellore" },
+                      { label: "Erode Commercial", value: "Erode" },
+                      { label: "Thanjavur Town", value: "Thanjavur" },
+                      { label: "Dindigul Central", value: "Dindigul" },
+                      { label: "Kanchipuram Division", value: "Kanchipuram" },
+                    ]}
+                  />
+
+                  <div>
+                    <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                      Region / State
+                    </label>
+                    <div className="px-3 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs text-blue-300 font-mono flex items-center justify-between">
+                      <span>Tamil Nadu (State Police)</span>
+                      <span className="h-2 w-2 rounded-full bg-blue-400" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Suspect Lead Status (Replaces the illogical Relationship field) */}
                 <Select
-                  label="Triage Analysis Mode"
-                  value={formData.model}
+                  label="Initial Suspect Lead Status at Scene"
+                  value={formData.suspect_lead_status || "UNKNOWN_OFFENDER"}
                   onChange={(e) =>
-                    setFormData({ ...formData, model: e.target.value })
+                    setFormData({ ...formData, suspect_lead_status: e.target.value })
                   }
                   options={[
-                    { label: "Ensemble Consensus Verdict (Recommended)", value: "ensemble" },
-                    { label: "Deep Feature Analysis (ANN)", value: "ann" },
-                    { label: "Standard Triage Analysis (ID3)", value: "decision_tree_id3" },
+                    { label: "Unidentified Offender (Zero Leads at Crime Scene)", value: "UNKNOWN_OFFENDER" },
+                    { label: "Witnessed Dispute Preceding Incident (Quarrel Observed)", value: "CIRCUMSTANTIAL_DISPUTE" },
+                    { label: "Specific Person of Interest / Named Suspect Lead", value: "NAMED_SUSPECT" },
+                    { label: "Domestic / Household Dispute Reported", value: "INTIMATE_DOMESTIC" },
                   ]}
                 />
 
-                <div className="pt-1.5">
+                {/* Physical & Forensic Leads Recovered (Interactive Toggle Chips) */}
+                <div className="space-y-2">
+                  <label className="block text-xs font-medium text-slate-300">
+                    Physical &amp; Forensic Leads Recovered
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                    {[
+                      { key: "cctv_footage", label: "CCTV Footage Recovered", icon: Camera },
+                      { key: "forensic_dna_fingerprints", label: "DNA / Latent Prints", icon: Fingerprint },
+                      { key: "eyewitness_present", label: "Direct Eyewitness Recorded", icon: Eye },
+                      { key: "weapon_recovered", label: "Weapon / Ballistics Recovered", icon: Crosshair },
+                      { key: "vehicle_identified", label: "Vehicle / Plate Tracked", icon: Car },
+                    ].map((lead) => {
+                      const Icon = lead.icon;
+                      const active = !!(formData as any)[lead.key];
+                      return (
+                        <button
+                          key={lead.key}
+                          type="button"
+                          onClick={() => toggleEvidence(lead.key as any)}
+                          className={`p-2.5 rounded-xl border text-xs font-medium transition-all flex items-center justify-between gap-2 text-left ${
+                            active
+                              ? "bg-blue-600/25 border-blue-500 text-blue-200 shadow-[0_0_15px_rgba(37,99,235,0.2)] font-semibold"
+                              : "bg-slate-900/60 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700"
+                          }`}
+                        >
+                          <div className="flex items-center gap-2">
+                            <Icon className={`h-3.5 w-3.5 ${active ? "text-blue-400" : "text-slate-500"}`} />
+                            <span>{lead.label}</span>
+                          </div>
+                          {active && (
+                            <span className="h-4 w-4 rounded-full bg-blue-500 text-white flex items-center justify-center shrink-0">
+                              <Check className="h-2.5 w-2.5 stroke-[3]" />
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Circumstance & Weapon */}
+                <div className="grid grid-cols-2 gap-4">
+                  <Select
+                    label="Crime Circumstance"
+                    value={formData.circumstance}
+                    onChange={(e) =>
+                      setFormData({ ...formData, circumstance: e.target.value })
+                    }
+                    options={[
+                      { label: "Robbery / Armed Heist", value: "Robbery" },
+                      { label: "Residential Intrusion", value: "Burglary" },
+                      { label: "Violent Brawl / Public Dispute", value: "Brawl due to influence of alcohol" },
+                      { label: "Financial / Business Dispute", value: "Argument over money" },
+                      { label: "Domestic Altercation", value: "Lover triangle" },
+                      { label: "Transit Snatching / Mugging", value: "Other" },
+                    ]}
+                  />
+
+                  <Select
+                    label="Weapon / M.O. Signature"
+                    value={formData.weapon}
+                    onChange={(e) =>
+                      setFormData({ ...formData, weapon: e.target.value })
+                    }
+                    options={[
+                      { label: "Knife / Edged Weapon", value: "Knife or cutting instrument" },
+                      { label: "Blunt Object (Rod/Club)", value: "Blunt object - hammer, club, etc" },
+                      { label: "Country Pistol / Firearm", value: "Handgun - pistol, revolver, etc" },
+                      { label: "Personal Weapons (Hands/Fists)", value: "Personal weapons, includes beating" },
+                      { label: "Firearm, unspecified", value: "Firearm, type not stated" },
+                    ]}
+                  />
+                </div>
+
+                {/* Victim Profile */}
+                <div className="space-y-4 pt-1">
                   <Slider
                     label="Victim Age"
                     value={formData.victim_age}
@@ -367,116 +488,34 @@ export default function SolvabilityPage() {
                       setFormData({ ...formData, victim_age: val })
                     }
                   />
-                </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <Select
-                    label="Victim Sex"
-                    value={formData.victim_sex}
-                    onChange={(e) =>
-                      setFormData({ ...formData, victim_sex: e.target.value })
-                    }
-                    options={[
-                      { label: "Male", value: "Male" },
-                      { label: "Female", value: "Female" },
-                      { label: "Unknown", value: "Unknown" },
-                    ]}
-                  />
+                  <div className="grid grid-cols-2 gap-4">
+                    <Select
+                      label="Victim Sex"
+                      value={formData.victim_sex}
+                      onChange={(e) =>
+                        setFormData({ ...formData, victim_sex: e.target.value })
+                      }
+                      options={[
+                        { label: "Male", value: "Male" },
+                        { label: "Female", value: "Female" },
+                        { label: "Other / Unspecified", value: "Unknown" },
+                      ]}
+                    />
 
-                  <Select
-                    label="Demographic Category"
-                    value={formData.victim_race}
-                    onChange={(e) =>
-                      setFormData({ ...formData, victim_race: e.target.value })
-                    }
-                    options={[
-                      { label: "General", value: "White" },
-                      { label: "Metropolitan", value: "Black" },
-                      { label: "Regional", value: "Asian" },
-                      { label: "Unspecified", value: "Unknown" },
-                    ]}
-                  />
-                </div>
-
-                <Select
-                  label="Weapon / M.O. Signature"
-                  value={formData.weapon}
-                  onChange={(e) =>
-                    setFormData({ ...formData, weapon: e.target.value })
-                  }
-                  options={[
-                    { label: "Handgun - pistol, revolver", value: "Handgun - pistol, revolver, etc" },
-                    { label: "Knife / Cutting Instrument", value: "Knife or cutting instrument" },
-                    { label: "Blunt Object (Club/Hammer)", value: "Blunt object - hammer, club, etc" },
-                    { label: "Firearm, unspecified", value: "Firearm, type not stated" },
-                    { label: "Shotgun / Rifle", value: "Shotgun" },
-                    { label: "Personal Weapons (Hands/Fists)", value: "Personal weapons, includes beating" },
-                  ]}
-                />
-
-                <div className="grid grid-cols-2 gap-4">
-                  <Select
-                    label="Circumstance"
-                    value={formData.circumstance}
-                    onChange={(e) =>
-                      setFormData({ ...formData, circumstance: e.target.value })
-                    }
-                    options={[
-                      { label: "Robbery / Theft", value: "Robbery" },
-                      { label: "Domestic Altercation", value: "Lover triangle" },
-                      { label: "Brawl / Dispute", value: "Brawl due to influence of alcohol" },
-                      { label: "Narcotics / Contraband", value: "Narcotic drug laws" },
-                      { label: "Financial Dispute", value: "Argument over money" },
-                      { label: "Gangland / Organized", value: "Gangland killings" },
-                    ]}
-                  />
-
-                  <Select
-                    label="Relationship"
-                    value={formData.relationship}
-                    onChange={(e) =>
-                      setFormData({ ...formData, relationship: e.target.value })
-                    }
-                    options={[
-                      { label: "Acquaintance", value: "Acquaintance" },
-                      { label: "Stranger", value: "Stranger" },
-                      { label: "Spouse / Partner", value: "Wife" },
-                      { label: "Family Relative", value: "Family" },
-                      { label: "Unknown", value: "Unknown" },
-                    ]}
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <Select
-                    label="Jurisdiction City"
-                    value={formData.city}
-                    onChange={(e) =>
-                      setFormData({ ...formData, city: e.target.value })
-                    }
-                    options={[
-                      { label: "Chennai", value: "Chennai" },
-                      { label: "Madurai", value: "Madurai" },
-                      { label: "Coimbatore", value: "Coimbatore" },
-                      { label: "Salem", value: "Salem" },
-                      { label: "Los Angeles", value: "Los Angeles" },
-                      { label: "Chicago", value: "Chicago" },
-                    ]}
-                  />
-
-                  <Select
-                    label="Region / State"
-                    value={formData.state}
-                    onChange={(e) =>
-                      setFormData({ ...formData, state: e.target.value })
-                    }
-                    options={[
-                      { label: "Tamil Nadu", value: "Tamil Nadu" },
-                      { label: "California", value: "California" },
-                      { label: "Texas", value: "Texas" },
-                      { label: "New York", value: "New York" },
-                    ]}
-                  />
+                    <Select
+                      label="Victim Count"
+                      value={String(formData.victim_count)}
+                      onChange={(e) =>
+                        setFormData({ ...formData, victim_count: Number(e.target.value) })
+                      }
+                      options={[
+                        { label: "Single Victim", value: "0" },
+                        { label: "2 Victims", value: "1" },
+                        { label: "3+ Victims", value: "2" },
+                      ]}
+                    />
+                  </div>
                 </div>
 
                 <button
@@ -484,163 +523,156 @@ export default function SolvabilityPage() {
                   disabled={loading}
                   className="w-full mt-4 py-3.5 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs tracking-wide shadow-[0_0_20px_rgba(37,99,235,0.35)] border border-blue-400/30 transition-all flex items-center justify-center gap-2"
                 >
-                  <Sparkles className="h-4 w-4" />
-                  <span>Calculate Clearance Likelihood</span>
+                  {loading ? (
+                    <span>Evaluating Evidence...</span>
+                  ) : (
+                    <>
+                      <Sparkles className="h-4 w-4" />
+                      <span>Assess Case Solvability</span>
+                    </>
+                  )}
                 </button>
               </form>
             </CardContent>
           </Card>
         </div>
 
-        {/* Right Column (7 cols): Primary Investigation Triage Output */}
-        <div className="lg:col-span-7 space-y-8">
-          {loading ? (
-            <Card className="p-8 space-y-6 rounded-2xl hud-bracket glow-card-blue">
-              <div className="flex items-center justify-between">
-                <div className="h-5 w-40 bg-slate-800 animate-pulse rounded" />
-                <div className="h-7 w-28 bg-slate-800 animate-pulse rounded-full" />
-              </div>
-              <div className="h-10 w-56 bg-slate-800 animate-pulse rounded" />
-              <div className="h-3 w-full bg-slate-800 animate-pulse rounded-full" />
-              <div className="grid grid-cols-2 gap-4 pt-2">
-                <div className="h-20 bg-slate-800/60 animate-pulse rounded-xl" />
-                <div className="h-20 bg-slate-800/60 animate-pulse rounded-xl" />
-              </div>
-              <div className="h-40 bg-slate-800/40 animate-pulse rounded-xl mt-3" />
-            </Card>
-          ) : result ? (
+        {/* Right Column (7 cols): Single AI Solvability Result & Directives */}
+        <div className="lg:col-span-7 space-y-6">
+          {result ? (
             <>
-              {/* Verdict Summary Card */}
+              {/* Primary Solvability Card */}
               <Card className="rounded-2xl hud-bracket glow-card-blue">
-                <CardHeader className="pb-4">
-                  <div className="flex items-center justify-between">
+                <CardHeader className="pb-3 border-b border-slate-800/80">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div>
-                      <span className="text-[10px] font-mono uppercase tracking-[0.12em] text-blue-400 font-semibold">
-                        Investigation Triage Verdict
-                      </span>
-                      <CardTitle className="text-xl mt-1 text-white">
-                        Clearance Likelihood: {result.clearance_percentage}%
+                      <div className="text-[10px] font-mono uppercase text-blue-400 tracking-wider font-semibold">
+                        {result.model_selected}
+                      </div>
+                      <CardTitle className="text-xl text-white mt-1">
+                        Case Clearance Likelihood: {result.clearance_percentage.toFixed(1)}%
                       </CardTitle>
                     </div>
-                    {getTriageBadge(result.triage_tier)}
+                    <div>
+                      <Badge
+                        variant={
+                          result.clearance_percentage >= 70
+                            ? "success"
+                            : result.clearance_percentage >= 45
+                            ? "warning"
+                            : "danger"
+                        }
+                        className="text-xs px-3 py-1 font-mono uppercase"
+                      >
+                        {result.triage_tier}
+                      </Badge>
+                    </div>
                   </div>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                  {/* Holographic Circular & Linear Gauge */}
-                  <div className="flex flex-col sm:flex-row items-center gap-6 p-5 rounded-xl bg-slate-950/70 border border-blue-950/80 shadow-inner">
-                    {/* Radial Arc */}
-                    <div className="relative h-24 w-24 shrink-0">
-                      <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
-                        <circle cx="18" cy="18" r="14" fill="none" stroke="#1E345A" strokeWidth="3" />
+                <CardContent className="space-y-6 pt-5">
+                  {/* Holographic Clearance Gauge & Operational Window */}
+                  <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-950 via-blue-950/30 to-slate-900 border border-blue-900/50 shadow-inner flex flex-col md:flex-row items-center gap-8">
+                    <div className="relative h-32 w-32 shrink-0 flex items-center justify-center">
+                      <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
                         <circle
-                          cx="18"
-                          cy="18"
-                          r="14"
-                          fill="none"
-                          stroke="#2563EB"
-                          strokeWidth="3.2"
-                          strokeDasharray="88"
-                          strokeDashoffset={88 - (88 * result.clearance_percentage) / 100}
+                          cx="50"
+                          cy="50"
+                          r="42"
+                          stroke="#1e345a"
+                          strokeWidth="8"
+                          fill="transparent"
+                        />
+                        <circle
+                          cx="50"
+                          cy="50"
+                          r="42"
+                          stroke={
+                            result.clearance_percentage >= 70
+                              ? "#3b82f6"
+                              : result.clearance_percentage >= 45
+                              ? "#f59e0b"
+                              : "#ef4444"
+                          }
+                          strokeWidth="8"
+                          strokeDasharray="264"
+                          strokeDashoffset={
+                            264 - (264 * result.clearance_percentage) / 100
+                          }
                           strokeLinecap="round"
+                          fill="transparent"
+                          className="transition-all duration-1000 ease-out"
                         />
                       </svg>
-                      <div className="absolute inset-0 flex flex-col items-center justify-center">
-                        <span className="text-lg font-mono font-extrabold text-white">
-                          {result.clearance_percentage}%
+                      <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+                        <span className="text-2xl font-black font-mono text-white">
+                          {result.clearance_percentage.toFixed(1)}%
                         </span>
-                        <span className="text-[8px] font-mono uppercase text-blue-400">SCORE</span>
+                        <span className="text-[9px] font-mono uppercase tracking-wider text-blue-300">
+                          SOLVABILITY
+                        </span>
                       </div>
                     </div>
 
-                    <div className="flex-1 w-full space-y-2">
-                      <div className="flex justify-between text-xs font-medium text-slate-300">
-                        <span>Clearance Probability Gauge</span>
-                        <span className="font-mono text-blue-400 font-bold">
-                          {result.clearance_percentage >= 70 ? "HIGH PROBABILITY" : "MODERATE RECOVERY"}
+                    <div className="space-y-3 flex-1 w-full">
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="text-slate-400 font-mono">Triage Classification:</span>
+                        <span className="font-bold text-white">{result.triage_priority}</span>
+                      </div>
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="text-slate-400 font-mono">Golden Response Target:</span>
+                        <span className="font-mono font-bold text-blue-300 bg-blue-950/80 px-2.5 py-1 rounded border border-blue-800/40">
+                          ⏱️ {result.time_window_target}
                         </span>
                       </div>
-                      <div className="w-full h-3 bg-slate-900 rounded-full overflow-hidden border border-slate-800 p-0.5">
+                      <div className="w-full bg-slate-950 rounded-full h-2 border border-slate-800 overflow-hidden mt-2">
                         <div
-                          className="h-full rounded-full bg-gradient-to-r from-blue-600 via-sky-500 to-indigo-400 transition-all duration-700 shadow-[0_0_12px_rgba(37,99,235,0.5)]"
-                          style={{ width: `${Math.max(5, result.clearance_percentage)}%` }}
+                          className={`h-full rounded-full transition-all duration-1000 ${
+                            result.clearance_percentage >= 70
+                              ? "bg-gradient-to-r from-blue-500 to-sky-400"
+                              : result.clearance_percentage >= 45
+                              ? "bg-gradient-to-r from-amber-500 to-yellow-400"
+                              : "bg-gradient-to-r from-rose-600 to-rose-400"
+                          }`}
+                          style={{ width: `${result.clearance_percentage}%` }}
                         />
                       </div>
-                      <p className="text-[11px] text-slate-400">
-                        Consensus across multi-engine investigative telemetry correlates with historical closure patterns.
-                      </p>
                     </div>
                   </div>
 
-                  {/* Priority & Golden Window Targets */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="p-4 rounded-xl border border-slate-800/80 bg-slate-950/60">
-                      <div className="flex items-center gap-2 text-xs text-slate-400">
-                        <AlertCircle className="h-4 w-4 text-amber-400" />
-                        <span className="text-[11px] uppercase font-semibold text-slate-300 tracking-wider">Triage Priority</span>
+                  {/* Evidentiary Impact Assessment */}
+                  {result.evidentiary_factors && result.evidentiary_factors.length > 0 && (
+                    <div className="space-y-3">
+                      <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 font-mono flex items-center justify-between">
+                        <span>Evidentiary Impact Assessment</span>
+                        <span className="text-slate-500 text-[10px]">Factor Influence on Score</span>
                       </div>
-                      <div className="text-base font-semibold text-white mt-1.5 font-mono">
-                        {result.triage_priority}
+                      <div className="grid grid-cols-1 gap-2">
+                        {result.evidentiary_factors.map((factor, idx) => (
+                          <div
+                            key={idx}
+                            className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 flex items-center justify-between gap-3 text-xs"
+                          >
+                            <div className="space-y-0.5">
+                              <div className="font-semibold text-slate-200">{factor.factor}</div>
+                              <div className="text-[11px] text-slate-400">{factor.description}</div>
+                            </div>
+                            <span
+                              className={`font-mono font-bold px-2.5 py-1 rounded text-xs shrink-0 ${
+                                factor.status === "POSITIVE"
+                                  ? "bg-blue-500/15 text-blue-300 border border-blue-500/30"
+                                  : "bg-rose-500/15 text-rose-300 border border-rose-500/30"
+                              }`}
+                            >
+                              {factor.impact_pct > 0 ? `+${factor.impact_pct}%` : `${factor.impact_pct}%`}
+                            </span>
+                          </div>
+                        ))}
                       </div>
-                    </div>
-
-                    <div className="p-4 rounded-xl border border-slate-800/80 bg-slate-950/60">
-                      <div className="flex items-center gap-2 text-xs text-slate-400">
-                        <Clock className="h-4 w-4 text-blue-400" />
-                        <span className="text-[11px] uppercase font-semibold text-slate-300 tracking-wider">Golden Response Window</span>
-                      </div>
-                      <div className="text-base font-semibold text-white mt-1.5 font-mono">
-                        {result.time_window_target}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Operational Verdicts Breakdown Table */}
-                  {result.verdicts && result.verdicts.length > 0 && (
-                    <div className="space-y-3 pt-2">
-                      <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 font-mono">
-                        Consensus Engine Analysis Breakdown
-                      </div>
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Analysis Engine</TableHead>
-                            <TableHead>Likelihood</TableHead>
-                            <TableHead>Verdict</TableHead>
-                            <TableHead>Confidence</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {result.verdicts.map((v) => (
-                            <TableRow key={v.model_key}>
-                              <TableCell className="font-semibold text-xs text-slate-200">
-                                {getOperationalModelName(v.model_name, v.model_key)}
-                              </TableCell>
-                              <TableCell className="font-mono text-xs text-blue-400 font-bold">
-                                {(v.probability * 100).toFixed(1)}%
-                              </TableCell>
-                              <TableCell className="text-xs">
-                                <span
-                                  className={
-                                    v.prediction === 1
-                                      ? "text-blue-300 font-semibold bg-blue-500/15 px-2 py-0.5 rounded border border-blue-500/30"
-                                      : "text-rose-400 font-semibold bg-rose-500/10 px-2 py-0.5 rounded border border-rose-500/20"
-                                  }
-                                >
-                                  {v.clearance_verdict}
-                                </span>
-                              </TableCell>
-                              <TableCell className="font-mono text-xs text-slate-400">
-                                {v.confidence_tier}
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
                     </div>
                   )}
 
                   {/* Detective Action Protocol */}
-                  <div className="space-y-3 pt-2">
+                  <div className="space-y-3 pt-1">
                     <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 font-mono">
                       Recommended Detective Action Protocol
                     </div>
@@ -660,11 +692,11 @@ export default function SolvabilityPage() {
               </Card>
 
               {/* Response Window Clearance Retention Curve */}
-              <Card className="rounded-2xl hud-bracket glow-card-cyan">
+              <Card className="rounded-2xl hud-bracket glow-card-blue">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-lg text-white">Case Clearance Probability by Lead Response Window</CardTitle>
                   <CardDescription className="text-xs mt-1">
-                    Resolution probability drops significantly as lead response exceeds initial 72 hours.
+                    Resolution likelihood decreases sharply as critical response time extends past initial 72 hours.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="h-64 pt-4">
@@ -713,15 +745,15 @@ export default function SolvabilityPage() {
               </Card>
             </>
           ) : (
-            <Card className="border-dashed border-slate-800 bg-slate-900/30 flex flex-col items-center justify-center p-16 text-center h-[480px] rounded-2xl hud-bracket">
+            <Card className="border-dashed border-slate-800 bg-slate-900/30 flex flex-col items-center justify-center p-16 text-center h-[520px] rounded-2xl hud-bracket">
               <div className="h-16 w-16 rounded-2xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-4 shadow-[0_0_20px_rgba(37,99,235,0.25)]">
                 <Scale className="h-8 w-8 text-blue-400 stroke-[2.3]" />
               </div>
               <h3 className="text-base font-semibold text-white">
-                Awaiting Case Parameters
+                Awaiting Incident Parameters
               </h3>
-              <p className="text-xs text-slate-400 max-w-md mt-2 leading-relaxed">
-                Select a quick-load scenario preset above or configure incident metadata in the left workspace and click &quot;Calculate Clearance Likelihood&quot; to compute triage tier and golden-hour response directives.
+              <p className="text-xs text-slate-400 max-w-sm mt-1.5 leading-relaxed">
+                Choose a 1-click scenario preset above or configure scene parameters and evidence in the left panel to execute solvability triage.
               </p>
             </Card>
           )}
