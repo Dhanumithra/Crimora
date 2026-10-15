@@ -145,9 +145,11 @@ export interface GeographicSummary {
   hotspots: HotspotCentroid[];
   tamil_nadu_focus_districts: Array<{
     district: string;
-    lat: number;
-    lon: number;
-    base_weight: number;
+    latitude?: number;
+    longitude?: number;
+    lat?: number;
+    lon?: number;
+    base_weight?: number;
   }>;
 }
 

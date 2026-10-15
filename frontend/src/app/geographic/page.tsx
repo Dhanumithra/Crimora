@@ -114,18 +114,23 @@ export default function GeographicPage() {
     },
   ];
 
-  const districts = summary?.tamil_nadu_focus_districts || [
-    { district: "Chennai", lat: 13.0827, lon: 80.2707, base_weight: 95 },
-    { district: "Madurai", lat: 9.9252, lon: 78.1198, base_weight: 88 },
-    { district: "Coimbatore", lat: 11.0168, lon: 76.9558, base_weight: 80 },
-    { district: "Salem", lat: 11.6643, lon: 78.146, base_weight: 73 },
-    { district: "Tiruchirappalli", lat: 10.7905, lon: 78.7047, base_weight: 68 },
-    { district: "Tirunelveli", lat: 8.7139, lon: 77.7567, base_weight: 62 },
-    { district: "Vellore", lat: 12.9165, lon: 79.1325, base_weight: 59 },
-    { district: "Erode", lat: 11.341, lon: 77.7172, base_weight: 55 },
-    { district: "Thanjavur", lat: 10.787, lon: 79.1378, base_weight: 52 },
-    { district: "Dindigul", lat: 10.3673, lon: 77.9803, base_weight: 48 },
-  ];
+  const districts = (summary?.tamil_nadu_focus_districts || [
+    { district: "Chennai", latitude: 13.0827, longitude: 80.2707, base_weight: 95 },
+    { district: "Madurai", latitude: 9.9252, longitude: 78.1198, base_weight: 88 },
+    { district: "Coimbatore", latitude: 11.0168, longitude: 76.9558, base_weight: 80 },
+    { district: "Salem", latitude: 11.6643, longitude: 78.146, base_weight: 73 },
+    { district: "Tiruchirappalli", latitude: 10.7905, longitude: 78.7047, base_weight: 68 },
+    { district: "Tirunelveli", latitude: 8.7139, longitude: 77.7567, base_weight: 62 },
+    { district: "Vellore", latitude: 12.9165, longitude: 79.1325, base_weight: 59 },
+    { district: "Erode", latitude: 11.341, longitude: 77.7172, base_weight: 55 },
+    { district: "Thanjavur", latitude: 10.787, longitude: 79.1378, base_weight: 52 },
+    { district: "Dindigul", latitude: 10.3673, longitude: 77.9803, base_weight: 48 },
+  ]).map((d: any) => ({
+    district: d.district,
+    latitude: Number(d.latitude ?? d.lat),
+    longitude: Number(d.longitude ?? d.lon),
+    base_weight: d.base_weight ?? 70,
+  }));
 
   return (
     <div className="space-y-8 animate-fade-in">

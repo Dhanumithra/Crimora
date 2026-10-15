@@ -8,9 +8,11 @@ interface LeafletHotspotMapProps {
   hotspots: HotspotCentroid[];
   districts: Array<{
     district: string;
-    lat: number;
-    lon: number;
-    base_weight: number;
+    latitude?: number;
+    longitude?: number;
+    lat?: number;
+    lon?: number;
+    base_weight?: number;
   }>;
   selectedCity?: string;
 }
@@ -64,12 +66,13 @@ export default function LeafletHotspotMap({
   // Initialize Map Instance once
   useEffect(() => {
     let isCancelled = false;
+    const containerEl = containerRef.current;
 
     async function initLeaflet() {
-      if (typeof window === "undefined" || !containerRef.current) return;
+      if (typeof window === "undefined" || !containerEl) return;
 
       const L = await import("leaflet");
-      if (isCancelled || !containerRef.current) return;
+      if (isCancelled || !containerEl) return;
       leafletModuleRef.current = L;
 
       // Fix default Leaflet icon paths
@@ -84,12 +87,12 @@ export default function LeafletHotspotMap({
       if (mapRef.current) {
         return;
       }
-      if ((containerRef.current as any)._leaflet_id) {
-        (containerRef.current as any)._leaflet_id = null;
+      if ((containerEl as any)._leaflet_id) {
+        (containerEl as any)._leaflet_id = null;
       }
 
       // Initialize map centered over Tamil Nadu (11.1271° N, 78.6569° E)
-      const map = L.map(containerRef.current, {
+      const map = L.map(containerEl, {
         center: [11.1271, 78.6569],
         zoom: 7,
         zoomControl: true,
@@ -114,8 +117,8 @@ export default function LeafletHotspotMap({
         mapRef.current.remove();
         mapRef.current = null;
       }
-      if (containerRef.current) {
-        (containerRef.current as any)._leaflet_id = null;
+      if (containerEl) {
+        (containerEl as any)._leaflet_id = null;
       }
       dataLayerGroupRef.current = null;
       tileLayersRef.current = [];
@@ -172,7 +175,11 @@ export default function LeafletHotspotMap({
 
     // Render Hotspot Circles with gradient radius based on spatial intensity
     hotspots.forEach((spot) => {
-      const radius = Math.max(10000, spot.normalized_intensity * 35000);
+      const lat = Number(spot.latitude ?? (spot as any).lat);
+      const lon = Number(spot.longitude ?? (spot as any).lon);
+      if (isNaN(lat) || isNaN(lon) || !isFinite(lat) || !isFinite(lon)) return;
+
+      const radius = Math.max(10000, (spot.normalized_intensity || 0.5) * 35000);
       const color =
         spot.normalized_intensity > 0.8
           ? "#ef4444" // Crimson
@@ -180,7 +187,7 @@ export default function LeafletHotspotMap({
           ? "#f59e0b" // Amber
           : "#3b82f6"; // Sapphire Blue
 
-      const circle = L.circle([spot.latitude, spot.longitude], {
+      const circle = L.circle([lat, lon], {
         color: color,
         fillColor: color,
         fillOpacity: 0.35,
@@ -190,19 +197,23 @@ export default function LeafletHotspotMap({
 
       circle.bindPopup(`
         <div style="font-family: monospace; font-size: 11px; color: #f8fafc; line-height: 1.5; padding: 4px; background: #0b1528; border-radius: 6px;">
-          <strong style="color: #60a5fa; font-size: 12px;">${spot.city} Hotspot</strong><br/>
+          <strong style="color: #60a5fa; font-size: 12px;">${spot.city || "Identified"} Hotspot</strong><br/>
           <span>Priority Rank: <strong style="color: #fff;">#${spot.rank}</strong></span><br/>
-          <span>Density Score: <strong style="color: #93c5fd;">${spot.estimated_intensity.toFixed(1)}</strong></span><br/>
-          <span>Risk Tier: <strong style="color: #38bdf8;">${spot.percentile_tier}</strong></span><br/>
+          <span>Density Score: <strong style="color: #93c5fd;">${(spot.estimated_intensity || 0).toFixed(1)}</strong></span><br/>
+          <span>Risk Tier: <strong style="color: #38bdf8;">${spot.percentile_tier || "Elevated"}</strong></span><br/>
           <hr style="border: 0; border-top: 1px solid #1e345a; margin: 6px 0;" />
-          <span style="font-size: 10px; color: #94a3b8;">Patrol Directive: ${spot.recommended_patrol}</span>
+          <span style="font-size: 10px; color: #94a3b8;">Patrol Directive: ${spot.recommended_patrol || "Active patrol"}</span>
         </div>
       `);
     });
 
     // Render Tamil Nadu administrative district nodes
     districts.forEach((d) => {
-      const marker = L.circleMarker([d.lat, d.lon], {
+      const lat = Number(d.latitude ?? (d as any).lat);
+      const lon = Number(d.longitude ?? (d as any).lon);
+      if (isNaN(lat) || isNaN(lon) || !isFinite(lat) || !isFinite(lon)) return;
+
+      const marker = L.circleMarker([lat, lon], {
         radius: 4,
         color: "#2563eb",
         fillColor: "#38bdf8",
@@ -213,8 +224,8 @@ export default function LeafletHotspotMap({
       marker.bindPopup(`
         <div style="font-family: monospace; font-size: 11px; color: #f8fafc; padding: 4px; background: #0b1528; border-radius: 6px;">
           <strong style="color: #93c5fd;">${d.district} District HQ</strong><br/>
-          <span>Coordinates: ${d.lat.toFixed(4)}° N, ${d.lon.toFixed(4)}° E</span><br/>
-          <span>Incident Volume Weight: ${d.base_weight}</span>
+          <span>Coordinates: ${lat.toFixed(4)}° N, ${lon.toFixed(4)}° E</span><br/>
+          <span>Incident Volume Weight: ${d.base_weight ?? 70}</span>
         </div>
       `);
     });
