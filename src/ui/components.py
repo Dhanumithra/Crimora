@@ -123,7 +123,7 @@ def render_page_header(
     title: str,
     subtitle: str,
     icon: str = "🔍",
-    badge_text: str = "Person B Track",
+    badge_text: str = "System Operational",
     badge_type: str = "active",
     badge_color: str = "",  # legacy alias ignored; badge_type takes effect
 ) -> None:

@@ -84,9 +84,10 @@ def render_tamil_nadu_analytics_page() -> None:
 
     st.markdown("---")
 
-    tab1, tab2, tab3 = st.tabs([
+    tab1, tab2, tab3, tab4 = st.tabs([
         "📋  District Summary & Rankings",
         "📈  Annual Trends (2014–2022)",
+        "⚔️  Head-to-Head Comparison",
         "🖼️  Publication Figures",
     ])
 
@@ -95,6 +96,8 @@ def render_tamil_nadu_analytics_page() -> None:
     with tab2:
         _render_yearly_trends_tab(trends_df)
     with tab3:
+        _render_head_to_head_tab(district_df)
+    with tab4:
         _render_figures_tab()
 
     render_responsible_notice()
@@ -307,3 +310,66 @@ def _render_figures_tab() -> None:
             "No visualization figures found in outputs/tamil_nadu/. "
             "Run the Tamil Nadu analytics pipeline to generate them."
         )
+
+
+def _render_head_to_head_tab(district_df: pd.DataFrame) -> None:
+    """Compare two selected Tamil Nadu districts head-to-head across key crime metrics."""
+    render_section_header(
+        title="District Head-to-Head Comparative Drilldown",
+        description="Select any two Tamil Nadu administrative jurisdictions to compare crime incidence, rates, and demographic share.",
+    )
+
+    if district_df.empty or COL_DISTRICT not in district_df.columns:
+        st.info("District summary data unavailable.")
+        return
+
+    districts = sorted(district_df[COL_DISTRICT].dropna().unique().tolist())
+    if len(districts) < 2:
+        st.info("Need at least two districts for comparison.")
+        return
+
+    c1, c2 = st.columns(2)
+    with c1:
+        dist_a = st.selectbox("Select District A:", options=districts, index=0, key="dist_comp_a")
+    with c2:
+        default_b_idx = min(1, len(districts) - 1)
+        dist_b = st.selectbox("Select District B:", options=districts, index=default_b_idx, key="dist_comp_b")
+
+    row_a = district_df[district_df[COL_DISTRICT] == dist_a].iloc[0]
+    row_b = district_df[district_df[COL_DISTRICT] == dist_b].iloc[0]
+
+    st.markdown("---")
+
+    # KPI comparison
+    col_a_kpi, col_b_kpi = st.columns(2)
+    with col_a_kpi:
+        st.markdown(f"### 🏛️ {dist_a}")
+        total_a = int(row_a.get(COL_TOTAL, 0))
+        rate_a = float(row_a.get(COL_RATE, 0.0))
+        pop_a = float(row_a.get(COL_POP, 0.0))
+        share_a = float(row_a.get(COL_SHARE, 0.0))
+        st.metric("Total Crimes (2020–22)", f"{total_a:,}")
+        st.metric("Crime Rate (2022)", f"{rate_a:.1f}")
+        st.metric("Projected Pop (Lakhs)", f"{pop_a:.1f}")
+        st.metric("State Crime Share", f"{share_a:.2f}%")
+
+    with col_b_kpi:
+        st.markdown(f"### 🏛️ {dist_b}")
+        total_b = int(row_b.get(COL_TOTAL, 0))
+        rate_b = float(row_b.get(COL_RATE, 0.0))
+        pop_b = float(row_b.get(COL_POP, 0.0))
+        share_b = float(row_b.get(COL_SHARE, 0.0))
+        delta_total = total_b - total_a
+        delta_rate = rate_b - rate_a
+        st.metric("Total Crimes (2020–22)", f"{total_b:,}", delta=f"{delta_total:+,} vs {dist_a}")
+        st.metric("Crime Rate (2022)", f"{rate_b:.1f}", delta=f"{delta_rate:+.1f} vs {dist_a}")
+        st.metric("Projected Pop (Lakhs)", f"{pop_b:.1f}")
+        st.metric("State Crime Share", f"{share_b:.2f}%")
+
+    st.markdown("#### Visual Comparison")
+    comp_df = pd.DataFrame({
+        dist_a: [total_a, rate_a, pop_a * 100],
+        dist_b: [total_b, rate_b, pop_b * 100],
+    }, index=["Total Incidents", "Rate per Lakh", "Est. Population (x100)"])
+    st.bar_chart(comp_df, use_container_width=True)
+

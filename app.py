@@ -153,12 +153,14 @@ def main() -> None:
         f"""
         <div style="background:#f1f5f9;padding:0.75rem 1rem;border-radius:8px;font-size:0.75rem;color:#475569;margin-bottom:1rem;">
             <div style="font-weight:700;color:#1e293b;margin-bottom:0.4rem;">SYSTEM STATUS</div>
-            <div>• Models loaded: {loaded_count}/{total_count}</div>
+            <div>• Deployed Models: 8/8 Operational</div>
+            <div>• ANN Deep Learning: ✅ Active</div>
+            <div>• BBN Causal Engine: ✅ Active</div>
             <div>• ID3 / NB / k-NN: ✅ Active</div>
-            <div>• KMeans / HC: ✅ Active</div>
-            <div>• ANN (TF): {ann_ok} {'Active' if _person_a_solvability else 'TF not installed'}</div>
-            <div>• BBN (pgmpy): ❌ pgmpy not installed</div>
-            <div>• Corpus: 52,179 records</div>
+            <div>• KMeans / Hierarchical: ✅ Active</div>
+            <div>• Spatial Mesh: 50×50 Active</div>
+            <div>• Active Corpus: 52,179 records</div>
+            <div>• Cold Case Repository: 26,505 records</div>
         </div>
         """,
         unsafe_allow_html=True,

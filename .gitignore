@@ -52,6 +52,17 @@ models/*
 *.pt
 *.pth
 
+# Allow backend production deployment artifacts
+!backend/artifacts/**
+
+# Node & Next.js frontend dependencies and build
+node_modules/
+.next/
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+*.tsbuildinfo
+
 # Generated outputs & evaluation figures
 outputs/*
 !outputs/.gitkeep

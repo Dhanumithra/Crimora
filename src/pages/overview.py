@@ -61,8 +61,8 @@ def render_overview_page() -> None:
 
     # 2. Platform Architecture & Development Lineage
     render_section_header(
-        title="Platform Architecture & Multi-Day Milestone Status",
-        description="Collaborative investigative engineering framework across Person A and Person B tracks.",
+        title="Platform Architecture & Analytical Engine Status",
+        description="Unified investigative engineering framework integrating Deep Learning, Classical ML, Spatial Kernels, and Causal Inference.",
     )
 
     col_arch1, col_arch2 = st.columns([0.65, 0.35])
@@ -76,52 +76,52 @@ def render_overview_page() -> None:
                         <tr style='border-bottom: 2px solid #e2e8f0; text-align: left; color: #475569;'>
                             <th style='padding: 6px 8px;'>Module</th>
                             <th style='padding: 6px 8px;'>Methodology</th>
-                            <th style='padding: 6px 8px;'>Track</th>
+                            <th style='padding: 6px 8px;'>Architecture</th>
                             <th style='padding: 6px 8px;'>Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr style='border-bottom: 1px solid #f1f5f9;'>
-                            <td style='padding: 6px 8px;'><b>Data Engineering & Cleaning</b></td>
-                            <td style='padding: 6px 8px;'>Imputation, Casing, Spatial Bounds Validation</td>
-                            <td style='padding: 6px 8px;'>Person B</td>
-                            <td style='padding: 6px 8px;'><span class='badge badge-active'>Complete (Day 2)</span></td>
+                            <td style='padding: 6px 8px;'><b>Case Solvability Engine</b></td>
+                            <td style='padding: 6px 8px;'>Multi-Model Clearance Scoring</td>
+                            <td style='padding: 6px 8px;'>ANN (Deep MLP), ID3, NB, k-NN</td>
+                            <td style='padding: 6px 8px;'><span class='badge badge-active'>Operational</span></td>
                         </tr>
                         <tr style='border-bottom: 1px solid #f1f5f9;'>
-                            <td style='padding: 6px 8px;'><b>PCA Dimensionality Reduction</b></td>
-                            <td style='padding: 6px 8px;'>Eigendecomposition & Latent Projection</td>
-                            <td style='padding: 6px 8px;'>Person B</td>
-                            <td style='padding: 6px 8px;'><span class='badge badge-active'>Complete (Day 3)</span></td>
+                            <td style='padding: 6px 8px;'><b>Behavioral & Suspect Profiling</b></td>
+                            <td style='padding: 6px 8px;'>Causal Demographics Inference</td>
+                            <td style='padding: 6px 8px;'>Bayesian Belief Network (BBN)</td>
+                            <td style='padding: 6px 8px;'><span class='badge badge-active'>Operational</span></td>
                         </tr>
                         <tr style='border-bottom: 1px solid #f1f5f9;'>
-                            <td style='padding: 6px 8px;'><b>Tamil Nadu Crime Analytics</b></td>
-                            <td style='padding: 6px 8px;'>Longitudinal IPC District Aggregation</td>
-                            <td style='padding: 6px 8px;'>Person B</td>
-                            <td style='padding: 6px 8px;'><span class='badge badge-active'>Complete (Day 3)</span></td>
+                            <td style='padding: 6px 8px;'><b>Cold Case Linkage & Clustering</b></td>
+                            <td style='padding: 6px 8px;'>Pattern Linkage across 26k+ Cases</td>
+                            <td style='padding: 6px 8px;'>K-Means &amp; Hierarchical (k=5)</td>
+                            <td style='padding: 6px 8px;'><span class='badge badge-active'>Operational</span></td>
                         </tr>
                         <tr style='border-bottom: 1px solid #f1f5f9;'>
                             <td style='padding: 6px 8px;'><b>Geographic Profiling & LWR</b></td>
-                            <td style='padding: 6px 8px;'>Haversine Kernel Intensity & Hotspot Centroids</td>
-                            <td style='padding: 6px 8px;'>Person B</td>
-                            <td style='padding: 6px 8px;'><span class='badge badge-active'>Complete (Day 4)</span></td>
+                            <td style='padding: 6px 8px;'>Distance-Weighted Spatial Kernel</td>
+                            <td style='padding: 6px 8px;'>Folium Heatmap + Spatial NMS</td>
+                            <td style='padding: 6px 8px;'><span class='badge badge-active'>Operational</span></td>
                         </tr>
                         <tr style='border-bottom: 1px solid #f1f5f9;'>
-                            <td style='padding: 6px 8px;'><b>Classical Solvability Models</b></td>
-                            <td style='padding: 6px 8px;'>ID3 Decision Tree, Naive Bayes, Scaled k-NN</td>
-                            <td style='padding: 6px 8px;'>Person B</td>
-                            <td style='padding: 6px 8px;'><span class='badge badge-active'>Complete (Day 5)</span></td>
+                            <td style='padding: 6px 8px;'><b>PCA Dimensionality Reduction</b></td>
+                            <td style='padding: 6px 8px;'>Latent Attribute Decomposition</td>
+                            <td style='padding: 6px 8px;'>Eigendecomposition (Top 15 PCs)</td>
+                            <td style='padding: 6px 8px;'><span class='badge badge-active'>Operational</span></td>
                         </tr>
                         <tr style='border-bottom: 1px solid #f1f5f9;'>
-                            <td style='padding: 6px 8px;'><b>Crime Linkage Clustering</b></td>
-                            <td style='padding: 6px 8px;'>K-Means &amp; Hierarchical Agglomerative (k=5)</td>
-                            <td style='padding: 6px 8px;'>Person A</td>
-                            <td style='padding: 6px 8px;'><span class='badge badge-active'>Integrated (Day 7)</span></td>
+                            <td style='padding: 6px 8px;'><b>Tamil Nadu Crime Analytics</b></td>
+                            <td style='padding: 6px 8px;'>Longitudinal District Pattern Analysis</td>
+                            <td style='padding: 6px 8px;'>NCRB 2014–2022 District Matrix</td>
+                            <td style='padding: 6px 8px;'><span class='badge badge-active'>Operational</span></td>
                         </tr>
                         <tr>
-                            <td style='padding: 6px 8px;'><b>Behavioral Profiling (BBN)</b></td>
-                            <td style='padding: 6px 8px;'>Bayesian Belief Networks &mdash; pgmpy required</td>
-                            <td style='padding: 6px 8px;'>Person A</td>
-                            <td style='padding: 6px 8px;'><span class='badge badge-pending'>Dep. Missing</span></td>
+                            <td style='padding: 6px 8px;'><b>Data Engineering & Hygiene</b></td>
+                            <td style='padding: 6px 8px;'>Leakage Isolation & PII Segregation</td>
+                            <td style='padding: 6px 8px;'>Sklearn ColumnTransformers</td>
+                            <td style='padding: 6px 8px;'><span class='badge badge-active'>Operational</span></td>
                         </tr>
                     </tbody>
                 </table>

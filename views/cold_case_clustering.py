@@ -58,11 +58,12 @@ def render_clustering_page():
         cluster_id = st.selectbox("Select Cluster Group", options=sorted(df_clustered['Cluster_ID'].unique()))
 
     # Apply Filters
-    filtered_df = df_clustered[
-        (df_clustered['State'].isin(selected_state)) &
-        (df_clustered['Weapon'].isin(selected_weapon)) &
-        (df_clustered['Cluster_ID'] == cluster_id)
-    ]
+    mask = df_clustered['Cluster_ID'] == cluster_id
+    if selected_state:
+        mask = mask & (df_clustered['State'].isin(selected_state))
+    if selected_weapon:
+        mask = mask & (df_clustered['Weapon'].isin(selected_weapon))
+    filtered_df = df_clustered[mask]
 
     st.markdown("---")
     st.subheader(f"Identified Linked Cold Cases (Cluster #{cluster_id})")

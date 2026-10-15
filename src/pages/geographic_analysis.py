@@ -22,7 +22,7 @@ def render_geographic_analysis_page() -> None:
         title="Geographic Profiling & Hotspot Analytics",
         subtitle="Distance-Weighted Spatial Intensity & Activity-Area Estimation",
         icon="🗺️",
-        badge_text="Day 4 Integrated",
+        badge_text="Spatial Engine Active",
         badge_type="active",
     )
 

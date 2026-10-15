@@ -113,7 +113,7 @@ def render_solvability_profiling_page():
                     if hasattr(ann_scaler, 'feature_names_in_'):
                         for col in ann_scaler.feature_names_in_:
                             if col not in df_input.columns:
-                                df_input[col] = 'Unknown'
+                                df_input[col] = 0 if col in ['VicAge', 'Year', 'VicCount', 'OffAge', 'OffCount'] else 'Unknown'
                         df_input = df_input[ann_scaler.feature_names_in_]
 
                     X_proc = ann_scaler.transform(df_input)
