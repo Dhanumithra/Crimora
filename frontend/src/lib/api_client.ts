@@ -21,7 +21,7 @@ class CrimoraApiClient {
   private baseUrl: string;
 
   constructor(baseUrl: string) {
-    this.baseUrl = baseUrl.replace(/\/$/, "");
+    this.baseUrl = baseUrl.replace(/\/api\/v1\/?$/, "").replace(/\/$/, "");
   }
 
   private async fetchJson<T>(
