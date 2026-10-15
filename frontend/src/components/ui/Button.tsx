@@ -18,27 +18,27 @@ export function Button({
 }: ButtonProps) {
   const variantStyles = {
     primary:
-      "bg-indigo-600 hover:bg-indigo-500 text-white font-medium shadow-sm border border-indigo-500/40 focus:ring-indigo-500",
+      "bg-[#3B5BDB] hover:bg-[#4C6EF5] text-white font-medium shadow-sm border border-[#4C6EF5]/30 focus:ring-[#3B5BDB]",
     secondary:
-      "bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 focus:ring-slate-400",
+      "bg-[#1A1F2C] hover:bg-[#1F2535] text-slate-200 border border-[#252B3B] focus:ring-slate-400",
     outline:
-      "bg-transparent hover:bg-slate-800 text-slate-300 border border-slate-750 hover:text-white focus:ring-indigo-500",
+      "bg-transparent hover:bg-[#1A1F2C] text-slate-400 border border-[#252B3B] hover:text-slate-200 focus:ring-[#3B5BDB]",
     danger:
-      "bg-rose-600 hover:bg-rose-500 text-white border border-rose-500/40 focus:ring-rose-400",
+      "bg-[#C92A2A] hover:bg-[#E03131] text-white border border-[#C92A2A]/40 focus:ring-red-400",
     ghost:
-      "bg-transparent hover:bg-slate-800 text-slate-400 hover:text-slate-200",
+      "bg-transparent hover:bg-[#1A1F2C] text-slate-500 hover:text-slate-200",
   };
 
   const sizeStyles = {
     sm: "h-7 px-2.5 text-xs",
-    md: "h-8.5 px-3.5 text-xs",
-    lg: "h-9.5 px-4 text-sm",
+    md: "h-8 px-3 text-xs",
+    lg: "h-9 px-4 text-sm",
   };
 
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center rounded-md font-medium transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-slate-950 disabled:opacity-50 disabled:cursor-not-allowed select-none",
+        "inline-flex items-center justify-center rounded font-medium transition-colors duration-150 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-offset-[#0B0E14] disabled:opacity-40 disabled:cursor-not-allowed select-none gap-1.5",
         variantStyles[variant],
         sizeStyles[size],
         className

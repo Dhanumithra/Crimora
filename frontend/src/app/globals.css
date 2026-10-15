@@ -4,16 +4,23 @@
 
 @layer base {
   :root {
-    --background: #090d16;
-    --foreground: #f8fafc;
-    --card: #0f172a;
-    --card-foreground: #f8fafc;
-    --primary: #4f46e5;
-    --primary-foreground: #ffffff;
-    --border: #1e293b;
-    --accent: #10b981;
-    --muted: #64748b;
-    --muted-foreground: #94a3b8;
+    --background:        #0B0E14;
+    --surface:           #111520;
+    --card:              #1A1F2C;
+    --card-hover:        #1F2535;
+    --card-border:       #252B3B;
+    --foreground:        #E2E8F0;
+    --foreground-dim:    #94A3B8;
+    --foreground-faint:  #475569;
+    --primary:           #3B5BDB;
+    --primary-hover:     #4C6EF5;
+    --border:            #252B3B;
+    --border-subtle:     #1D2232;
+    --accent:            #2F9E44;
+    --warning:           #E67700;
+    --danger:            #C92A2A;
+    --muted:             #64748B;
+    --muted-foreground:  #94A3B8;
   }
 
   body {
@@ -21,68 +28,155 @@
     color: var(--foreground);
     font-feature-settings: "rlig" 1, "calt" 1;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  * {
+    border-color: var(--border);
   }
 }
 
-/* Compact Enterprise Scrollbars */
+/* ── Ultra-thin Enterprise Scrollbars ── */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 4px;
+  height: 4px;
 }
 ::-webkit-scrollbar-track {
-  background: #090d16;
+  background: #0B0E14;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
-  border-radius: 4px;
+  background: #252B3B;
+  border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #2F3A52;
 }
 
-/* Enterprise Panels */
+/* ── Enterprise Panel Utilities ── */
 .enterprise-panel {
-  background: #0f172a;
-  border: 1px solid #1e293b;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
 
 .enterprise-panel-subtle {
-  background: #0d1527;
-  border: 1px solid rgba(30, 41, 59, 0.7);
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
 }
 
-/* Leaflet Custom Styles - Dark Tactical Theme */
+/* ── Flat metric card – no glow, layered depth ── */
+.metric-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03);
+}
+
+/* ── Ultra-clean table styles ── */
+.data-table thead th {
+  background: #111520;
+  border-bottom: 1px solid #252B3B;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748B;
+  font-weight: 600;
+  padding: 6px 12px;
+}
+
+.data-table tbody tr {
+  border-bottom: 1px solid #1D2232;
+  transition: background 0.1s ease;
+}
+
+.data-table tbody tr:hover {
+  background: rgba(59,91,219,0.04);
+}
+
+.data-table tbody td {
+  padding: 7px 12px;
+  font-size: 12px;
+  color: #CBD5E1;
+}
+
+/* ── Status dot – minimal pulsing indicator ── */
+.status-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.status-live::before {
+  content: "";
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #2F9E44;
+  animation: pulseSlow 2.5s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+/* ── Micro label (10-11px uppercase) ── */
+.micro-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748B;
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
+}
+
+/* ── Leaflet Dark Tactical Theme ── */
 .leaflet-container {
   width: 100%;
   height: 100%;
-  border-radius: 0.375rem;
-  background-color: #090d16 !important;
+  border-radius: 4px;
+  background-color: #0B0E14 !important;
 }
 
 .leaflet-popup-content-wrapper {
-  background: #0f172a !important;
-  color: #f8fafc !important;
-  border: 1px solid #1e293b !important;
-  border-radius: 6px !important;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.7) !important;
+  background: #1A1F2C !important;
+  color: #E2E8F0 !important;
+  border: 1px solid #252B3B !important;
+  border-radius: 4px !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.7) !important;
   font-size: 11px !important;
 }
 
 .leaflet-popup-tip {
-  background: #0f172a !important;
+  background: #1A1F2C !important;
 }
 
 .leaflet-control-attribution {
-  background: rgba(11, 15, 25, 0.85) !important;
-  color: #64748b !important;
+  background: rgba(11,14,20,0.9) !important;
+  color: #475569 !important;
   font-size: 9px !important;
-  border-radius: 3px !important;
+  border-radius: 2px !important;
 }
 
 .leaflet-control-attribution a {
-  color: #6366f1 !important;
+  color: #3B5BDB !important;
 }
 
 .leaflet-tile {
-  filter: brightness(0.92) contrast(1.08);
+  filter: brightness(0.88) contrast(1.1) saturate(0.75);
+}
+
+/* ── Animate-in utility ── */
+@keyframes animateIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-in {
+  animation: animateIn 0.2s ease-out both;
+}
+
+/* ── Recharts tooltip global override ── */
+.recharts-tooltip-wrapper .recharts-default-tooltip {
+  background: #1A1F2C !important;
+  border: 1px solid #252B3B !important;
+  border-radius: 4px !important;
+  font-size: 11px !important;
+  padding: 6px 10px !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.6) !important;
 }

@@ -346,9 +346,9 @@ export default function SolvabilityPage() {
                         {result.clearance_percentage}%
                       </span>
                     </div>
-                    <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+                    <div className="w-full h-1.5 bg-[#111520] rounded-full overflow-hidden border border-[#252B3B]">
                       <div
-                        className="h-full rounded-full bg-indigo-600 transition-all duration-500"
+                        className="h-full rounded-full bg-[#3B5BDB] transition-all duration-700"
                         style={{ width: `${Math.max(5, result.clearance_percentage)}%` }}
                       />
                     </div>
@@ -455,27 +455,28 @@ export default function SolvabilityPage() {
                     <AreaChart data={leadWindowRetentionData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
                       <defs>
                         <linearGradient id="indigoGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.6} />
-                          <stop offset="95%" stopColor="#4f46e5" stopOpacity={0.0} />
+                          <stop offset="5%" stopColor="#3B5BDB" stopOpacity={0.5} />
+                          <stop offset="95%" stopColor="#3B5BDB" stopOpacity={0.0} />
                         </linearGradient>
                       </defs>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                      <XAxis dataKey="window" stroke="#64748b" fontSize={10} />
-                      <YAxis stroke="#64748b" fontSize={10} domain={[0, 100]} unit="%" />
+                      <CartesianGrid strokeDasharray="3 3" stroke="#1D2232" />
+                      <XAxis dataKey="window" stroke="#475569" fontSize={10} />
+                      <YAxis stroke="#475569" fontSize={10} domain={[0, 100]} unit="%" />
                       <Tooltip
                         contentStyle={{
-                          backgroundColor: "#0f172a",
-                          borderColor: "#1e293b",
-                          borderRadius: "6px",
+                          backgroundColor: "#1A1F2C",
+                          borderColor: "#252B3B",
+                          borderRadius: "4px",
                           fontSize: "11px",
+                          boxShadow: "0 8px 24px rgba(0,0,0,0.6)",
                         }}
                         formatter={(val: any) => [`${val}%`, "Clearance Probability"]}
                       />
                       <Area
                         type="monotone"
                         dataKey="clearance_pct"
-                        stroke="#4f46e5"
-                        strokeWidth={2}
+                        stroke="#3B5BDB"
+                        strokeWidth={1.5}
                         fillOpacity={1}
                         fill="url(#indigoGrad)"
                         name="Clearance Probability"
@@ -483,8 +484,9 @@ export default function SolvabilityPage() {
                       <Line
                         type="monotone"
                         dataKey="historical_avg"
-                        stroke="#64748b"
+                        stroke="#475569"
                         strokeDasharray="4 4"
+                        strokeWidth={1}
                         name="Historical Average"
                       />
                     </AreaChart>

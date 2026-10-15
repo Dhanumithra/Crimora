@@ -11,18 +11,18 @@ export function Badge({
   ...props
 }: BadgeProps) {
   const variantStyles = {
-    default: "bg-slate-800/90 text-slate-300 border-slate-700/80",
-    secondary: "bg-indigo-500/10 text-indigo-400 border-indigo-500/30",
-    success: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30",
-    warning: "bg-amber-500/10 text-amber-400 border-amber-500/30",
-    danger: "bg-rose-500/10 text-rose-400 border-rose-500/30",
-    outline: "text-slate-400 border-slate-800 bg-transparent",
+    default:   "bg-[#1D2232] text-slate-400 border-[#2A3247]",
+    secondary: "bg-[#1E2540] text-[#7B9CF5] border-[#2D3E6B]",
+    success:   "bg-[#1A2E20] text-[#4CAF6A] border-[#2A4A32]",
+    warning:   "bg-[#2C1E0A] text-[#E09B50] border-[#4A3018]",
+    danger:    "bg-[#2A1414] text-[#D46060] border-[#4A2222]",
+    outline:   "text-slate-500 border-[#252B3B] bg-transparent",
   };
 
   return (
     <div
       className={cn(
-        "inline-flex items-center gap-1.5 rounded border px-2 py-0.5 text-[11px] font-medium tracking-wide transition-colors select-none",
+        "inline-flex items-center gap-1 rounded-sm border px-1.5 py-0.5 text-[10px] font-mono font-semibold tracking-[0.06em] uppercase transition-colors select-none",
         variantStyles[variant],
         className
       )}

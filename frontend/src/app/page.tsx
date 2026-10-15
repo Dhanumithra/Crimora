@@ -220,125 +220,121 @@ export default function OverviewPage() {
   };
 
   return (
-    <div className="space-y-4 animate-in fade-in duration-200">
+    <div className="space-y-4 animate-in">
       {/* Enterprise Top Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2.5 border-b border-slate-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2.5 border-b border-[#252B3B]">
         <div>
           <div className="flex items-center gap-2 mb-0.5">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-indigo-400">
+            <span className="text-[9px] font-mono uppercase tracking-[0.1em] text-[#7B9CF5]">
               Operations Center
             </span>
-            <span className="text-slate-600">&bull;</span>
-            <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">
+            <span className="text-[#252B3B]">&bull;</span>
+            <span className="text-[9px] font-mono uppercase tracking-[0.1em] text-slate-500">
               Tamil Nadu State Intelligence
             </span>
           </div>
-          <h1 className="text-xl font-semibold tracking-tight text-slate-100 flex items-center gap-2">
+          <h1 className="text-[18px] font-semibold tracking-tight text-slate-100 flex items-center gap-2">
             Investigative Intelligence &amp; Clearance Command
           </h1>
         </div>
 
         <div className="flex items-center gap-2">
           <Link href="/solvability">
-            <Button variant="primary" size="sm" className="gap-1.5">
+            <Button variant="primary" size="sm">
               <Scale className="h-3.5 w-3.5" />
               Triage Incident
             </Button>
           </Link>
           <Link href="/clustering">
-            <Button variant="secondary" size="sm" className="gap-1.5">
-              <Network className="h-3.5 w-3.5 text-indigo-400" />
+            <Button variant="secondary" size="sm">
+              <Network className="h-3.5 w-3.5 text-[#7B9CF5]" />
               Serial Matcher
             </Button>
           </Link>
         </div>
       </div>
 
-      {/* 4-Card Top Stat Bar - Crisp & Compact */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <Card className="p-3.5">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">
+      {/* 4-Card Top Stat Bar - Flat Metric Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
+        {/* Card 1: Total Incidents */}
+        <div className="metric-card rounded p-3.5">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[10px] font-mono font-semibold uppercase tracking-[0.08em] text-slate-500">
               Total Incidents Logged
             </span>
-            <Database className="h-4 w-4 text-slate-500" />
+            <Database className="h-3.5 w-3.5 text-slate-600" />
           </div>
-          <div className="mt-2">
-            {loading ? (
-              <div className="h-6 w-24 bg-slate-800 animate-pulse rounded" />
-            ) : (
-              <div className="text-xl font-bold font-mono text-slate-100">
-                {formatNumber(totalRecords, 106037)}
-              </div>
-            )}
-            <p className="text-[10px] text-slate-500 mt-0.5">
-              Historical benchmark repository
-            </p>
-          </div>
-        </Card>
+          {loading ? (
+            <div className="h-6 w-24 bg-[#252B3B] animate-pulse rounded" />
+          ) : (
+            <div className="text-[20px] font-bold font-mono text-slate-100 leading-none">
+              {formatNumber(totalRecords, 106037)}
+            </div>
+          )}
+          <p className="text-[10px] text-slate-600 mt-1">
+            Historical benchmark repository
+          </p>
+        </div>
 
-        <Card className="p-3.5">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">
+        {/* Card 2: Unsolved Cold Cases */}
+        <div className="metric-card rounded p-3.5">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[10px] font-mono font-semibold uppercase tracking-[0.08em] text-slate-500">
               Unsolved Cold Cases
             </span>
-            <AlertTriangle className="h-4 w-4 text-amber-500" />
+            <AlertTriangle className="h-3.5 w-3.5 text-[#E09B50]" />
           </div>
-          <div className="mt-2">
-            {loading ? (
-              <div className="h-6 w-20 bg-slate-800 animate-pulse rounded" />
-            ) : (
-              <div className="text-xl font-bold font-mono text-amber-400">
-                {formatNumber(unsolvedCases, 26505)}
-              </div>
-            )}
-            <p className="text-[10px] text-slate-500 mt-0.5">
-              Active pattern cross-reference targets
-            </p>
-          </div>
-        </Card>
+          {loading ? (
+            <div className="h-6 w-20 bg-[#252B3B] animate-pulse rounded" />
+          ) : (
+            <div className="text-[20px] font-bold font-mono text-[#E09B50] leading-none">
+              {formatNumber(unsolvedCases, 26505)}
+            </div>
+          )}
+          <p className="text-[10px] text-slate-600 mt-1">
+            Active pattern cross-reference targets
+          </p>
+        </div>
 
-        <Card className="p-3.5">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">
+        {/* Card 3: Clearance Rate */}
+        <div className="metric-card rounded p-3.5">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[10px] font-mono font-semibold uppercase tracking-[0.08em] text-slate-500">
               Clearance Solvability Rate
             </span>
-            <TrendingUp className="h-4 w-4 text-emerald-500" />
+            <TrendingUp className="h-3.5 w-3.5 text-[#4CAF6A]" />
           </div>
-          <div className="mt-2">
-            {loading ? (
-              <div className="h-6 w-16 bg-slate-800 animate-pulse rounded" />
-            ) : (
-              <div className="text-xl font-bold font-mono text-emerald-400">
-                {clearanceRate.toFixed(1)}%
-              </div>
-            )}
-            <p className="text-[10px] text-slate-500 mt-0.5">
-              Consensus clearance benchmark
-            </p>
-          </div>
-        </Card>
+          {loading ? (
+            <div className="h-6 w-16 bg-[#252B3B] animate-pulse rounded" />
+          ) : (
+            <div className="text-[20px] font-bold font-mono text-[#4CAF6A] leading-none">
+              {clearanceRate.toFixed(1)}%
+            </div>
+          )}
+          <p className="text-[10px] text-slate-600 mt-1">
+            Consensus clearance benchmark
+          </p>
+        </div>
 
-        <Card className="p-3.5">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">
+        {/* Card 4: Serial Pattern Leads */}
+        <div className="metric-card rounded p-3.5">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[10px] font-mono font-semibold uppercase tracking-[0.08em] text-slate-500">
               Serial Pattern Leads
             </span>
-            <Network className="h-4 w-4 text-indigo-400" />
+            <Network className="h-3.5 w-3.5 text-[#7B9CF5]" />
           </div>
-          <div className="mt-2">
-            {loading ? (
-              <div className="h-6 w-16 bg-slate-800 animate-pulse rounded" />
-            ) : (
-              <div className="text-xl font-bold font-mono text-indigo-300">
-                {formatNumber(serialCandidates, 1842)}
-              </div>
-            )}
-            <p className="text-[10px] text-slate-500 mt-0.5">
-              MO Match Confidence &ge; 85%
-            </p>
-          </div>
-        </Card>
+          {loading ? (
+            <div className="h-6 w-16 bg-[#252B3B] animate-pulse rounded" />
+          ) : (
+            <div className="text-[20px] font-bold font-mono text-[#7B9CF5] leading-none">
+              {formatNumber(serialCandidates, 1842)}
+            </div>
+          )}
+          <p className="text-[10px] text-slate-600 mt-1">
+            MO Match Confidence &ge; 85%
+          </p>
+        </div>
       </div>
 
       {/* Main Grid: Priority Watchlist Table (8 Cols) & Recent Case Activity Feed (4 Cols) */}
@@ -440,36 +436,36 @@ export default function OverviewPage() {
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
                 <CardTitle className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-indigo-400" />
+                  <Clock className="h-4 w-4 text-[#7B9CF5]" />
                   Recent Case Activity Feed
                 </CardTitle>
                 <CardDescription>
                   Chronological dispatch and pattern detection log.
                 </CardDescription>
               </div>
-              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="h-2 w-2 rounded-full bg-[#2F9E44] animate-pulse" />
             </CardHeader>
-            <CardContent className="space-y-2.5 flex-1">
+            <CardContent className="space-y-2 flex-1">
               {recentActivities.map((act) => (
                 <div
                   key={act.id}
-                  className="p-2.5 rounded-md border border-slate-800/80 bg-slate-950/70 hover:border-slate-700 transition-colors space-y-1"
+                  className="p-2.5 rounded-sm border border-[#1D2232] bg-[#111520] hover:border-[#252B3B] transition-colors space-y-1"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-semibold text-slate-300">
+                    <span className="text-[10px] font-mono font-semibold text-slate-400">
                       {act.caseId}
                     </span>
                     <div className="flex items-center gap-1.5">
                       {getActivityBadge(act.type)}
-                      <span className="text-[10px] text-slate-500 font-mono">
+                      <span className="text-[9px] text-slate-600 font-mono">
                         {act.time}
                       </span>
                     </div>
                   </div>
-                  <div className="text-xs font-medium text-slate-200">
+                  <div className="text-[11px] font-medium text-slate-200">
                     {act.title}
                   </div>
-                  <p className="text-[11px] text-slate-400 leading-normal">
+                  <p className="text-[10px] text-slate-500 leading-normal">
                     {act.summary}
                   </p>
                 </div>
@@ -496,19 +492,20 @@ export default function OverviewPage() {
             <CardContent className="h-44">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={caseFactorData} layout="vertical" margin={{ top: 0, right: 15, left: 15, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" horizontal={false} />
-                  <XAxis type="number" domain={[0, 32]} stroke="#64748b" fontSize={10} unit="%" />
-                  <YAxis dataKey="factor" type="category" stroke="#94a3b8" fontSize={10} width={90} tickLine={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1D2232" horizontal={false} />
+                  <XAxis type="number" domain={[0, 32]} stroke="#475569" fontSize={10} unit="%" />
+                  <YAxis dataKey="factor" type="category" stroke="#64748B" fontSize={10} width={90} tickLine={false} />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "#0f172a",
-                      borderColor: "#1e293b",
-                      borderRadius: "6px",
+                      backgroundColor: "#1A1F2C",
+                      borderColor: "#252B3B",
+                      borderRadius: "4px",
                       fontSize: "11px",
+                      boxShadow: "0 8px 24px rgba(0,0,0,0.6)",
                     }}
                     formatter={(val: any) => [`${val}% Weight`, "Solvability Impact"]}
                   />
-                  <Bar dataKey="impact" fill="#4f46e5" radius={[0, 3, 3, 0]} />
+                  <Bar dataKey="impact" fill="#3B5BDB" radius={[0, 2, 2, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
@@ -516,68 +513,68 @@ export default function OverviewPage() {
         </div>
 
         {/* 3 Quick Action Workspaces (7 Cols) */}
-        <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-2.5">
           <Link href="/solvability" className="group">
-            <Card className="p-3.5 hover:border-indigo-500/50 transition-colors h-full flex flex-col justify-between">
+            <Card className="p-3.5 hover:border-[#3B5BDB]/40 hover:shadow-[0_2px_8px_rgba(0,0,0,0.6),0_0_0_1px_rgba(59,91,219,0.25)] transition-all h-full flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <div className="p-1.5 rounded-md bg-indigo-500/10 text-indigo-400">
-                    <Scale className="h-4 w-4" />
+                  <div className="p-1.5 rounded-sm bg-[#3B5BDB]/10 text-[#7B9CF5]">
+                    <Scale className="h-3.5 w-3.5" />
                   </div>
-                  <ArrowUpRight className="h-3.5 w-3.5 text-slate-500 group-hover:text-indigo-400" />
+                  <ArrowUpRight className="h-3 w-3 text-slate-600 group-hover:text-[#7B9CF5]" />
                 </div>
-                <h3 className="text-xs font-semibold text-slate-100 group-hover:text-indigo-300">
+                <h3 className="text-[11px] font-semibold text-slate-200 group-hover:text-[#7B9CF5]">
                   Solvability &amp; Triage Priority
                 </h3>
-                <p className="text-[11px] text-slate-400 mt-1 leading-normal">
+                <p className="text-[10px] text-slate-500 mt-1 leading-normal">
                   Score case clearance likelihood and golden hour response targets.
                 </p>
               </div>
-              <div className="mt-3 text-[11px] text-indigo-400 font-medium">
+              <div className="mt-3 text-[10px] text-[#7B9CF5] font-mono font-medium">
                 Triage Incident &rarr;
               </div>
             </Card>
           </Link>
 
           <Link href="/clustering" className="group">
-            <Card className="p-3.5 hover:border-indigo-500/50 transition-colors h-full flex flex-col justify-between">
+            <Card className="p-3.5 hover:border-[#3B5BDB]/40 hover:shadow-[0_2px_8px_rgba(0,0,0,0.6),0_0_0_1px_rgba(59,91,219,0.25)] transition-all h-full flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <div className="p-1.5 rounded-md bg-indigo-500/10 text-indigo-400">
-                    <Network className="h-4 w-4" />
+                  <div className="p-1.5 rounded-sm bg-[#3B5BDB]/10 text-[#7B9CF5]">
+                    <Network className="h-3.5 w-3.5" />
                   </div>
-                  <ArrowUpRight className="h-3.5 w-3.5 text-slate-500 group-hover:text-indigo-400" />
+                  <ArrowUpRight className="h-3 w-3 text-slate-600 group-hover:text-[#7B9CF5]" />
                 </div>
-                <h3 className="text-xs font-semibold text-slate-100 group-hover:text-indigo-300">
+                <h3 className="text-[11px] font-semibold text-slate-200 group-hover:text-[#7B9CF5]">
                   Serial Pattern Linkage
                 </h3>
-                <p className="text-[11px] text-slate-400 mt-1 leading-normal">
+                <p className="text-[10px] text-slate-500 mt-1 leading-normal">
                   Cross-reference cold case dossiers by victimology and weapon patterns.
                 </p>
               </div>
-              <div className="mt-3 text-[11px] text-indigo-400 font-medium">
+              <div className="mt-3 text-[10px] text-[#7B9CF5] font-mono font-medium">
                 Cross-Match Cases &rarr;
               </div>
             </Card>
           </Link>
 
           <Link href="/geographic" className="group">
-            <Card className="p-3.5 hover:border-emerald-500/50 transition-colors h-full flex flex-col justify-between">
+            <Card className="p-3.5 hover:border-[#2F9E44]/40 hover:shadow-[0_2px_8px_rgba(0,0,0,0.6),0_0_0_1px_rgba(47,158,68,0.2)] transition-all h-full flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <div className="p-1.5 rounded-md bg-emerald-500/10 text-emerald-400">
-                    <MapPin className="h-4 w-4" />
+                  <div className="p-1.5 rounded-sm bg-[#2F9E44]/10 text-[#4CAF6A]">
+                    <MapPin className="h-3.5 w-3.5" />
                   </div>
-                  <ArrowUpRight className="h-3.5 w-3.5 text-slate-500 group-hover:text-emerald-400" />
+                  <ArrowUpRight className="h-3 w-3 text-slate-600 group-hover:text-[#4CAF6A]" />
                 </div>
-                <h3 className="text-xs font-semibold text-slate-100 group-hover:text-emerald-300">
+                <h3 className="text-[11px] font-semibold text-slate-200 group-hover:text-[#4CAF6A]">
                   Geographic Hotspots
                 </h3>
-                <p className="text-[11px] text-slate-400 mt-1 leading-normal">
+                <p className="text-[10px] text-slate-500 mt-1 leading-normal">
                   Spatial density mapping and tactical patrol checkpoint directives.
                 </p>
               </div>
-              <div className="mt-3 text-[11px] text-emerald-400 font-medium">
+              <div className="mt-3 text-[10px] text-[#4CAF6A] font-mono font-medium">
                 View Hotspots &rarr;
               </div>
             </Card>

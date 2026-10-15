@@ -6,9 +6,9 @@ export function Table({
   ...props
 }: React.HTMLAttributes<HTMLTableElement>) {
   return (
-    <div className="relative w-full overflow-auto max-h-[500px]">
+    <div className="relative w-full overflow-auto">
       <table
-        className={cn("w-full caption-bottom text-xs text-left", className)}
+        className={cn("w-full caption-bottom text-xs text-left border-collapse", className)}
         {...props}
       />
     </div>
@@ -22,7 +22,7 @@ export function TableHeader({
   return (
     <thead
       className={cn(
-        "sticky top-0 z-10 border-b border-slate-800 bg-slate-900 text-[11px] font-medium text-slate-400 uppercase tracking-wider backdrop-blur-sm",
+        "sticky top-0 z-10 bg-[#111520]",
         className
       )}
       {...props}
@@ -36,7 +36,7 @@ export function TableBody({
 }: React.HTMLAttributes<HTMLTableSectionElement>) {
   return (
     <tbody
-      className={cn("divide-y divide-slate-800/50 font-sans", className)}
+      className={cn("font-sans", className)}
       {...props}
     />
   );
@@ -49,7 +49,7 @@ export function TableRow({
   return (
     <tr
       className={cn(
-        "transition-colors hover:bg-slate-800/40 data-[state=selected]:bg-slate-800",
+        "border-b border-[#1D2232] transition-colors duration-100 hover:bg-[#3B5BDB]/[0.04]",
         className
       )}
       {...props}
@@ -64,7 +64,7 @@ export function TableHead({
   return (
     <th
       className={cn(
-        "h-8 px-3 text-left align-middle font-medium text-slate-400 [&:has([role=checkbox])]:pr-0",
+        "h-7 px-3 text-left align-middle font-mono text-[10px] uppercase tracking-[0.08em] font-semibold text-slate-500 border-b border-[#252B3B] [&:has([role=checkbox])]:pr-0",
         className
       )}
       {...props}
@@ -78,7 +78,10 @@ export function TableCell({
 }: React.TdHTMLAttributes<HTMLTableCellElement>) {
   return (
     <td
-      className={cn("px-3 py-2 align-middle [&:has([role=checkbox])]:pr-0 text-slate-200", className)}
+      className={cn(
+        "px-3 py-[7px] align-middle text-slate-300 [&:has([role=checkbox])]:pr-0",
+        className
+      )}
       {...props}
     />
   );
