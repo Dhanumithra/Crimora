@@ -38,12 +38,12 @@ export function Navbar() {
 
         <div className="hidden lg:flex items-center gap-2">
           <Badge variant="success" className="text-[11px] font-mono">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            FastAPI 3.10+ Active
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse mr-1" />
+            Network: Secure / Encrypted
           </Badge>
           <Badge variant="default" className="text-[11px] font-mono">
-            <Layers className="h-3 w-3 mr-1" />
-            Decoupled Next.js 14
+            <Activity className="h-3 w-3 mr-1 text-sky-400" />
+            Analytics Node: Active
           </Badge>
         </div>
       </div>

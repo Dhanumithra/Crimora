@@ -56,12 +56,20 @@ async def get_executive_overview():
 
     return ExecutiveOverviewResponse(
         kpis={
-            "analyzed_incidents": 52179,
-            "baseline_clearance_rate": 49.2,
+            "total_records": 106037,
+            "unsolved_cases": 26505,
+            "clearance_rate_pct": 75.0,
+            "active_districts": 38,
+            "hotspot_zones": 2500,
+            "mean_victim_age": 33.2,
+            "serial_candidates": 1842,
+            # Legacy compatibility
+            "analyzed_incidents": 106037,
+            "unsolved_cold_cases": 26505,
+            "baseline_clearance_rate": 75.0,
             "active_ml_engines": len(models_reg),
             "spatial_grid_nodes": 2500,
-            "monitored_jurisdictions": 50,
-            "unsolved_cold_cases": 26505,
+            "monitored_jurisdictions": 38,
         },
         models=models_reg,
         incident_sample=sample_records,

@@ -102,17 +102,17 @@ export default function ClusteringPage() {
   };
 
   const clusterChartData =
-    distributions?.kmeans_clusters.map((c) => ({
+    distributions?.kmeans_clusters.map((c: any) => ({
       name: `Cluster ${c.cluster_id}`,
-      cases: c.case_count,
-      label: c.label,
-      weapon: c.top_weapon,
+      cases: c.cases || c.case_count || 0,
+      label: c.label || `Cluster ${c.cluster_id}`,
+      weapon: c.top_weapon || "Firearm / Mixed",
     })) || [
-      { name: "Cluster 0", cases: 7200, label: "Young Adult Firearm Linkage" },
-      { name: "Cluster 1", cases: 5400, label: "Edged Weapon / Domestic Pattern" },
-      { name: "Cluster 2", cases: 4900, label: "Blunt Trauma Dispute" },
-      { name: "Cluster 3", cases: 4600, label: "Senior / Vulnerable Target" },
-      { name: "Cluster 4", cases: 4405, label: "Juvenile High-Mobility Incident" },
+      { name: "Cluster 0", cases: 11482, label: "Youth Conflict Linkage" },
+      { name: "Cluster 1", cases: 7305, label: "Senior Domestic Pattern" },
+      { name: "Cluster 2", cases: 18262, label: "Young Adult Street Linkage" },
+      { name: "Cluster 3", cases: 2609, label: "Vulnerable Elder Target" },
+      { name: "Cluster 4", cases: 12521, label: "Middle-Aged Workplace / Acquaintance" },
     ];
 
   return (
@@ -375,12 +375,22 @@ export default function ClusteringPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {coldCases.length === 0 ? (
+              {loadingCases ? (
+                Array.from({ length: 6 }).map((_, i) => (
+                  <TableRow key={i}>
+                    <TableCell><div className="h-4 w-20 bg-slate-800 animate-pulse rounded" /></TableCell>
+                    <TableCell><div className="h-4 w-12 bg-slate-800 animate-pulse rounded" /></TableCell>
+                    <TableCell><div className="h-4 w-28 bg-slate-800 animate-pulse rounded" /></TableCell>
+                    <TableCell><div className="h-4 w-32 bg-slate-800 animate-pulse rounded" /></TableCell>
+                    <TableCell><div className="h-4 w-36 bg-slate-800 animate-pulse rounded" /></TableCell>
+                    <TableCell><div className="h-4 w-16 bg-slate-800 animate-pulse rounded" /></TableCell>
+                    <TableCell><div className="h-4 w-14 bg-slate-800 animate-pulse rounded" /></TableCell>
+                  </TableRow>
+                ))
+              ) : coldCases.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={7} className="text-center py-8 text-slate-500">
-                    {loadingCases
-                      ? "Loading cold cases from database..."
-                      : "No cold cases match the current filter criteria."}
+                    No cold cases match the current filter criteria.
                   </TableCell>
                 </TableRow>
               ) : (

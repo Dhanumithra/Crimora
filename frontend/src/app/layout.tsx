@@ -21,8 +21,8 @@ export const metadata: Metadata = {
     "Production-grade dark-mode crime intelligence platform serving multi-model solvability inference, cold case linkage, Bayesian behavioral profiling, and Tamil Nadu spatial analytics.",
   keywords: [
     "Crime Analytics",
-    "FastAPI",
-    "Next.js 14",
+    "Law Enforcement Intelligence",
+    "Clearance Prediction",
     "Machine Learning",
     "Bayesian Belief Network",
     "Tamil Nadu Police Analytics",

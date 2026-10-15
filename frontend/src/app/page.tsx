@@ -60,50 +60,46 @@ export default function OverviewPage() {
     loadData();
   }, []);
 
-  const kpis = overview?.kpis || {
-    total_records: 106037,
-    unsolved_cases: 26505,
-    clearance_rate_pct: 75.0,
-    active_districts: 38,
-    hotspot_zones: 2500,
-    mean_victim_age: 33.2,
-    serial_candidates: 1842,
-  };
+  const rawKpis = overview?.kpis as any;
+  const totalRecords = rawKpis?.total_records ?? rawKpis?.analyzed_incidents ?? 106037;
+  const unsolvedCases = rawKpis?.unsolved_cases ?? rawKpis?.unsolved_cold_cases ?? 26505;
+  const clearanceRate = rawKpis?.clearance_rate_pct ?? rawKpis?.baseline_clearance_rate ?? 75.0;
+  const serialCandidates = rawKpis?.serial_candidates ?? 1842;
 
   const models = overview?.models || [
     {
       key: "ann_mlp",
-      name: "Solvability ANN (TensorFlow Keras)",
-      architecture: "Deep MLP (Dense 64 -> 32 -> 16)",
+      name: "Deep Learning Clearance Engine",
+      architecture: "High-Capacity Neural Classifier (Dense 64 -> 32 -> 16)",
       task: "Clearance Likelihood Prediction",
-      status: "active",
+      status: "Operational",
       metric: "Validation Accuracy",
       metric_value: 0.814,
     },
     {
       key: "kmeans_serial",
-      name: "Cold Case Clustering (K-Means)",
-      architecture: "K-Means (k=5) + Scaler",
+      name: "Unsupervised Serial Linkage Engine",
+      architecture: "Centroid-Based MO Partitioning (k=5)",
       task: "M.O. Pattern Linkage",
-      status: "active",
-      metric: "Silhouette Score",
+      status: "Operational",
+      metric: "Silhouette Index",
       metric_value: 0.582,
     },
     {
       key: "bbn_profile",
-      name: "Bayesian Behavioral Profiler (BBN)",
-      architecture: "Discrete Directed Acyclic Graph (pgmpy)",
+      name: "Probabilistic Behavioral Profiler",
+      architecture: "Directed Acyclic Causal Belief Network",
       task: "Offender Demographic Inference",
-      status: "active",
+      status: "Operational",
       metric: "Log-Likelihood",
       metric_value: -14.22,
     },
     {
       key: "lwr_hotspots",
-      name: "Geographic Profiling (LWR)",
+      name: "Geographic Profiling Engine (LWR)",
       architecture: "Locally Weighted Regression Distance Decay",
       task: "Spatial Hotspot Intensity",
-      status: "active",
+      status: "Operational",
       metric: "Spatial Resolution",
       metric_value: 2500,
     },
@@ -130,16 +126,16 @@ export default function OverviewPage() {
             </Badge>
             <Badge variant="success" className="font-mono text-[10px]">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping mr-1" />
-              INFERENCE ONLINE
+              INTELLIGENCE ACTIVE
             </Badge>
           </div>
           <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white flex items-center gap-3">
-            CRIMORA Executive Intelligence
+            Executive Crime Analytics & Investigative Overview
           </h1>
           <p className="text-xs md:text-sm text-slate-400 mt-1 max-w-2xl">
-            Decoupled full-stack investigative support system powered by FastAPI
-            and Next.js 14. Real-time predictive clearance, cold case clustering,
-            and spatial hotspot analytics.
+            Central law enforcement command dashboard providing real-time predictive
+            case clearance triage, serial cold-case linkage analysis, and spatial
+            hotspot intelligence.
           </p>
         </div>
 
@@ -171,9 +167,13 @@ export default function OverviewPage() {
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl md:text-3xl font-extrabold font-mono text-white">
-              {formatNumber(kpis.total_records)}
-            </div>
+            {loading ? (
+              <div className="h-8 w-28 bg-slate-800 animate-pulse rounded my-1" />
+            ) : (
+              <div className="text-2xl md:text-3xl font-extrabold font-mono text-white">
+                {formatNumber(totalRecords, 106037)}
+              </div>
+            )}
             <p className="text-[11px] text-slate-400 mt-1">
               Historical benchmark & SHR registry
             </p>
@@ -190,11 +190,15 @@ export default function OverviewPage() {
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl md:text-3xl font-extrabold font-mono text-amber-400">
-              {formatNumber(kpis.unsolved_cases)}
-            </div>
+            {loading ? (
+              <div className="h-8 w-24 bg-slate-800 animate-pulse rounded my-1" />
+            ) : (
+              <div className="text-2xl md:text-3xl font-extrabold font-mono text-amber-400">
+                {formatNumber(unsolvedCases, 26505)}
+              </div>
+            )}
             <p className="text-[11px] text-slate-400 mt-1">
-              Active K-Means pattern targets
+              Active pattern linkage targets
             </p>
           </div>
         </Card>
@@ -209,9 +213,13 @@ export default function OverviewPage() {
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl md:text-3xl font-extrabold font-mono text-emerald-400">
-              {kpis.clearance_rate_pct}%
-            </div>
+            {loading ? (
+              <div className="h-8 w-20 bg-slate-800 animate-pulse rounded my-1" />
+            ) : (
+              <div className="text-2xl md:text-3xl font-extrabold font-mono text-emerald-400">
+                {clearanceRate.toFixed(1)}%
+              </div>
+            )}
             <p className="text-[11px] text-slate-400 mt-1">
               Multi-model ensemble baseline
             </p>
@@ -228,9 +236,13 @@ export default function OverviewPage() {
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl md:text-3xl font-extrabold font-mono text-purple-400">
-              {formatNumber(kpis.serial_candidates)}
-            </div>
+            {loading ? (
+              <div className="h-8 w-20 bg-slate-800 animate-pulse rounded my-1" />
+            ) : (
+              <div className="text-2xl md:text-3xl font-extrabold font-mono text-purple-400">
+                {formatNumber(serialCandidates, 1842)}
+              </div>
+            )}
             <p className="text-[11px] text-slate-400 mt-1">
               Similarity Score &ge; 0.85
             </p>
@@ -248,15 +260,14 @@ export default function OverviewPage() {
                 <div>
                   <CardTitle>
                     <Cpu className="h-5 w-5 text-sky-400" />
-                    Production Machine Learning Model Registry
+                    Investigative Intelligence Engine Registry
                   </CardTitle>
                   <CardDescription>
-                    Serving real pre-trained weights through async REST endpoints
-                    with high throughput.
+                    Real-time operational status of investigative classification and profiling engines.
                   </CardDescription>
                 </div>
                 <Badge variant="default" className="font-mono text-[11px]">
-                  {models.length} Models Operational
+                  {models.length} Engines Operational
                 </Badge>
               </div>
             </CardHeader>
@@ -264,9 +275,9 @@ export default function OverviewPage() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Model / Pipeline</TableHead>
-                    <TableHead>Architecture</TableHead>
-                    <TableHead>Primary Metric</TableHead>
+                    <TableHead>Engine / Pipeline</TableHead>
+                    <TableHead>Classification Core</TableHead>
+                    <TableHead>Benchmark Metric</TableHead>
                     <TableHead>Status</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -303,7 +314,7 @@ export default function OverviewPage() {
             <CardHeader>
               <CardTitle>
                 <Activity className="h-5 w-5 text-sky-400" />
-                Feature Decomposition (PCA)
+                Feature Decomposition
               </CardTitle>
               <CardDescription>
                 Cumulative variance explained across standardized demographic and
@@ -342,7 +353,7 @@ export default function OverviewPage() {
                 </AreaChart>
               </ResponsiveContainer>
               <div className="mt-3 text-center text-xs text-slate-400 font-mono">
-                7 principal components explain &gt;94% of dataset variance
+                Principal components explain &gt;94% of dataset variance
               </div>
             </CardContent>
           </Card>
@@ -364,12 +375,12 @@ export default function OverviewPage() {
                 Case Solvability Engine
               </CardTitle>
               <CardDescription>
-                Multi-model scoring comparing TensorFlow ANN against ID3 Decision
-                Trees, Naïve Bayes, and k-NN classifiers.
+                Multi-model clearance probability assessment combining deep neural
+                inference with consensus decision classifiers.
               </CardDescription>
             </CardHeader>
             <div className="px-5 pb-5 text-xs text-sky-400 font-medium">
-              Launch Solvability Wizard &rarr;
+              Launch Solvability Assessment &rarr;
             </div>
           </Card>
         </Link>
@@ -384,11 +395,11 @@ export default function OverviewPage() {
                 <ArrowUpRight className="h-4 w-4 text-slate-500 group-hover:text-purple-400" />
               </div>
               <CardTitle className="mt-3 group-hover:text-purple-300">
-                Cold Case Clustering
+                Cold Case Linkage Matrix
               </CardTitle>
               <CardDescription>
-                Unsupervised K-Means and Hierarchical pattern matching linking
-                unsolved homicides by victimology and weapon.
+                Unsupervised centroid pattern matching linking cold cases by
+                victimology and modus operandi vectors.
               </CardDescription>
             </CardHeader>
             <div className="px-5 pb-5 text-xs text-purple-400 font-medium">
@@ -410,8 +421,8 @@ export default function OverviewPage() {
                 Geographic Profiling
               </CardTitle>
               <CardDescription>
-                Interactive Leaflet map with Locally Weighted Regression (LWR)
-                distance decay centered on Tamil Nadu & metropolitan zones.
+                High-precision spatial analysis canvas with distance-decay hotspot
+                mapping centered on Tamil Nadu jurisdictions.
               </CardDescription>
             </CardHeader>
             <div className="px-5 pb-5 text-xs text-emerald-400 font-medium">

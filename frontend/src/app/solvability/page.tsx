@@ -106,9 +106,8 @@ export default function SolvabilityPage() {
             Case Solvability & Clearance Prediction
           </h1>
           <p className="text-xs md:text-sm text-slate-400 mt-1 max-w-2xl">
-            Execute real-time solvability triage using our pre-trained Keras Deep
-            Neural Network alongside classical Decision Tree, Naïve Bayes, and
-            k-NN consensus models.
+            Execute real-time case clearance triage combining deep neural inference
+            with multi-model consensus decision classifiers.
           </p>
         </div>
 
@@ -144,11 +143,11 @@ export default function SolvabilityPage() {
                     setFormData({ ...formData, model: e.target.value })
                   }
                   options={[
-                    { label: "Ensemble Consensus (All 4 Models)", value: "ensemble" },
-                    { label: "Deep Neural Network (ANN MLP - Keras)", value: "ann" },
-                    { label: "ID3 Decision Tree Classifier", value: "decision_tree_id3" },
-                    { label: "Gaussian / Categorical Naïve Bayes", value: "naive_bayes" },
-                    { label: "k-Nearest Neighbors (k=7)", value: "knn" },
+                    { label: "Multi-Model Consensus Ensemble", value: "ensemble" },
+                    { label: "Deep Learning Clearance Engine", value: "ann" },
+                    { label: "Hierarchical Decision Classifier", value: "decision_tree_id3" },
+                    { label: "Probabilistic Clearance Screener", value: "naive_bayes" },
+                    { label: "Spatial Neighborhood Classifier", value: "knn" },
                   ]}
                 />
 
@@ -428,7 +427,9 @@ export default function SolvabilityPage() {
               <p className="text-xs text-slate-500 max-w-sm mt-1">
                 Configure the case parameters on the left and click &quot;Run
                 Solvability Triage&quot; to compute inference probabilities across
-                ANN, ID3 Tree, Naïve Bayes, and k-NN.
+                Configure the case parameters on the left and click &quot;Run
+                Solvability Triage&quot; to compute inference probabilities across
+                active consensus classifiers.
               </p>
             </Card>
           )}
@@ -438,11 +439,11 @@ export default function SolvabilityPage() {
             <CardHeader>
               <CardTitle>
                 <TrendingUp className="h-5 w-5 text-sky-400" />
-                ROC-AUC Diagnostic Benchmark Curves
+                ROC-AUC Diagnostic Clearance Curves
               </CardTitle>
               <CardDescription>
-                Validation ROC performance: Keras ANN (AUC 0.814) vs ID3 Tree (0.762),
-                k-NN (0.751), and Naïve Bayes (0.718).
+                Validation ROC performance: Deep Learning Clearance Engine (AUC 0.814)
+                alongside consensus decision classifiers.
               </CardDescription>
             </CardHeader>
             <CardContent className="h-64">
@@ -488,7 +489,7 @@ export default function SolvabilityPage() {
                     dataKey="ann"
                     stroke="#38bdf8"
                     strokeWidth={2.5}
-                    name="Keras ANN (AUC 0.814)"
+                    name="Deep Learning Engine (AUC 0.814)"
                     dot={false}
                   />
                   <Line
@@ -496,7 +497,7 @@ export default function SolvabilityPage() {
                     dataKey="tree"
                     stroke="#10b981"
                     strokeWidth={2}
-                    name="ID3 Tree (AUC 0.762)"
+                    name="Hierarchical Tree (AUC 0.762)"
                     dot={false}
                   />
                   <Line
@@ -504,7 +505,7 @@ export default function SolvabilityPage() {
                     dataKey="knn"
                     stroke="#a855f7"
                     strokeWidth={1.8}
-                    name="k-NN (AUC 0.751)"
+                    name="Neighborhood Classifier (AUC 0.751)"
                     dot={false}
                   />
                   <Line
@@ -512,7 +513,7 @@ export default function SolvabilityPage() {
                     dataKey="nb"
                     stroke="#f59e0b"
                     strokeWidth={1.8}
-                    name="Naïve Bayes (AUC 0.718)"
+                    name="Probabilistic Screener (AUC 0.718)"
                     dot={false}
                   />
                   <Line
@@ -520,7 +521,7 @@ export default function SolvabilityPage() {
                     dataKey="baseline"
                     stroke="#475569"
                     strokeDasharray="4 4"
-                    name="Random Baseline"
+                    name="Uninformed Baseline"
                     dot={false}
                   />
                 </LineChart>

@@ -212,7 +212,7 @@ export default function ProfilingPage() {
             <CardHeader>
               <CardTitle className="text-sm">
                 <GitFork className="h-4 w-4 text-sky-400" />
-                Bayesian Directed Graph (pgmpy)
+                Probabilistic Causal Directed Graph
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 text-xs text-slate-400">

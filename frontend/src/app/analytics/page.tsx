@@ -356,7 +356,18 @@ export default function AnalyticsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredDistricts.length === 0 ? (
+              {loading ? (
+                Array.from({ length: 6 }).map((_, i) => (
+                  <TableRow key={i}>
+                    <TableCell><div className="h-4 w-10 bg-slate-800 animate-pulse rounded" /></TableCell>
+                    <TableCell><div className="h-4 w-28 bg-slate-800 animate-pulse rounded" /></TableCell>
+                    <TableCell><div className="h-4 w-20 bg-slate-800 animate-pulse rounded" /></TableCell>
+                    <TableCell><div className="h-4 w-16 bg-slate-800 animate-pulse rounded" /></TableCell>
+                    <TableCell><div className="h-4 w-14 bg-slate-800 animate-pulse rounded" /></TableCell>
+                    <TableCell><div className="h-4 w-14 bg-slate-800 animate-pulse rounded" /></TableCell>
+                  </TableRow>
+                ))
+              ) : filteredDistricts.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={6} className="text-center py-8 text-slate-500">
                     No matching districts found.

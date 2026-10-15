@@ -77,3 +77,18 @@
 .leaflet-popup-tip {
   background: #0d1322 !important;
 }
+
+.leaflet-control-attribution {
+  background: rgba(7, 11, 20, 0.75) !important;
+  color: #64748b !important;
+  font-size: 10px !important;
+  border-radius: 4px !important;
+}
+
+.leaflet-control-attribution a {
+  color: #38bdf8 !important;
+}
+
+.leaflet-tile {
+  filter: brightness(0.95) contrast(1.05);
+}

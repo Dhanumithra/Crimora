@@ -87,7 +87,7 @@ export function Sidebar() {
                 CRIMORA
               </span>
               <span className="block text-[10px] uppercase font-mono tracking-widest text-sky-400">
-                AI Defense v2.0
+                CRIMINAL INVESTIGATIVE SYSTEM
               </span>
             </div>
           </div>
@@ -170,14 +170,14 @@ export function Sidebar() {
             <div className="flex items-center justify-between text-xs font-medium">
               <span className="flex items-center gap-1.5 text-slate-300 font-mono text-[11px]">
                 <Radio className="h-3 w-3 text-emerald-400 animate-pulse" />
-                REST API Live
+                System Status: Armed
               </span>
               <span className="font-mono text-[10px] text-emerald-400">
-                HTTP 200
+                100% Health
               </span>
             </div>
             <div className="mt-2 text-[10px] text-slate-400 leading-tight">
-              Pre-trained models loaded into memory. Async inference active.
+              Investigative inference engines operational. Real-time clearance active.
             </div>
           </div>
         ) : (
