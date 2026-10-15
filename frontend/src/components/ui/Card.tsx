@@ -8,7 +8,7 @@ export function Card({
   return (
     <div
       className={cn(
-        "rounded bg-[#1A1F2C] border border-[#252B3B] shadow-[0_1px_3px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.03)] transition-colors duration-150",
+        "rounded-2xl bg-gradient-to-b from-slate-900/90 via-slate-900/70 to-slate-950/90 border border-slate-800/80 backdrop-blur-xl shadow-[0_8px_30px_rgb(0,0,0,0.35),inset_0_1px_0_0_rgba(255,255,255,0.06)] hover:border-slate-700/80 transition-all duration-200",
         className
       )}
       {...props}
@@ -22,7 +22,7 @@ export function CardHeader({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("flex flex-col space-y-0.5 px-4 pt-3.5 pb-3 border-b border-[#1D2232]", className)}
+      className={cn("flex flex-col space-y-1.5 px-6 pt-6 pb-4", className)}
       {...props}
     />
   );
@@ -35,7 +35,7 @@ export function CardTitle({
   return (
     <h3
       className={cn(
-        "text-[13px] font-semibold tracking-tight text-slate-100 flex items-center gap-2",
+        "text-base font-semibold text-slate-100 flex items-center gap-2.5 tracking-tight",
         className
       )}
       {...props}
@@ -49,7 +49,7 @@ export function CardDescription({
 }: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
     <p
-      className={cn("text-[11px] text-slate-500 leading-normal mt-0.5", className)}
+      className={cn("text-xs text-slate-400 leading-relaxed font-normal", className)}
       {...props}
     />
   );
@@ -59,7 +59,7 @@ export function CardContent({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("px-4 pb-4 pt-3", className)} {...props} />;
+  return <div className={cn("px-6 pb-6 pt-2", className)} {...props} />;
 }
 
 export function CardFooter({
@@ -68,8 +68,9 @@ export function CardFooter({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("flex items-center px-4 py-2.5 border-t border-[#1D2232]", className)}
+      className={cn("flex items-center px-6 py-4 border-t border-slate-800/60 mt-2", className)}
       {...props}
     />
   );
 }
+

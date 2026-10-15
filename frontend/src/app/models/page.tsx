@@ -4,14 +4,11 @@ import React, { useEffect, useState } from "react";
 import {
   Cpu,
   Server,
-  Layers,
-  Database,
-  CheckCircle2,
-  ShieldAlert,
-  ShieldCheck,
   Activity,
   Lock,
   Zap,
+  ShieldCheck,
+  CheckCircle2,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
@@ -102,87 +99,91 @@ export default function SystemGovernancePage() {
   ];
 
   return (
-    <div className="space-y-4 animate-in fade-in duration-200">
-      {/* Header - Enterprise Clean */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2.5 border-b border-slate-800">
+    <div className="space-y-8 animate-fade-in">
+      {/* Header - Enterprise Clean in Blue */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-6 border-b border-blue-950/80">
         <div>
-          <div className="flex items-center gap-2 mb-0.5">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-indigo-400">
+          <div className="flex items-center gap-2.5 mb-2">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/15 border border-blue-500/40 text-[10px] font-mono uppercase tracking-[0.14em] text-blue-300 font-semibold shadow-[0_0_12px_rgba(37,99,235,0.25)]">
+              <span className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-pulse" />
               System Governance
             </span>
             <span className="text-slate-600">&bull;</span>
-            <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">
+            <span className="text-[11px] font-mono uppercase tracking-[0.1em] text-slate-400 font-medium">
               Engine Integrity Audit
             </span>
           </div>
-          <h1 className="text-xl font-semibold tracking-tight text-slate-100 flex items-center gap-2">
-            <Cpu className="h-5 w-5 text-indigo-400" />
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-3">
+            <Cpu className="h-6 w-6 text-blue-400" />
             System Governance &amp; Diagnostics
           </h1>
+          <p className="text-xs sm:text-sm text-slate-300/80 mt-1 max-w-3xl leading-relaxed">
+            Analytical engine diagnostics, cryptographic tamper resistance, audit telemetry, and operational SLA adherence.
+          </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Badge variant="success" className="font-mono text-xs">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse mr-1" />
+        <div className="flex items-center gap-3 shrink-0">
+          <Badge variant="success" className="font-mono text-xs px-3.5 py-1.5 shadow-[0_0_12px_rgba(37,99,235,0.25)]">
+            <span className="h-2 w-2 rounded-full bg-blue-400 animate-pulse mr-2" />
             Integrity: 100% Operational
           </Badge>
         </div>
       </div>
 
       {/* Enterprise Infrastructure Governance Panel */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Server className="h-4 w-4 text-indigo-400" />
+      <Card className="rounded-2xl glow-card-blue">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-lg text-white">
+            <Server className="h-5 w-5 text-blue-400 inline mr-2" />
             Operational Subsystems &amp; Security Posture
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-xs mt-1">
             High-availability deployment architecture powering law enforcement intelligence.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <div className="p-3 rounded-md border border-slate-800 bg-slate-950 space-y-1">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="p-5 rounded-2xl border border-blue-950/80 bg-slate-950/70 space-y-3 shadow-inner">
               <div className="flex items-center justify-between">
-                <span className="font-mono font-semibold text-slate-200 text-xs flex items-center gap-1.5">
-                  <Activity className="h-3.5 w-3.5 text-indigo-400" />
+                <span className="font-mono font-bold text-white text-xs flex items-center gap-2">
+                  <Activity className="h-4 w-4 text-blue-400" />
                   Availability &amp; Uptime
                 </span>
-                <Badge variant="success" className="text-[10px]">
+                <Badge variant="success" className="text-[10px] px-2 py-0.5">
                   99.9% Uptime
                 </Badge>
               </div>
-              <p className="text-[11px] text-slate-400 leading-normal">
+              <p className="text-xs text-slate-400 leading-relaxed">
                 Active fault-tolerant nodes with redundant failover support, sub-50ms query caching, and automated health auditing.
               </p>
             </div>
 
-            <div className="p-3 rounded-md border border-slate-800 bg-slate-950 space-y-1">
+            <div className="p-5 rounded-2xl border border-blue-950/80 bg-slate-950/70 space-y-3 shadow-inner">
               <div className="flex items-center justify-between">
-                <span className="font-mono font-semibold text-slate-200 text-xs flex items-center gap-1.5">
-                  <Lock className="h-3.5 w-3.5 text-emerald-400" />
+                <span className="font-mono font-bold text-white text-xs flex items-center gap-2">
+                  <Lock className="h-4 w-4 text-sky-400" />
                   Security &amp; Encryption
                 </span>
-                <Badge variant="default" className="text-[10px]">
+                <Badge variant="default" className="text-[10px] px-2 py-0.5">
                   256-bit AES
                 </Badge>
               </div>
-              <p className="text-[11px] text-slate-400 leading-normal">
+              <p className="text-xs text-slate-400 leading-relaxed">
                 End-to-end encrypted transport layer (TLS 1.3), tamper-evident audit logs, and strict role-based access control.
               </p>
             </div>
 
-            <div className="p-3 rounded-md border border-slate-800 bg-slate-950 space-y-1">
+            <div className="p-5 rounded-2xl border border-blue-950/80 bg-slate-950/70 space-y-3 shadow-inner">
               <div className="flex items-center justify-between">
-                <span className="font-mono font-semibold text-slate-200 text-xs flex items-center gap-1.5">
-                  <Zap className="h-3.5 w-3.5 text-amber-400" />
+                <span className="font-mono font-bold text-white text-xs flex items-center gap-2">
+                  <Zap className="h-4 w-4 text-amber-300" />
                   Real-Time Analytics Core
                 </span>
-                <Badge variant="default" className="text-[10px]">
+                <Badge variant="secondary" className="text-[10px] px-2 py-0.5">
                   Sub-100ms
                 </Badge>
               </div>
-              <p className="text-[11px] text-slate-400 leading-normal">
+              <p className="text-xs text-slate-400 leading-relaxed">
                 High-throughput async processing pipeline serving instant clearance scoring and concurrent spatial evaluations.
               </p>
             </div>
@@ -191,18 +192,18 @@ export default function SystemGovernancePage() {
       </Card>
 
       {/* Analytical Engine Registry Table */}
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
+      <Card className="rounded-2xl overflow-hidden glow-card-blue">
+        <CardHeader className="flex flex-row items-center justify-between pb-4">
           <div>
-            <CardTitle className="flex items-center gap-2">
-              <ShieldCheck className="h-4 w-4 text-indigo-400" />
+            <CardTitle className="text-lg text-white">
+              <ShieldCheck className="h-5 w-5 text-blue-400 inline mr-2" />
               Active Intelligence Engines Registry
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-xs mt-1">
               Operational status and diagnostic benchmarks for active investigative scoring and pattern matching pipelines.
             </CardDescription>
           </div>
-          <Badge variant="outline" className="font-mono text-xs">
+          <Badge variant="outline" className="font-mono text-xs px-3 py-1">
             7 Active Engines Operational
           </Badge>
         </CardHeader>
@@ -219,10 +220,10 @@ export default function SystemGovernancePage() {
             </TableHeader>
             <TableBody>
               {architectureDetails.map((item) => (
-                <TableRow key={item.name}>
+                <TableRow key={item.name} className="hover:bg-blue-950/20">
                   <TableCell className="font-semibold text-xs text-slate-200">
                     <div>{item.name}</div>
-                    <div className="text-[10px] text-indigo-400 font-mono mt-0.5">{item.role}</div>
+                    <div className="text-[10px] text-blue-400 font-mono mt-0.5">{item.role}</div>
                   </TableCell>
                   <TableCell className="font-mono text-xs text-slate-400">
                     {item.pipelineCore}
@@ -234,7 +235,7 @@ export default function SystemGovernancePage() {
                     {item.output}
                   </TableCell>
                   <TableCell>
-                    <span className="font-mono text-xs text-emerald-400 font-semibold">
+                    <span className="font-mono text-xs text-blue-300 font-semibold">
                       {item.accuracy}
                     </span>
                   </TableCell>

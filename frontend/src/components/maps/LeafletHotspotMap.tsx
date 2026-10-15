@@ -94,7 +94,7 @@ export default function LeafletHotspotMap({
             <strong style="color: #818cf8; font-size: 12px;">${spot.city} Hotspot</strong><br/>
             <span>Priority Rank: <strong>#${spot.rank}</strong></span><br/>
             <span>Density Score: <strong>${spot.estimated_intensity.toFixed(1)}</strong></span><br/>
-            <span>Risk Tier: <strong style="color: #10b981;">${spot.percentile_tier}</strong></span><br/>
+            <span>Risk Tier: <strong style="color: #38bdf8;">${spot.percentile_tier}</strong></span><br/>
             <hr style="border: 0; border-top: 1px solid #334155; margin: 5px 0;" />
             <span style="font-size: 10px; color: #94a3b8;">Patrol Directive: ${spot.recommended_patrol}</span>
           </div>
@@ -105,15 +105,15 @@ export default function LeafletHotspotMap({
       districts.forEach((d) => {
         const marker = L.circleMarker([d.lat, d.lon], {
           radius: 4,
-          color: "#10b981",
-          fillColor: "#10b981",
+          color: "#3b82f6",
+          fillColor: "#38bdf8",
           fillOpacity: 0.85,
           weight: 1,
         }).addTo(map);
 
         marker.bindPopup(`
           <div style="font-family: monospace; font-size: 11px; color: #f8fafc; padding: 4px;">
-            <strong style="color: #10b981;">${d.district} District HQ</strong><br/>
+            <strong style="color: #60a5fa;">${d.district} District HQ</strong><br/>
             <span>Coordinates: ${d.lat.toFixed(4)}° N, ${d.lon.toFixed(4)}° E</span><br/>
             <span>Incident Volume Weight: ${d.base_weight}</span>
           </div>

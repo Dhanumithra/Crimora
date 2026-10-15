@@ -18,27 +18,27 @@ export function Button({
 }: ButtonProps) {
   const variantStyles = {
     primary:
-      "bg-[#3B5BDB] hover:bg-[#4C6EF5] text-white font-medium shadow-sm border border-[#4C6EF5]/30 focus:ring-[#3B5BDB]",
+      "bg-blue-600 hover:bg-blue-500 text-white font-medium shadow-[0_0_15px_rgba(37,99,235,0.35)] border border-blue-400/40 focus:ring-blue-500",
     secondary:
-      "bg-[#1A1F2C] hover:bg-[#1F2535] text-slate-200 border border-[#252B3B] focus:ring-slate-400",
+      "bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-slate-700/80 focus:ring-blue-400",
     outline:
-      "bg-transparent hover:bg-[#1A1F2C] text-slate-400 border border-[#252B3B] hover:text-slate-200 focus:ring-[#3B5BDB]",
+      "bg-transparent hover:bg-blue-600/10 text-slate-200 border border-slate-700 hover:border-blue-500/50 hover:text-blue-300 focus:ring-blue-500",
     danger:
-      "bg-[#C92A2A] hover:bg-[#E03131] text-white border border-[#C92A2A]/40 focus:ring-red-400",
+      "bg-red-600 hover:bg-red-500 text-white border border-red-500/40 focus:ring-red-400",
     ghost:
-      "bg-transparent hover:bg-[#1A1F2C] text-slate-500 hover:text-slate-200",
+      "bg-transparent hover:bg-slate-800/50 text-slate-400 hover:text-blue-300",
   };
 
   const sizeStyles = {
-    sm: "h-7 px-2.5 text-xs",
-    md: "h-8 px-3 text-xs",
-    lg: "h-9 px-4 text-sm",
+    sm: "h-7 px-3 text-xs",
+    md: "h-8.5 px-4 text-xs",
+    lg: "h-10 px-5 text-sm",
   };
 
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center rounded font-medium transition-colors duration-150 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-offset-[#0B0E14] disabled:opacity-40 disabled:cursor-not-allowed select-none gap-1.5",
+        "inline-flex items-center justify-center gap-1.5 rounded-md font-medium transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-[#070D1A] disabled:opacity-40 disabled:cursor-not-allowed select-none",
         variantStyles[variant],
         sizeStyles[size],
         className

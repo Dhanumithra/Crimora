@@ -38,12 +38,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} font-sans bg-[#0B0E14] text-[#E2E8F0] min-h-screen antialiased flex flex-row selection:bg-[#3B5BDB]/30 selection:text-[#7B9CF5]`}
+        className={`${inter.variable} ${jetbrainsMono.variable} font-sans bg-background text-foreground min-h-screen antialiased flex flex-row selection:bg-blue-600/30 selection:text-blue-200`}
       >
         <Sidebar />
         <div className="flex-1 flex flex-col min-w-0 min-h-screen overflow-x-hidden">
           <Navbar />
-          <main className="flex-1 p-4 md:p-5 max-w-[1440px] w-full mx-auto">
+          <main className="flex-1 p-6 sm:p-8 lg:p-10 max-w-[1600px] w-full mx-auto">
             {children}
           </main>
         </div>

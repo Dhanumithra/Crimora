@@ -95,7 +95,7 @@ export function CommandPalette() {
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-150">
       <div className="w-full max-w-lg overflow-hidden rounded-lg border border-slate-800 bg-slate-900 shadow-xl">
         <div className="flex items-center px-3.5 py-2.5 border-b border-slate-800">
-          <Search className="h-4 w-4 text-indigo-400 mr-2.5" />
+          <Search className="h-4 w-4 text-blue-400 mr-2.5" />
           <input
             type="text"
             className="w-full bg-transparent text-xs text-slate-100 placeholder-slate-400 outline-none"
@@ -125,14 +125,14 @@ export function CommandPalette() {
                   <button
                     key={idx}
                     onClick={() => navigateTo(item.href)}
-                    className="w-full flex items-center justify-between p-2 rounded-md text-left text-xs text-slate-200 hover:bg-slate-800/80 hover:text-indigo-300 transition-colors group"
+                    className="w-full flex items-center justify-between p-2 rounded-md text-left text-xs text-slate-200 hover:bg-slate-800/80 hover:text-blue-300 transition-colors group"
                   >
                     <div className="flex items-center gap-2.5">
-                      <div className="p-1 rounded bg-slate-800 text-indigo-400 group-hover:bg-indigo-500/10">
+                      <div className="p-1 rounded bg-slate-800 text-blue-400 group-hover:bg-blue-500/15">
                         <Icon className="h-3.5 w-3.5" />
                       </div>
                       <div>
-                        <div className="font-medium text-slate-200 group-hover:text-indigo-300">
+                        <div className="font-medium text-slate-200 group-hover:text-blue-300">
                           {item.title}
                         </div>
                         <div className="text-[10px] text-slate-500">
@@ -140,7 +140,7 @@ export function CommandPalette() {
                         </div>
                       </div>
                     </div>
-                    <CornerDownLeft className="h-3 w-3 text-slate-500 group-hover:text-indigo-400" />
+                    <CornerDownLeft className="h-3 w-3 text-slate-500 group-hover:text-blue-400" />
                   </button>
                 );
               })}

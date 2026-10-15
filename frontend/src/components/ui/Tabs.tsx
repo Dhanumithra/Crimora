@@ -25,7 +25,7 @@ export function Tabs({ tabs, activeTab, onChange, className }: TabsProps) {
             className={cn(
               "flex items-center gap-2 px-3.5 py-1.5 text-xs font-medium rounded-lg transition-all duration-150 select-none",
               isActive
-                ? "bg-slate-800 text-sky-400 shadow-sm border border-slate-700/60 font-semibold"
+                ? "bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)] border border-blue-400/50 font-semibold"
                 : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40"
             )}
           >
