@@ -33,7 +33,7 @@ Law enforcement agencies and criminal intelligence analysts confront escalating 
 3. Formulate a non-parametric Locally Weighted Regression (LWR) geographic profiling engine using geodesic Haversine distance and kernel density estimation to extract incident intensity hotspots.
 4. Benchmark classical supervised machine learning classifiers (ID3 Decision Tree, Gaussian Naive Bayes, Scaled $k$-Nearest Neighbors) under 5-fold stratified cross-validation using initial intake variables.
 5. Integrate Person A's unsupervised clustering (K-Means, Hierarchical), Deep Learning Solvability Engine (ANN), and Causal Probabilistic Modeling (Bayesian Belief Network).
-6. Build a hardened, interactive multi-page Streamlit web dashboard with interactive Folium geospatial maps and cached service layers.
+6. Build a hardened, interactive web application featuring a high-performance FastAPI backend service and a modern Next.js 14 tactical command deck with interactive Leaflet geospatial maps.
 
 ---
 
@@ -42,7 +42,7 @@ Crimora provides an end-to-end, multi-paradigm machine learning framework. The p
 - **Intake-Only Prediction:** Predicts case clearance using strictly pre-investigation attributes, ensuring true real-world utility without target leakage.
 - **Geographic Profiling:** Computes continuous spatial intensity surfaces across urban coordinates using optimized bandwidths ($h = 0.8574\text{ km}$ via Silverman's rule) and Haversine distance metrics.
 - **Unsupervised Cold Case Linkage:** Clusters incident profiles into distinct demographic and situational cohorts to reveal potential serial crime connections.
-- **Unified Decision-Support UI:** Renders analytics, live solvability scoring, geographic maps, and longitudinal district comparisons in an executive Streamlit dashboard.
+- **Unified Decision-Support UI:** Renders analytics, live solvability scoring, geographic maps, and longitudinal district comparisons in a high-tech Next.js command deck powered by FastAPI.
 
 ---
 
@@ -302,19 +302,33 @@ pip install -r requirements.txt
 pip install tensorflow pgmpy
 ```
 
----
+## 21. Running the Platform
 
-## 21. Running the Application
+### Option A: Complete Web Stack (FastAPI + Next.js)
 
+1. **Launch the FastAPI Intelligence API Server:**
+   ```bash
+   cd backend
+   pip install -r requirements.txt
+   python -m uvicorn app.main:app --host 0.0.0.0 --port 8000
+   ```
+   API Documentation available at `http://localhost:8000/docs`.
+
+2. **Launch the Modern Next.js Tactical Command Deck:**
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
+   Access the web application at `http://localhost:3000`.
+
+### Option B: Executing the Test Suite
 ```bash
-# Launch the Streamlit application
-streamlit run app.py
-```
-Open your browser at `http://localhost:8501`.
+# Core Machine Learning & Data Pipeline Tests:
+pytest tests/ -v
 
-To execute the complete test suite:
-```bash
-pytest -v
+# FastAPI Backend Integration Tests:
+python backend/test_endpoints.py
 ```
 
 ---
