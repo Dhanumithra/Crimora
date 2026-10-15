@@ -30,25 +30,25 @@ const navigationItems = [
     name: "Case Solvability",
     href: "/solvability",
     icon: Scale,
-    description: "Multi-Model Clearance",
+    description: "Solvability & Triage Priority",
   },
   {
-    name: "Serial Case Linkage",
+    name: "Serial Pattern Linkage",
     href: "/clustering",
     icon: Network,
-    description: "K-Means & Cold Cases",
+    description: "Cross-Case MO Matcher",
   },
   {
     name: "Geographic Profiling",
     href: "/geographic",
     icon: MapPin,
-    description: "LWR Spatial Hotspots",
+    description: "Spatial Density & Hotspots",
   },
   {
     name: "Behavioral Profiler",
     href: "/profiling",
     icon: Dna,
-    description: "Bayesian Network (BBN)",
+    description: "Suspect Profile Inference",
   },
   {
     name: "Regional Analytics",
@@ -57,10 +57,10 @@ const navigationItems = [
     description: "Tamil Nadu IPC Trends",
   },
   {
-    name: "Model Registry",
+    name: "System Governance & Diagnostics",
     href: "/models",
     icon: Cpu,
-    description: "Architecture & Metrics",
+    description: "Engine Integrity & Logs",
   },
 ];
 

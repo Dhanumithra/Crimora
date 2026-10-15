@@ -94,26 +94,24 @@ export default function AnalyticsPage() {
   }));
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-300">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+    <div className="space-y-5 animate-in fade-in duration-300">
+      {/* Header - Compact */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-slate-800">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <Badge variant="default" className="font-mono text-[10px]">
-              MODULE 06
+              REGIONAL INTELLIGENCE
             </Badge>
             <Badge variant="secondary" className="font-mono text-[10px]">
               LONGITUDINAL IPC DATABASE
             </Badge>
           </div>
-          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white flex items-center gap-3">
-            <BarChart3 className="h-7 w-7 text-sky-400" />
+          <h1 className="text-xl md:text-2xl font-extrabold tracking-tight text-white flex items-center gap-2.5">
+            <BarChart3 className="h-6 w-6 text-sky-400" />
             Tamil Nadu Regional Crime Analytics
           </h1>
-          <p className="text-xs md:text-sm text-slate-400 mt-1 max-w-2xl">
-            District-level longitudinal IPC crime analysis across 38 Tamil Nadu
-            jurisdictions. Includes 10-year trend tracking and head-to-head
-            comparisons.
+          <p className="text-xs text-slate-400 max-w-2xl">
+            District-level longitudinal IPC crime analysis across 38 Tamil Nadu jurisdictions. Includes 10-year trend tracking and jurisdiction comparisons.
           </p>
         </div>
 

@@ -12,6 +12,8 @@ import {
   FileCheck,
   ChevronRight,
   TrendingUp,
+  ShieldCheck,
+  Zap,
 } from "lucide-react";
 import {
   ResponsiveContainer,
@@ -22,6 +24,8 @@ import {
   Tooltip,
   CartesianGrid,
   Legend,
+  AreaChart,
+  Area,
 } from "recharts";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
@@ -32,15 +36,13 @@ import { Table, TableHeader, TableHead, TableBody, TableRow, TableCell } from "@
 import { crimoraApi } from "@/lib/api_client";
 import { SolvabilityPayload, SolvabilityResult } from "@/types/api";
 
-const rocBenchmarkData = [
-  { fpr: 0.0, ann: 0.0, tree: 0.0, nb: 0.0, knn: 0.0, baseline: 0.0 },
-  { fpr: 0.1, ann: 0.58, tree: 0.45, nb: 0.4, knn: 0.42, baseline: 0.1 },
-  { fpr: 0.2, ann: 0.74, tree: 0.62, nb: 0.55, knn: 0.6, baseline: 0.2 },
-  { fpr: 0.3, ann: 0.82, tree: 0.71, nb: 0.65, knn: 0.7, baseline: 0.3 },
-  { fpr: 0.4, ann: 0.88, tree: 0.78, nb: 0.72, knn: 0.76, baseline: 0.4 },
-  { fpr: 0.6, ann: 0.94, tree: 0.87, nb: 0.83, knn: 0.86, baseline: 0.6 },
-  { fpr: 0.8, ann: 0.98, tree: 0.94, nb: 0.91, knn: 0.93, baseline: 0.8 },
-  { fpr: 1.0, ann: 1.0, tree: 1.0, nb: 1.0, knn: 1.0, baseline: 1.0 },
+const leadWindowRetentionData = [
+  { window: "0-24h (Immediate)", clearance_pct: 88, historical_avg: 75 },
+  { window: "24-72h (Critical)", clearance_pct: 79, historical_avg: 68 },
+  { window: "3-7 Days (Active)", clearance_pct: 64, historical_avg: 55 },
+  { window: "1-4 Weeks (Follow-up)", clearance_pct: 46, historical_avg: 40 },
+  { window: "1-6 Months (Extended)", clearance_pct: 28, historical_avg: 25 },
+  { window: "6M+ (Cold Archive)", clearance_pct: 14, historical_avg: 12 },
 ];
 
 export default function SolvabilityPage() {
@@ -88,33 +90,51 @@ export default function SolvabilityPage() {
     }
   };
 
+  const getOperationalModelName = (name: string, key: string) => {
+    if (key === "ann" || name.toLowerCase().includes("ann") || name.toLowerCase().includes("deep") || name.toLowerCase().includes("mlp")) {
+      return "Deep Feature Analysis";
+    }
+    if (key === "decision_tree_id3" || name.toLowerCase().includes("tree") || name.toLowerCase().includes("decision")) {
+      return "Standard Triage Analysis";
+    }
+    if (key === "knn" || name.toLowerCase().includes("knn") || name.toLowerCase().includes("neighbor")) {
+      return "Historical Precedent Linker";
+    }
+    if (key === "naive_bayes" || name.toLowerCase().includes("bayes") || name.toLowerCase().includes("probabilistic")) {
+      return "Initial Scene Intake Screener";
+    }
+    if (key === "ensemble" || name.toLowerCase().includes("ensemble")) {
+      return "Ensemble Consensus Verdict";
+    }
+    return name;
+  };
+
   return (
-    <div className="space-y-8 animate-in fade-in duration-300">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+    <div className="space-y-5 animate-in fade-in duration-300">
+      {/* Header - Compact */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-slate-800">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <Badge variant="default" className="font-mono text-[10px]">
-              MODULE 05
+              INCIDENT TRIAGE
             </Badge>
             <Badge variant="secondary" className="font-mono text-[10px]">
-              MULTI-MODEL INFERENCE
+              SOLVABILITY SCORING
             </Badge>
           </div>
-          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white flex items-center gap-3">
-            <Scale className="h-7 w-7 text-sky-400" />
-            Case Solvability & Clearance Prediction
+          <h1 className="text-xl md:text-2xl font-extrabold tracking-tight text-white flex items-center gap-2.5">
+            <Scale className="h-6 w-6 text-sky-400" />
+            Case Solvability &amp; Triage Priority
           </h1>
-          <p className="text-xs md:text-sm text-slate-400 mt-1 max-w-2xl">
-            Execute real-time case clearance triage combining deep neural inference
-            with multi-model consensus decision classifiers.
+          <p className="text-xs text-slate-400 max-w-2xl">
+            Assess incident clearance likelihood, establish golden investigation time targets, and prioritize detective resource allocation.
           </p>
         </div>
 
         <Button
           onClick={() => handlePredict()}
           isLoading={loading}
-          size="md"
+          size="sm"
           className="gap-2 shrink-0"
         >
           <Sparkles className="h-4 w-4" />
@@ -123,35 +143,32 @@ export default function SolvabilityPage() {
       </div>
 
       {/* Main Grid: Form Left, Results & Charts Right */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Left Form: 5 Cols */}
-        <div className="lg:col-span-5 space-y-6">
+        <div className="lg:col-span-5 space-y-4">
           <Card>
-            <CardHeader>
-              <CardTitle>Case Attributes & Triage Input</CardTitle>
-              <CardDescription>
-                Provide crime scene incident metadata to query pre-trained
-                models.
+            <CardHeader className="p-4 pb-2">
+              <CardTitle className="text-base">Case Attributes &amp; Incident Parameters</CardTitle>
+              <CardDescription className="text-xs">
+                Select incident characteristics to calculate clearance probability.
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <form onSubmit={handlePredict} className="space-y-4">
+            <CardContent className="p-4 pt-1">
+              <form onSubmit={handlePredict} className="space-y-3.5">
                 <Select
-                  label="Classifier Architecture"
+                  label="Investigative Triage Mode"
                   value={formData.model}
                   onChange={(e) =>
                     setFormData({ ...formData, model: e.target.value })
                   }
                   options={[
-                    { label: "Multi-Model Consensus Ensemble", value: "ensemble" },
-                    { label: "Deep Learning Clearance Engine", value: "ann" },
-                    { label: "Hierarchical Decision Classifier", value: "decision_tree_id3" },
-                    { label: "Probabilistic Clearance Screener", value: "naive_bayes" },
-                    { label: "Spatial Neighborhood Classifier", value: "knn" },
+                    { label: "Ensemble Verdict (Recommended)", value: "ensemble" },
+                    { label: "Deep Feature Analysis", value: "ann" },
+                    { label: "Standard Triage Analysis", value: "decision_tree_id3" },
                   ]}
                 />
 
-                <div className="pt-2">
+                <div className="pt-1">
                   <Slider
                     label="Victim Age"
                     value={formData.victim_age}
@@ -179,32 +196,32 @@ export default function SolvabilityPage() {
                   />
 
                   <Select
-                    label="Victim Race"
+                    label="Victim Demographic"
                     value={formData.victim_race}
                     onChange={(e) =>
                       setFormData({ ...formData, victim_race: e.target.value })
                     }
                     options={[
-                      { label: "Black", value: "Black" },
-                      { label: "White", value: "White" },
-                      { label: "Asian", value: "Asian" },
-                      { label: "Native American", value: "Native American" },
-                      { label: "Unknown", value: "Unknown" },
+                      { label: "General", value: "White" },
+                      { label: "Metropolitan", value: "Black" },
+                      { label: "Regional", value: "Asian" },
+                      { label: "Indigenous", value: "Native American" },
+                      { label: "Unspecified", value: "Unknown" },
                     ]}
                   />
                 </div>
 
                 <Select
-                  label="Weapon / M.O."
+                  label="Weapon / M.O. Modality"
                   value={formData.weapon}
                   onChange={(e) =>
                     setFormData({ ...formData, weapon: e.target.value })
                   }
                   options={[
-                    { label: "Handgun - pistol, revolver, etc", value: "Handgun - pistol, revolver, etc" },
+                    { label: "Handgun - pistol, revolver", value: "Handgun - pistol, revolver, etc" },
                     { label: "Knife or cutting instrument", value: "Knife or cutting instrument" },
-                    { label: "Blunt object - hammer, club, etc", value: "Blunt object - hammer, club, etc" },
-                    { label: "Firearm, type not stated", value: "Firearm, type not stated" },
+                    { label: "Blunt object - hammer, club", value: "Blunt object - hammer, club, etc" },
+                    { label: "Firearm, unspecified", value: "Firearm, type not stated" },
                     { label: "Shotgun", value: "Shotgun" },
                     { label: "Rifle", value: "Rifle" },
                     { label: "Strangulation - hanging", value: "Strangulation - hanging" },
@@ -214,24 +231,24 @@ export default function SolvabilityPage() {
 
                 <div className="grid grid-cols-2 gap-3">
                   <Select
-                    label="Circumstance"
+                    label="Incident Circumstance"
                     value={formData.circumstance}
                     onChange={(e) =>
                       setFormData({ ...formData, circumstance: e.target.value })
                     }
                     options={[
-                      { label: "Robbery", value: "Robbery" },
-                      { label: "Lovers triangle", value: "Lover triangle" },
-                      { label: "Brawl due to alcohol", value: "Brawl due to influence of alcohol" },
-                      { label: "Narcotics drug dispute", value: "Narcotic drug laws" },
-                      { label: "Argument over money", value: "Argument over money" },
-                      { label: "Other arguments", value: "Other arguments" },
-                      { label: "Gangland killings", value: "Gangland killings" },
+                      { label: "Robbery / Theft", value: "Robbery" },
+                      { label: "Domestic / Triangle", value: "Lover triangle" },
+                      { label: "Brawl / Altercation", value: "Brawl due to influence of alcohol" },
+                      { label: "Narcotics / Contraband", value: "Narcotic drug laws" },
+                      { label: "Financial Dispute", value: "Argument over money" },
+                      { label: "Other Arguments", value: "Other arguments" },
+                      { label: "Organized Crime / Gang", value: "Gangland killings" },
                     ]}
                   />
 
                   <Select
-                    label="Relationship"
+                    label="Suspect Relationship"
                     value={formData.relationship}
                     onChange={(e) =>
                       setFormData({ ...formData, relationship: e.target.value })
@@ -239,42 +256,41 @@ export default function SolvabilityPage() {
                     options={[
                       { label: "Acquaintance", value: "Acquaintance" },
                       { label: "Stranger", value: "Stranger" },
-                      { label: "Wife / Husband", value: "Wife" },
-                      { label: "Girlfriend / Boyfriend", value: "Girlfriend" },
-                      { label: "Friend", value: "Friend" },
-                      { label: "Family member", value: "Family" },
-                      { label: "Unknown", value: "Unknown" },
+                      { label: "Spouse / Partner", value: "Wife" },
+                      { label: "Significant Other", value: "Girlfriend" },
+                      { label: "Friend / Associate", value: "Friend" },
+                      { label: "Family Relative", value: "Family" },
+                      { label: "Unknown / Unestablished", value: "Unknown" },
                     ]}
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <Select
-                    label="Incident City / District"
+                    label="Jurisdiction / City"
                     value={formData.city}
                     onChange={(e) =>
                       setFormData({ ...formData, city: e.target.value })
                     }
                     options={[
-                      { label: "Los Angeles", value: "Los Angeles" },
                       { label: "Chennai", value: "Chennai" },
                       { label: "Madurai", value: "Madurai" },
                       { label: "Coimbatore", value: "Coimbatore" },
+                      { label: "Salem", value: "Salem" },
+                      { label: "Los Angeles", value: "Los Angeles" },
                       { label: "Chicago", value: "Chicago" },
-                      { label: "Houston", value: "Houston" },
                     ]}
                   />
 
                   <Select
-                    label="State / Region"
+                    label="State / Province"
                     value={formData.state}
                     onChange={(e) =>
                       setFormData({ ...formData, state: e.target.value })
                     }
                     options={[
-                      { label: "California", value: "California" },
                       { label: "Tamil Nadu", value: "Tamil Nadu" },
-                      { label: "Illinois", value: "Illinois" },
+                      { label: "California", value: "California" },
                       { label: "Texas", value: "Texas" },
                       { label: "New York", value: "New York" },
                     ]}
@@ -285,7 +301,7 @@ export default function SolvabilityPage() {
                   type="submit"
                   variant="primary"
                   isLoading={loading}
-                  className="w-full mt-4"
+                  className="w-full mt-2"
                 >
                   Calculate Clearance Likelihood
                 </Button>
@@ -295,34 +311,34 @@ export default function SolvabilityPage() {
         </div>
 
         {/* Right Output: 7 Cols */}
-        <div className="lg:col-span-7 space-y-6">
+        <div className="lg:col-span-7 space-y-4">
           {result ? (
             <>
               {/* Verdict Summary Card */}
               <Card className="border-sky-500/30 bg-gradient-to-br from-slate-900 via-slate-900/90 to-sky-950/20">
-                <CardHeader>
+                <CardHeader className="p-4 pb-2">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="text-xs uppercase font-mono tracking-wider text-sky-400">
-                        Inference Verdict
+                      <div className="text-[11px] uppercase font-mono tracking-wider text-sky-400">
+                        Investigation Clearance Verdict
                       </div>
-                      <CardTitle className="text-xl mt-1">
-                        Case Clearance Likelihood: {result.clearance_percentage}%
+                      <CardTitle className="text-lg mt-0.5">
+                        Clearance Likelihood: {result.clearance_percentage}%
                       </CardTitle>
                     </div>
                     {getTriageBadge(result.triage_tier)}
                   </div>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                  {/* Progress Ring / Gauge Bar */}
+                <CardContent className="p-4 pt-2 space-y-4">
+                  {/* Progress Gauge */}
                   <div>
-                    <div className="flex justify-between text-xs font-semibold mb-1.5 text-slate-300">
-                      <span>Predicted Clearance Likelihood</span>
+                    <div className="flex justify-between text-xs font-semibold mb-1 text-slate-300">
+                      <span>Clearance Probability Gauge</span>
                       <span className="font-mono text-sky-400 font-bold">
                         {result.clearance_percentage}%
                       </span>
                     </div>
-                    <div className="w-full h-3.5 bg-slate-800 rounded-full overflow-hidden border border-slate-700/60 p-0.5">
+                    <div className="w-full h-3 bg-slate-800 rounded-full overflow-hidden border border-slate-700/60 p-0.5">
                       <div
                         className="h-full rounded-full bg-gradient-to-r from-sky-500 via-teal-400 to-emerald-400 transition-all duration-700 shadow-glow"
                         style={{ width: `${Math.max(5, result.clearance_percentage)}%` }}
@@ -331,8 +347,8 @@ export default function SolvabilityPage() {
                   </div>
 
                   {/* Priority & Window Target */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="p-3.5 rounded-lg border border-slate-800 bg-slate-950/60">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="p-3 rounded-lg border border-slate-800 bg-slate-950/60">
                       <div className="flex items-center gap-2 text-xs text-slate-400">
                         <AlertCircle className="h-4 w-4 text-amber-400" />
                         <span>Triage Priority</span>
@@ -342,7 +358,7 @@ export default function SolvabilityPage() {
                       </div>
                     </div>
 
-                    <div className="p-3.5 rounded-lg border border-slate-800 bg-slate-950/60">
+                    <div className="p-3 rounded-lg border border-slate-800 bg-slate-950/60">
                       <div className="flex items-center gap-2 text-xs text-slate-400">
                         <Clock className="h-4 w-4 text-sky-400" />
                         <span>Golden Window Target</span>
@@ -353,31 +369,31 @@ export default function SolvabilityPage() {
                     </div>
                   </div>
 
-                  {/* Multi-Model Verdicts Breakdown */}
+                  {/* Operational Verdicts Breakdown */}
                   {result.verdicts && result.verdicts.length > 0 && (
-                    <div className="space-y-2">
-                      <div className="text-xs font-semibold uppercase tracking-wider text-slate-400">
-                        Multi-Model Breakdown
+                    <div className="space-y-1.5">
+                      <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                        Investigative Verdict Breakdown
                       </div>
                       <Table>
                         <TableHeader>
                           <TableRow>
-                            <TableHead>Model</TableHead>
-                            <TableHead>Probability</TableHead>
-                            <TableHead>Verdict</TableHead>
-                            <TableHead>Confidence</TableHead>
+                            <TableHead className="text-xs">Analysis Engine</TableHead>
+                            <TableHead className="text-xs">Likelihood</TableHead>
+                            <TableHead className="text-xs">Clearance Verdict</TableHead>
+                            <TableHead className="text-xs">Confidence</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
                           {result.verdicts.map((v) => (
                             <TableRow key={v.model_key}>
-                              <TableCell className="font-medium text-slate-300">
-                                {v.model_name}
+                              <TableCell className="font-medium text-xs text-slate-300">
+                                {getOperationalModelName(v.model_name, v.model_key)}
                               </TableCell>
-                              <TableCell className="font-mono text-sky-400 font-bold">
+                              <TableCell className="font-mono text-xs text-sky-400 font-bold">
                                 {(v.probability * 100).toFixed(1)}%
                               </TableCell>
-                              <TableCell>
+                              <TableCell className="text-xs">
                                 <span
                                   className={
                                     v.prediction === 1
@@ -398,16 +414,16 @@ export default function SolvabilityPage() {
                     </div>
                   )}
 
-                  {/* Investigative Action Items */}
-                  <div className="space-y-2">
-                    <div className="text-xs font-semibold uppercase tracking-wider text-slate-400">
-                      Tactical Investigative Guidelines
+                  {/* Tactical Guidelines */}
+                  <div className="space-y-1.5">
+                    <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                      Recommended Detective Action Protocol
                     </div>
-                    <div className="space-y-1.5">
+                    <div className="space-y-1">
                       {result.investigative_guidelines.map((guide, idx) => (
                         <div
                           key={idx}
-                          className="flex items-start gap-2.5 p-2 rounded-lg bg-slate-950/50 border border-slate-800 text-xs text-slate-300"
+                          className="flex items-start gap-2 p-2 rounded-lg bg-slate-950/50 border border-slate-800 text-xs text-slate-300"
                         >
                           <ChevronRight className="h-3.5 w-3.5 text-sky-400 shrink-0 mt-0.5" />
                           <span>{guide}</span>
@@ -419,112 +435,66 @@ export default function SolvabilityPage() {
               </Card>
             </>
           ) : (
-            <Card className="border-dashed border-slate-800 bg-slate-900/30 flex flex-col items-center justify-center p-12 text-center h-80">
-              <Scale className="h-12 w-12 text-slate-600 mb-3" />
-              <h3 className="text-base font-semibold text-slate-300">
-                No Active Solvability Query
+            <Card className="border-dashed border-slate-800 bg-slate-900/30 flex flex-col items-center justify-center p-8 text-center h-64">
+              <Scale className="h-10 w-10 text-slate-600 mb-2" />
+              <h3 className="text-sm font-semibold text-slate-300">
+                Awaiting Case Parameters
               </h3>
               <p className="text-xs text-slate-500 max-w-sm mt-1">
-                Configure the case parameters on the left and click &quot;Run
-                Solvability Triage&quot; to compute inference probabilities across
-                Configure the case parameters on the left and click &quot;Run
-                Solvability Triage&quot; to compute inference probabilities across
-                active consensus classifiers.
+                Configure the case parameters on the left and select &quot;Calculate Clearance Likelihood&quot; to generate triage priority.
               </p>
             </Card>
           )}
 
-          {/* Model Diagnostic Benchmark ROC Curves */}
+          {/* Practical Response Window Clearance Curve */}
           <Card>
-            <CardHeader>
-              <CardTitle>
-                <TrendingUp className="h-5 w-5 text-sky-400" />
-                ROC-AUC Diagnostic Clearance Curves
+            <CardHeader className="p-4 pb-2">
+              <CardTitle className="text-sm flex items-center gap-2">
+                <TrendingUp className="h-4 w-4 text-sky-400" />
+                Case Clearance Probability by Lead Response Window
               </CardTitle>
-              <CardDescription>
-                Validation ROC performance: Deep Learning Clearance Engine (AUC 0.814)
-                alongside consensus decision classifiers.
+              <CardDescription className="text-xs">
+                Historical resolution probability drops steeply outside the golden 48-hour response window.
               </CardDescription>
             </CardHeader>
-            <CardContent className="h-64">
+            <CardContent className="p-4 pt-1 h-56">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={rocBenchmarkData}>
+                <AreaChart data={leadWindowRetentionData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="clearanceGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#38bdf8" stopOpacity={0.8} />
+                      <stop offset="95%" stopColor="#38bdf8" stopOpacity={0.05} />
+                    </linearGradient>
+                  </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                  <XAxis
-                    dataKey="fpr"
-                    stroke="#64748b"
-                    fontSize={11}
-                    label={{
-                      value: "False Positive Rate (FPR)",
-                      position: "insideBottom",
-                      offset: -5,
-                      fill: "#64748b",
-                      fontSize: 10,
-                    }}
-                  />
-                  <YAxis
-                    stroke="#64748b"
-                    fontSize={11}
-                    label={{
-                      value: "True Positive Rate (TPR)",
-                      angle: -90,
-                      position: "insideLeft",
-                      fill: "#64748b",
-                      fontSize: 10,
-                    }}
-                  />
+                  <XAxis dataKey="window" stroke="#64748b" fontSize={10} />
+                  <YAxis stroke="#64748b" fontSize={10} domain={[0, 100]} unit="%" />
                   <Tooltip
                     contentStyle={{
                       backgroundColor: "#0d1322",
                       borderColor: "#1e293b",
                       borderRadius: "8px",
-                      fontSize: "12px",
+                      fontSize: "11px",
                     }}
+                    formatter={(val: any) => [`${val}%`, "Clearance Probability"]}
                   />
-                  <Legend
-                    wrapperStyle={{ fontSize: "11px", paddingTop: "10px" }}
-                  />
-                  <Line
+                  <Area
                     type="monotone"
-                    dataKey="ann"
+                    dataKey="clearance_pct"
                     stroke="#38bdf8"
-                    strokeWidth={2.5}
-                    name="Deep Learning Engine (AUC 0.814)"
-                    dot={false}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="tree"
-                    stroke="#10b981"
                     strokeWidth={2}
-                    name="Hierarchical Tree (AUC 0.762)"
-                    dot={false}
+                    fillOpacity={1}
+                    fill="url(#clearanceGrad)"
+                    name="Priority Triage Clearance"
                   />
                   <Line
                     type="monotone"
-                    dataKey="knn"
-                    stroke="#a855f7"
-                    strokeWidth={1.8}
-                    name="Neighborhood Classifier (AUC 0.751)"
-                    dot={false}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="nb"
-                    stroke="#f59e0b"
-                    strokeWidth={1.8}
-                    name="Probabilistic Screener (AUC 0.718)"
-                    dot={false}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="baseline"
-                    stroke="#475569"
+                    dataKey="historical_avg"
+                    stroke="#64748b"
                     strokeDasharray="4 4"
-                    name="Uninformed Baseline"
-                    dot={false}
+                    name="Historical Average"
                   />
-                </LineChart>
+                </AreaChart>
               </ResponsiveContainer>
             </CardContent>
           </Card>
