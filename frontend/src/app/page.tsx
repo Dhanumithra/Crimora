@@ -357,7 +357,50 @@ export default function OverviewPage() {
     return { label: "TIER-3 ARCHIVAL / COLD REVIEW", color: "text-rose-400", border: "border-rose-500/50", bg: "bg-rose-500/15" };
   };
 
+  const getDefconDetails = (lvl: number) => {
+    switch (lvl) {
+      case 1:
+        return {
+          code: "L1",
+          tag: "DEFCON 1",
+          statusText: "Active: Immediate Tactical Intervention",
+          badgeStyle: "bg-rose-500/20 text-rose-300 border-rose-500/50",
+          alertStyle: "bg-rose-950/80 text-rose-200 border-rose-500/60 shadow-[0_0_15px_rgba(244,63,94,0.35)]",
+          dotColor: "bg-rose-400",
+        };
+      case 2:
+        return {
+          code: "L2",
+          tag: "DEFCON 2",
+          statusText: "Active: Cross-District Serial M.O. Lock",
+          badgeStyle: "bg-amber-500/20 text-amber-300 border-amber-500/50",
+          alertStyle: "bg-amber-950/80 text-amber-200 border-amber-500/60 shadow-[0_0_15px_rgba(245,158,11,0.35)]",
+          dotColor: "bg-amber-400",
+        };
+      case 3:
+        return {
+          code: "L3",
+          tag: "DEFCON 3",
+          statusText: "Active: Elevated Hotspot Surveillance",
+          badgeStyle: "bg-cyan-500/20 text-cyan-300 border-cyan-500/50",
+          alertStyle: "bg-cyan-950/80 text-cyan-200 border-cyan-500/60 shadow-[0_0_15px_rgba(6,182,212,0.35)]",
+          dotColor: "bg-cyan-400",
+        };
+      case 4:
+      default:
+        return {
+          code: "L4",
+          tag: "DEFCON 4",
+          statusText: "Active: Statewide Routine Patrol Grid",
+          badgeStyle: "bg-blue-500/20 text-blue-300 border-blue-500/50",
+          alertStyle: "bg-blue-950/80 text-blue-200 border-blue-500/60 shadow-[0_0_15px_rgba(37,99,235,0.35)]",
+          dotColor: "bg-blue-400",
+        };
+    }
+  };
+
   const simTier = getSimTier(calculatedScore);
+  const currentDefcon = getDefconDetails(defconLevel);
   const activeSectorData = sectors[selectedSector] || sectors.chennai;
 
   return (
@@ -368,8 +411,8 @@ export default function OverviewPage() {
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-10 right-0 w-80 h-80 bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-          <div className="flex items-start gap-5">
+        <div className="relative z-10 flex flex-col 2xl:flex-row 2xl:items-center justify-between gap-6">
+          <div className="flex items-start gap-4 sm:gap-5 min-w-0 max-w-3xl">
             {/* Animated Blue Radar Scope Component */}
             <div className="hidden sm:flex relative h-16 w-16 shrink-0 rounded-2xl border border-blue-500/50 bg-blue-950/40 overflow-hidden items-center justify-center shadow-[0_0_25px_rgba(37,99,235,0.35)]">
               {/* Concentric rings */}
@@ -383,8 +426,8 @@ export default function OverviewPage() {
               <span className="h-2.5 w-2.5 rounded-full bg-sky-400 animate-ping" />
             </div>
 
-            <div>
-              <div className="flex flex-wrap items-center gap-2.5 mb-2">
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2 mb-2">
                 <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-blue-500/15 border border-blue-500/40 text-[10px] font-mono uppercase tracking-[0.15em] text-blue-300 font-bold shadow-[0_0_12px_rgba(37,99,235,0.25)]">
                   <span className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-pulse" />
                   Tactical Command Core
@@ -398,7 +441,7 @@ export default function OverviewPage() {
                   TAMIL NADU STATE POLICE
                 </span>
               </div>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white flex items-center gap-3">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white leading-tight">
                 Investigative Intelligence &amp; Clearance Command
               </h1>
               <p className="text-xs sm:text-sm text-slate-300/80 mt-1.5 max-w-2xl leading-relaxed">
@@ -408,48 +451,54 @@ export default function OverviewPage() {
           </div>
 
           {/* Quick Guide & DEFCON Operational Readiness Control */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <div className="flex flex-wrap items-center sm:items-stretch gap-3 shrink-0">
             <Button
               variant="outline"
               onClick={() => setShowQuickGuide(!showQuickGuide)}
-              className="gap-2 text-xs border-blue-500/40 bg-blue-950/40 hover:bg-blue-600/20 text-blue-200"
+              className="gap-2 text-xs border-blue-500/40 bg-blue-950/40 hover:bg-blue-600/20 text-blue-200 self-start sm:self-auto h-auto py-2.5"
             >
               <HelpCircle className="h-4 w-4 text-sky-400" />
               <span>{showQuickGuide ? "Hide Quick Tour" : "Platform Tour"}</span>
             </Button>
 
-            <div className="flex flex-col sm:items-end gap-2 shrink-0 bg-slate-950/70 p-3 rounded-xl border border-blue-950/80 shadow-inner">
-              <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 font-semibold flex items-center gap-1.5">
-                <ShieldAlert className="h-3.5 w-3.5 text-amber-400" />
-                Operational Posture (DEFCON)
-              </span>
-              <div className="flex items-center gap-1.5">
+            <div className="flex flex-col gap-2.5 bg-slate-950/90 p-3.5 rounded-xl border border-blue-500/40 shadow-xl min-w-[280px] max-w-full">
+              <div className="flex items-center justify-between gap-3 border-b border-blue-900/60 pb-2">
+                <span className="text-xs font-mono uppercase tracking-wider text-amber-300 font-bold flex items-center gap-1.5">
+                  <ShieldAlert className="h-4 w-4 text-amber-400 shrink-0" />
+                  Operational Posture (DEFCON)
+                </span>
+                <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-black border ${currentDefcon.badgeStyle}`}>
+                  {currentDefcon.tag}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-4 gap-1.5">
                 {[
-                  { lvl: 4, name: "DEFCON 4", sub: "Routine Patrol", color: "hover:border-blue-500/50 hover:text-blue-300", active: "bg-blue-600/30 text-blue-200 border-blue-400" },
-                  { lvl: 3, name: "DEFCON 3", sub: "Elevated Watch", color: "hover:border-cyan-500/50 hover:text-cyan-300", active: "bg-cyan-500/30 text-cyan-200 border-cyan-400" },
-                  { lvl: 2, name: "DEFCON 2", sub: "Pattern Alert", color: "hover:border-amber-500/50 hover:text-amber-300", active: "bg-amber-500/30 text-amber-200 border-amber-400" },
-                  { lvl: 1, name: "DEFCON 1", sub: "Lockdown", color: "hover:border-rose-500/50 hover:text-rose-300", active: "bg-rose-500/30 text-rose-200 border-rose-400" },
+                  { lvl: 4, code: "L4", name: "DEFCON 4", sub: "Routine Patrol", active: "bg-blue-600 text-white font-black border-blue-400 shadow-[0_0_12px_rgba(37,99,235,0.6)]" },
+                  { lvl: 3, code: "L3", name: "DEFCON 3", sub: "Elevated Watch", active: "bg-cyan-500 text-slate-950 font-black border-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.6)]" },
+                  { lvl: 2, code: "L2", name: "DEFCON 2", sub: "Pattern Alert", active: "bg-amber-500 text-slate-950 font-black border-amber-300 shadow-[0_0_12px_rgba(245,158,11,0.6)]" },
+                  { lvl: 1, code: "L1", name: "DEFCON 1", sub: "Lockdown", active: "bg-rose-600 text-white font-black border-rose-400 shadow-[0_0_12px_rgba(244,63,94,0.6)]" },
                 ].map((item) => (
                   <button
                     key={item.lvl}
+                    type="button"
                     onClick={() => setDefconLevel(item.lvl)}
-                    className={`px-2.5 py-1.5 rounded-lg border text-[11px] font-mono font-bold transition-all ${
+                    className={`py-1.5 px-3 rounded-lg border text-xs font-mono transition-all flex items-center justify-center ${
                       defconLevel === item.lvl
-                        ? item.active + " shadow-[0_0_15px_rgba(37,99,235,0.35)]"
-                        : "border-slate-800 bg-slate-900/60 text-slate-400 " + item.color
+                        ? item.active
+                        : "border-slate-800 bg-slate-900/80 text-slate-300 hover:border-slate-700 hover:text-white"
                     }`}
                     title={item.sub}
                   >
-                    L{item.lvl}
+                    {item.code}
                   </button>
                 ))}
               </div>
-              <span className="text-[10px] font-mono text-slate-400 text-right">
-                {defconLevel === 4 && "Active: Statewide Routine Patrol Grid"}
-                {defconLevel === 3 && "Active: Elevated Hotspot Surveillance"}
-                {defconLevel === 2 && "Active: Cross-District Serial M.O. Lock"}
-                {defconLevel === 1 && "Active: Immediate Tactical Intervention"}
-              </span>
+
+              <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-mono font-semibold ${currentDefcon.alertStyle}`}>
+                <span className={`h-2.5 w-2.5 rounded-full shrink-0 animate-ping ${currentDefcon.dotColor}`} />
+                <span className="truncate">{currentDefcon.statusText}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -483,7 +532,7 @@ export default function OverviewPage() {
                 Case Solvability
               </div>
               <p className="text-[11px] text-slate-400 leading-relaxed">
-                Enter crime scene details or pick a 1-click preset to evaluate likelihood of clearance &amp; golden-hour directives.
+                Enter crime scene evidentiary parameters and lead status to evaluate clearance likelihood &amp; golden-hour directives.
               </p>
             </Link>
 

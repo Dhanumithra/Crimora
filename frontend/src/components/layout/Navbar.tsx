@@ -14,21 +14,22 @@ export function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-20 flex h-16 w-full items-center justify-between border-b border-blue-950/80 bg-[#070D1A]/90 px-6 md:px-8 backdrop-blur-xl">
+    <header className="sticky top-0 z-20 flex h-16 w-full items-center justify-between border-b border-blue-950/80 bg-[#070D1A]/90 px-4 sm:px-6 md:px-8 backdrop-blur-xl">
       {/* Left: Search trigger & tactical signals */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3 sm:gap-4 min-w-0">
         <button
           onClick={triggerCommandPalette}
-          className="flex items-center gap-3 rounded-xl border border-slate-800 bg-slate-950/70 px-4 py-2 text-xs text-slate-300 hover:border-blue-500/60 hover:text-white hover:bg-blue-950/30 transition-all shadow-inner group"
+          className="flex items-center gap-2 sm:gap-3 rounded-xl border border-slate-800 bg-slate-950/70 px-3 sm:px-4 py-2 text-xs text-slate-300 hover:border-blue-500/60 hover:text-white hover:bg-blue-950/30 transition-all shadow-inner group shrink-0"
         >
-          <Search className="h-4 w-4 text-blue-400 group-hover:scale-110 transition-transform" />
-          <span className="font-medium">Quick Command / Jump to Module...</span>
-          <kbd className="ml-4 rounded-md border border-slate-800 bg-slate-900 px-2 py-0.5 text-[10px] font-mono text-slate-400 font-semibold shadow-sm">
+          <Search className="h-4 w-4 text-blue-400 group-hover:scale-110 transition-transform shrink-0" />
+          <span className="font-medium hidden sm:inline">Quick Command / Jump to Module...</span>
+          <span className="font-medium sm:hidden">Search...</span>
+          <kbd className="ml-1.5 sm:ml-4 rounded-md border border-slate-800 bg-slate-900 px-1.5 sm:px-2 py-0.5 text-[10px] font-mono text-slate-400 font-semibold shadow-sm">
             Ctrl+K
           </kbd>
         </button>
 
-        <div className="hidden lg:flex items-center gap-2.5">
+        <div className="hidden xl:flex items-center gap-2.5">
           <span className="inline-flex items-center gap-2 rounded-full border border-blue-500/40 bg-blue-500/15 px-3 py-1 text-xs font-medium text-blue-300 shadow-[0_0_12px_rgba(37,99,235,0.25)]">
             <span className="h-2 w-2 rounded-full bg-blue-400 animate-pulse" />
             Core Status: Operational
@@ -41,14 +42,14 @@ export function Navbar() {
       </div>
 
       {/* Right: Analyst identity */}
-      <div className="flex items-center gap-6">
-        <div className="hidden sm:flex items-center gap-2.5 text-xs text-slate-400 border-r border-slate-800/80 pr-6">
+      <div className="flex items-center gap-3 sm:gap-6 shrink-0">
+        <div className="hidden 2xl:flex items-center gap-2.5 text-xs text-slate-400 border-r border-slate-800/80 pr-6">
           <span className="font-mono text-[11px] uppercase tracking-wider text-slate-400 font-medium">Unsolved Dossiers:</span>
           <span className="font-mono font-bold text-amber-300 bg-amber-500/10 px-2.5 py-0.5 rounded border border-amber-500/25">26,505</span>
         </div>
 
-        <div className="flex items-center gap-3.5">
-          <div className="flex flex-col text-right">
+        <div className="flex items-center gap-3">
+          <div className="hidden xs:flex flex-col text-right">
             <span className="text-xs font-semibold text-slate-100 tracking-tight flex items-center justify-end gap-1.5">
               <ShieldCheck className="h-3.5 w-3.5 text-blue-400" />
               Senior Crime Analyst
@@ -58,7 +59,7 @@ export function Navbar() {
               Clearance Level 5 (Special Ops)
             </span>
           </div>
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-blue-500/50 bg-gradient-to-br from-blue-600/30 via-slate-900 to-indigo-950/70 text-blue-200 font-mono font-bold text-xs shadow-[0_0_15px_rgba(37,99,235,0.3)] ring-1 ring-blue-500/30">
+          <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl border border-blue-500/50 bg-gradient-to-br from-blue-600/30 via-slate-900 to-indigo-950/70 text-blue-200 font-mono font-bold text-xs shadow-[0_0_15px_rgba(37,99,235,0.3)] ring-1 ring-blue-500/30">
             TN
           </div>
         </div>

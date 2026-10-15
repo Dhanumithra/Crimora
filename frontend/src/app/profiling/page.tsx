@@ -9,7 +9,6 @@ import {
   UserCheck,
   Shield,
   Crosshair,
-  BookmarkCheck,
   HelpCircle,
   Info,
   RotateCcw,
@@ -47,37 +46,6 @@ export default function ProfilingPage() {
   const [profile, setProfile] = useState<ProfilingResult | null>(null);
   const [showHelp, setShowHelp] = useState(false);
 
-  const scenarioPresets = [
-    {
-      label: "Domestic Weapon Altercation",
-      weapon: "Knife or cutting instrument",
-      circumstance: "Lover triangle",
-      victim_sex: "Female",
-      victim_age: 28,
-    },
-    {
-      label: "Commercial Armed Robbery",
-      weapon: "Handgun - pistol, revolver, etc",
-      circumstance: "Robbery",
-      victim_sex: "Male",
-      victim_age: 42,
-    },
-    {
-      label: "Public Disorder Brawl",
-      weapon: "Personal weapons, includes beating",
-      circumstance: "Brawl due to influence of alcohol",
-      victim_sex: "Male",
-      victim_age: 25,
-    },
-    {
-      label: "Financial Dispute Trauma",
-      weapon: "Blunt object - hammer, club, etc",
-      circumstance: "Other arguments",
-      victim_sex: "Male",
-      victim_age: 50,
-    },
-  ];
-
   const handleInfer = async (e?: React.FormEvent, customForm?: typeof evidenceForm) => {
     if (e) e.preventDefault();
     setLoading(true);
@@ -89,17 +57,6 @@ export default function ProfilingPage() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const applyPreset = (preset: (typeof scenarioPresets)[0]) => {
-    const updated = {
-      weapon: preset.weapon,
-      circumstance: preset.circumstance,
-      victim_sex: preset.victim_sex,
-      victim_age: preset.victim_age,
-    };
-    setEvidenceForm(updated);
-    handleInfer(undefined, updated);
   };
 
   const resetForm = () => {
@@ -220,26 +177,6 @@ export default function ProfilingPage() {
         </div>
       )}
 
-      {/* Interactive Quick Archetype Selector */}
-      <div className="p-4 rounded-xl bg-slate-950/70 border border-blue-950/80 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-inner">
-        <div className="flex items-center gap-2">
-          <BookmarkCheck className="h-4 w-4 text-blue-400 shrink-0" />
-          <span className="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider">
-            Quick-Test Crime Scene Presets:
-          </span>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          {scenarioPresets.map((sc, i) => (
-            <button
-              key={i}
-              onClick={() => applyPreset(sc)}
-              className="px-3 py-1.5 rounded-lg border border-slate-800 bg-slate-900/80 hover:bg-blue-600/15 hover:border-blue-500/50 text-slate-300 hover:text-blue-200 text-xs font-medium transition-all shadow-sm"
-            >
-              {sc.label}
-            </button>
-          ))}
-        </div>
-      </div>
 
       {/* Main Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -490,7 +427,7 @@ export default function ProfilingPage() {
                 Awaiting Scene Evidence Input
               </h3>
               <p className="text-xs text-slate-400 max-w-md mt-2 leading-relaxed">
-                Select a quick-test crime scene preset above or enter forensic weapon, victimology, and scene circumstances to generate suspect trait profiles.
+                Configure forensic weapon, victimology, and scene circumstances on the left to generate probabilistic suspect trait profiles.
               </p>
             </Card>
           )}
