@@ -71,32 +71,32 @@ export default function LeafletHotspotMap({
         }
       ).addTo(map);
 
-      // Render Hotspot Circles with gradient radius based on LWR intensity
+      // Render Hotspot Circles with gradient radius based on spatial intensity
       hotspots.forEach((spot) => {
         const radius = Math.max(10000, spot.normalized_intensity * 35000);
         const color =
           spot.normalized_intensity > 0.8
-            ? "#ef4444"
+            ? "#f43f5e"
             : spot.normalized_intensity > 0.6
             ? "#f59e0b"
-            : "#38bdf8";
+            : "#6366f1";
 
         const circle = L.circle([spot.latitude, spot.longitude], {
           color: color,
           fillColor: color,
           fillOpacity: 0.35,
           radius: radius,
-          weight: 2,
+          weight: 1.5,
         }).addTo(map);
 
         circle.bindPopup(`
-          <div style="font-family: monospace; font-size: 12px; color: #f8fafc; line-height: 1.5; padding: 4px;">
-            <strong style="color: #38bdf8; font-size: 13px;">${spot.city} Hotspot</strong><br/>
+          <div style="font-family: monospace; font-size: 11px; color: #f8fafc; line-height: 1.5; padding: 4px;">
+            <strong style="color: #818cf8; font-size: 12px;">${spot.city} Hotspot</strong><br/>
             <span>Priority Rank: <strong>#${spot.rank}</strong></span><br/>
-            <span>LWR Intensity: <strong>${spot.estimated_intensity.toFixed(2)}</strong></span><br/>
-            <span>Percentile Tier: <strong style="color: #10b981;">${spot.percentile_tier}</strong></span><br/>
-            <hr style="border: 0; border-top: 1px solid #334155; margin: 6px 0;" />
-            <span style="font-size: 11px; color: #94a3b8;">Patrol Directive: ${spot.recommended_patrol}</span>
+            <span>Density Score: <strong>${spot.estimated_intensity.toFixed(1)}</strong></span><br/>
+            <span>Risk Tier: <strong style="color: #10b981;">${spot.percentile_tier}</strong></span><br/>
+            <hr style="border: 0; border-top: 1px solid #334155; margin: 5px 0;" />
+            <span style="font-size: 10px; color: #94a3b8;">Patrol Directive: ${spot.recommended_patrol}</span>
           </div>
         `);
       });
@@ -104,18 +104,18 @@ export default function LeafletHotspotMap({
       // Render Tamil Nadu administrative district nodes
       districts.forEach((d) => {
         const marker = L.circleMarker([d.lat, d.lon], {
-          radius: 5,
+          radius: 4,
           color: "#10b981",
           fillColor: "#10b981",
           fillOpacity: 0.85,
-          weight: 1.5,
+          weight: 1,
         }).addTo(map);
 
         marker.bindPopup(`
           <div style="font-family: monospace; font-size: 11px; color: #f8fafc; padding: 4px;">
             <strong style="color: #10b981;">${d.district} District HQ</strong><br/>
             <span>Coordinates: ${d.lat.toFixed(4)}° N, ${d.lon.toFixed(4)}° E</span><br/>
-            <span>Base Incident Weight: ${d.base_weight}</span>
+            <span>Incident Volume Weight: ${d.base_weight}</span>
           </div>
         `);
       });
@@ -139,22 +139,22 @@ export default function LeafletHotspotMap({
   }, [hotspots, districts]);
 
   return (
-    <div className="relative w-full h-[540px] rounded-xl overflow-hidden border border-slate-800 shadow-2xl">
+    <div className="relative w-full h-[500px] rounded-md overflow-hidden border border-slate-800 shadow-md">
       <div id="leaflet-crimora-map" className="w-full h-full" />
-      <div className="absolute top-4 right-4 z-[400] bg-slate-950/85 backdrop-blur-md border border-slate-800 p-3 rounded-lg text-xs font-mono space-y-1.5 shadow-lg">
-        <div className="text-slate-400 font-bold uppercase tracking-wider mb-1">
-          LWR Intensity Legend
+      <div className="absolute top-3 right-3 z-[400] bg-slate-950/90 backdrop-blur-md border border-slate-800 p-2.5 rounded-md text-[11px] font-mono space-y-1 shadow-md">
+        <div className="text-slate-400 font-semibold uppercase tracking-wider mb-1">
+          Spatial Density Legend
         </div>
         <div className="flex items-center gap-2">
-          <span className="h-3 w-3 rounded-full bg-rose-500 inline-block shadow-glow-red" />
+          <span className="h-2.5 w-2.5 rounded-full bg-rose-500 inline-block" />
           <span className="text-slate-200">Critical (&gt;80th pct)</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="h-3 w-3 rounded-full bg-amber-500 inline-block" />
+          <span className="h-2.5 w-2.5 rounded-full bg-amber-500 inline-block" />
           <span className="text-slate-200">Elevated (60th - 80th)</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="h-3 w-3 rounded-full bg-sky-400 inline-block" />
+          <span className="h-2.5 w-2.5 rounded-full bg-indigo-500 inline-block" />
           <span className="text-slate-200">Standard Baseline</span>
         </div>
       </div>

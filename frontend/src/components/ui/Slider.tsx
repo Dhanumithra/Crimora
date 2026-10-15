@@ -23,10 +23,10 @@ export function Slider({
   className,
 }: SliderProps) {
   return (
-    <div className={cn("flex flex-col space-y-2 w-full", className)}>
-      <div className="flex justify-between items-center text-xs font-semibold uppercase tracking-wider text-slate-300">
-        {label && <span>{label}</span>}
-        <span className="font-mono text-sky-400 font-bold">
+    <div className={cn("flex flex-col space-y-1.5 w-full", className)}>
+      <div className="flex justify-between items-center text-[11px] font-medium tracking-wider uppercase text-slate-400">
+        {label && <span className="truncate">{label}</span>}
+        <span className="font-mono text-indigo-400 font-semibold text-xs">
           {value} {unit}
         </span>
       </div>
@@ -37,7 +37,7 @@ export function Slider({
         step={step}
         value={value}
         onChange={(e) => onChange(parseFloat(e.target.value))}
-        className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-sky-400 focus:outline-none"
+        className="w-full h-1 bg-slate-800 rounded appearance-none cursor-pointer accent-indigo-500 focus:outline-none"
       />
       <div className="flex justify-between text-[10px] text-slate-500 font-mono">
         <span>{min}</span>

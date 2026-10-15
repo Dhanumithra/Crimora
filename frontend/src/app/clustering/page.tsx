@@ -36,7 +36,7 @@ import {
   ClusterDistributions,
 } from "@/types/api";
 
-const CLUSTER_COLORS = ["#38bdf8", "#10b981", "#a855f7", "#f59e0b", "#ef4444"];
+const PATTERN_COLORS = ["#4f46e5", "#0ea5e9", "#10b981", "#f59e0b", "#f43f5e"];
 
 export default function ClusteringPage() {
   // Input for live pattern matching
@@ -117,57 +117,55 @@ export default function ClusteringPage() {
     ];
 
   return (
-    <div className="space-y-5 animate-in fade-in duration-300">
-      {/* Header - Compact */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-slate-800">
+    <div className="space-y-4 animate-in fade-in duration-200">
+      {/* Header - Enterprise Clean */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2.5 border-b border-slate-800">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <Badge variant="default" className="font-mono text-[10px]">
-              PATTERN MATCHING
-            </Badge>
-            <Badge variant="secondary" className="font-mono text-[10px]">
-              CROSS-CASE MO PATTERN ANALYSIS
-            </Badge>
+          <div className="flex items-center gap-2 mb-0.5">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-indigo-400">
+              Serial Pattern Linkage
+            </span>
+            <span className="text-slate-600">&bull;</span>
+            <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">
+              26,505 Case Repository
+            </span>
           </div>
-          <h1 className="text-xl md:text-2xl font-extrabold tracking-tight text-white flex items-center gap-2.5">
-            <Network className="h-6 w-6 text-purple-400" />
+          <h1 className="text-xl font-semibold tracking-tight text-slate-100 flex items-center gap-2">
+            <Network className="h-5 w-5 text-indigo-400" />
             Serial Pattern Linkage &amp; Cross-Case MO Matcher
           </h1>
-          <p className="text-xs text-slate-400 max-w-2xl">
-            Cross-reference 26,505 unsolved cases against incident parameters to uncover serial offender signatures, weapon patterns, and behavioral archetypes.
-          </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2">
           <Badge variant="outline" className="font-mono text-xs">
-            Cold Case Repository: 26,505 Unsolved
+            Unsolved Repository: 26,505 Files
           </Badge>
         </div>
       </div>
 
-      {/* Top Section: Active Incident MO Profile & Behavioral & MO Groups */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+      {/* Top Section: Active Incident MO Profile (5 cols) & Behavioral & MO Groups (7 cols) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         {/* Active Incident MO Profile (5 cols) */}
         <div className="lg:col-span-5 space-y-4">
-          <Card className="border-purple-500/20 bg-gradient-to-b from-purple-500/5 to-slate-900/60">
-            <CardHeader className="p-4 pb-2">
-              <CardTitle className="text-base flex items-center gap-2">
-                <Target className="h-4 w-4 text-purple-400" />
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Target className="h-4 w-4 text-indigo-400" />
                 Active Incident M.O. Profile
               </CardTitle>
-              <CardDescription className="text-xs">
-                Input incident parameters to identify matching cold case archetypes and serial patterns.
+              <CardDescription>
+                Input incident parameters to identify matching cold case archetypes.
               </CardDescription>
             </CardHeader>
-            <CardContent className="p-4 pt-1">
-              <form onSubmit={handleAssign} className="space-y-3.5">
-                <div className="pt-1">
+            <CardContent>
+              <form onSubmit={handleAssign} className="space-y-3">
+                <div className="pt-0.5">
                   <Slider
                     label="Victim Age"
                     value={assignForm.victim_age}
                     min={1}
                     max={95}
-                    unit="years"
+                    unit="yrs"
                     onChange={(val) =>
                       setAssignForm({ ...assignForm, victim_age: val })
                     }
@@ -182,10 +180,10 @@ export default function ClusteringPage() {
                   }
                   options={[
                     { label: "Handgun - pistol, revolver", value: "Handgun - pistol, revolver, etc" },
-                    { label: "Knife or cutting instrument", value: "Knife or cutting instrument" },
-                    { label: "Blunt object - hammer, club", value: "Blunt object - hammer, club, etc" },
+                    { label: "Knife / Cutting Instrument", value: "Knife or cutting instrument" },
+                    { label: "Blunt Object (Club/Hammer)", value: "Blunt object - hammer, club, etc" },
                     { label: "Firearm, unspecified", value: "Firearm, type not stated" },
-                    { label: "Personal weapons (hands, fists)", value: "Personal weapons, includes beating" },
+                    { label: "Personal Weapons (Hands/Fists)", value: "Personal weapons, includes beating" },
                   ]}
                 />
 
@@ -200,24 +198,24 @@ export default function ClusteringPage() {
               </form>
 
               {assignedResult && (
-                <div className="mt-4 p-3.5 rounded-xl border border-purple-500/30 bg-slate-950/80 space-y-2.5">
+                <div className="mt-3.5 p-3 rounded-md border border-indigo-500/30 bg-slate-950 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-mono uppercase text-purple-400 font-bold">
+                    <span className="text-[10px] font-mono uppercase text-indigo-400 font-semibold">
                       Matched M.O. Archetype
                     </span>
-                    <Badge variant="default" className="font-mono text-[10px]">
+                    <Badge variant="secondary" className="font-mono text-[10px]">
                       Group #{assignedResult.cluster_id}
                     </Badge>
                   </div>
-                  <div className="text-sm font-bold text-white">
+                  <div className="text-xs font-semibold text-slate-100">
                     {assignedResult.cluster_label}
                   </div>
-                  <div className="grid grid-cols-2 gap-2 text-xs font-mono text-slate-300">
-                    <div>Mean Target Age: {assignedResult.centroid_age.toFixed(1)} yrs</div>
-                    <div>Pattern Fit: <span className="text-emerald-400 font-bold">Strong</span></div>
+                  <div className="grid grid-cols-2 gap-2 text-[11px] font-mono text-slate-300">
+                    <div>Mean Age: {assignedResult.centroid_age.toFixed(1)} yrs</div>
+                    <div>Pattern Fit: <span className="text-emerald-400 font-semibold">High Match</span></div>
                   </div>
-                  <div className="text-xs text-slate-400 pt-2 border-t border-slate-800">
-                    <strong className="text-slate-200">Investigative Lead Focus: </strong>
+                  <div className="text-[11px] text-slate-400 pt-2 border-t border-slate-800">
+                    <strong className="text-slate-200 font-medium">Investigative Lead Focus: </strong>
                     {assignedResult.investigative_focus}
                   </div>
                 </div>
@@ -229,49 +227,47 @@ export default function ClusteringPage() {
         {/* Behavioral & M.O. Cluster Groups (7 cols) */}
         <div className="lg:col-span-7">
           <Card className="h-full flex flex-col justify-between">
-            <CardHeader className="p-4 pb-2">
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle className="text-base flex items-center gap-2">
-                    <Layers className="h-4 w-4 text-purple-400" />
-                    Behavioral &amp; M.O. Cluster Groups
-                  </CardTitle>
-                  <CardDescription className="text-xs">
-                    Partitioning of 26,505 unsolved cases across distinct criminal behavioral pattern groups.
-                  </CardDescription>
-                </div>
-                <Badge variant="secondary" className="font-mono text-[10px]">
-                  5 Pattern Groups
-                </Badge>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <Layers className="h-4 w-4 text-indigo-400" />
+                  Behavioral &amp; M.O. Cluster Groups
+                </CardTitle>
+                <CardDescription>
+                  Partitioning of 26,505 unsolved cases across distinct criminal behavioral pattern groups.
+                </CardDescription>
               </div>
+              <Badge variant="outline" className="font-mono text-[10px]">
+                5 Pattern Groups
+              </Badge>
             </CardHeader>
-            <CardContent className="p-4 pt-1 h-64">
+            <CardContent className="h-56">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={clusterChartData} margin={{ top: 10, right: 10, left: -10, bottom: 15 }}>
+                <BarChart data={clusterChartData} margin={{ top: 10, right: 10, left: -10, bottom: 10 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
                   <XAxis dataKey="name" stroke="#64748b" fontSize={10} />
                   <YAxis stroke="#64748b" fontSize={10} />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "#0d1322",
+                      backgroundColor: "#0f172a",
                       borderColor: "#1e293b",
-                      borderRadius: "8px",
+                      borderRadius: "6px",
                       fontSize: "11px",
                     }}
-                    formatter={(val: any) => [`${val} Unsolved Cases`, "Volume"]}
+                    formatter={(val: any) => [`${val} Cases`, "Volume"]}
                   />
-                  <Bar dataKey="cases" radius={[4, 4, 0, 0]}>
+                  <Bar dataKey="cases" radius={[3, 3, 0, 0]}>
                     {clusterChartData.map((entry, index) => (
                       <Cell
                         key={`cell-${index}`}
-                        fill={CLUSTER_COLORS[index % CLUSTER_COLORS.length]}
+                        fill={PATTERN_COLORS[index % PATTERN_COLORS.length]}
                       />
                     ))}
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
-              <div className="mt-1 text-center text-[11px] text-slate-400 font-mono">
-                Select any pattern group below to inspect linked cold case files.
+              <div className="mt-1 text-center text-[10px] text-slate-500 font-mono">
+                Select any pattern group in the filter below to inspect linked cold case files.
               </div>
             </CardContent>
           </Card>
@@ -280,27 +276,23 @@ export default function ClusteringPage() {
 
       {/* Cold Cases Query & Live Table */}
       <Card>
-        <CardHeader className="p-4 pb-2">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-            <div>
-              <CardTitle className="text-base flex items-center gap-2">
-                <Database className="h-4 w-4 text-purple-400" />
-                Unsolved Cold Case Linkage Dossiers
-              </CardTitle>
-              <CardDescription className="text-xs">
-                Cross-reference unsolved cases displaying high Modus Operandi similarity.
-              </CardDescription>
-            </div>
-            <div className="flex items-center gap-2">
-              <Badge variant="default" className="font-mono text-xs">
-                Matched: {totalMatched} Records
-              </Badge>
-            </div>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div>
+            <CardTitle className="flex items-center gap-2">
+              <Database className="h-4 w-4 text-indigo-400" />
+              Unsolved Cold Case Linkage Dossiers
+            </CardTitle>
+            <CardDescription>
+              Cross-reference unsolved cases displaying high Modus Operandi similarity.
+            </CardDescription>
           </div>
+          <Badge variant="default" className="font-mono text-xs">
+            Matched: {totalMatched} Records
+          </Badge>
         </CardHeader>
 
         {/* Filter Controls Bar */}
-        <div className="px-4 py-2.5 border-y border-slate-800 bg-slate-950/40 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="px-3 py-2 border-y border-slate-800 bg-slate-950/80 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5">
           <Select
             label="Behavioral Pattern Group"
             value={filters.cluster_id}
@@ -318,7 +310,7 @@ export default function ClusteringPage() {
           />
 
           <Select
-            label="Filter Weapon M.O."
+            label="Weapon M.O."
             value={filters.weapon}
             onChange={(e) => {
               setFilters({ ...filters, weapon: e.target.value });
@@ -354,84 +346,82 @@ export default function ClusteringPage() {
               onClick={loadCases}
               variant="secondary"
               isLoading={loadingCases}
-              className="w-full gap-2 h-9"
+              className="w-full gap-1.5 h-8.5"
             >
-              <Filter className="h-4 w-4 text-purple-400" />
+              <Filter className="h-3.5 w-3.5 text-indigo-400" />
               Apply Pattern Filter
             </Button>
           </div>
         </div>
 
-        <CardContent className="p-4 pt-1">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Case Record</TableHead>
+                <TableHead>Incident Year</TableHead>
+                <TableHead>Jurisdiction</TableHead>
+                <TableHead>Victim Profile</TableHead>
+                <TableHead>Weapon / M.O.</TableHead>
+                <TableHead>MO Group</TableHead>
+                <TableHead>Pattern Match</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {loadingCases ? (
+                Array.from({ length: 6 }).map((_, i) => (
+                  <TableRow key={i}>
+                    <TableCell><div className="h-3.5 w-20 bg-slate-800 animate-pulse rounded" /></TableCell>
+                    <TableCell><div className="h-3.5 w-12 bg-slate-800 animate-pulse rounded" /></TableCell>
+                    <TableCell><div className="h-3.5 w-24 bg-slate-800 animate-pulse rounded" /></TableCell>
+                    <TableCell><div className="h-3.5 w-28 bg-slate-800 animate-pulse rounded" /></TableCell>
+                    <TableCell><div className="h-3.5 w-32 bg-slate-800 animate-pulse rounded" /></TableCell>
+                    <TableCell><div className="h-3.5 w-14 bg-slate-800 animate-pulse rounded" /></TableCell>
+                    <TableCell><div className="h-3.5 w-12 bg-slate-800 animate-pulse rounded" /></TableCell>
+                  </TableRow>
+                ))
+              ) : coldCases.length === 0 ? (
                 <TableRow>
-                  <TableHead className="text-xs">Case Record</TableHead>
-                  <TableHead className="text-xs">Incident Year</TableHead>
-                  <TableHead className="text-xs">Jurisdiction</TableHead>
-                  <TableHead className="text-xs">Victim Profile</TableHead>
-                  <TableHead className="text-xs">Weapon / M.O.</TableHead>
-                  <TableHead className="text-xs">MO Group</TableHead>
-                  <TableHead className="text-xs">Pattern Match</TableHead>
+                  <TableCell colSpan={7} className="text-center py-6 text-slate-500 text-xs">
+                    No cold case records match the specified pattern criteria.
+                  </TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody>
-                {loadingCases ? (
-                  Array.from({ length: 6 }).map((_, i) => (
-                    <TableRow key={i}>
-                      <TableCell><div className="h-4 w-20 bg-slate-800 animate-pulse rounded" /></TableCell>
-                      <TableCell><div className="h-4 w-12 bg-slate-800 animate-pulse rounded" /></TableCell>
-                      <TableCell><div className="h-4 w-28 bg-slate-800 animate-pulse rounded" /></TableCell>
-                      <TableCell><div className="h-4 w-32 bg-slate-800 animate-pulse rounded" /></TableCell>
-                      <TableCell><div className="h-4 w-36 bg-slate-800 animate-pulse rounded" /></TableCell>
-                      <TableCell><div className="h-4 w-16 bg-slate-800 animate-pulse rounded" /></TableCell>
-                      <TableCell><div className="h-4 w-14 bg-slate-800 animate-pulse rounded" /></TableCell>
-                    </TableRow>
-                  ))
-                ) : coldCases.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center py-6 text-slate-500 text-xs">
-                      No cold case records match the specified pattern criteria.
+              ) : (
+                coldCases.map((c) => (
+                  <TableRow key={c.Record_ID} className="hover:bg-slate-800/50">
+                    <TableCell className="font-mono font-medium text-slate-200 text-xs">
+                      {c.Record_ID}
+                    </TableCell>
+                    <TableCell className="font-mono text-xs text-slate-300">
+                      {c.Year}
+                    </TableCell>
+                    <TableCell className="text-xs text-slate-300">
+                      {c.City}, {c.State}
+                    </TableCell>
+                    <TableCell className="text-xs text-slate-300">
+                      {c.Victim_Age}y • {c.Victim_Sex} ({c.Victim_Race})
+                    </TableCell>
+                    <TableCell className="text-xs text-slate-300 max-w-[180px] truncate" title={c.Weapon}>
+                      {c.Weapon}
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant="default"
+                        className="font-mono text-[10px]"
+                      >
+                        #{c.Cluster_ID}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <span className="font-mono text-emerald-400 font-semibold text-xs">
+                        {(c.Similarity_Score * 100).toFixed(1)}% Match
+                      </span>
                     </TableCell>
                   </TableRow>
-                ) : (
-                  coldCases.map((c) => (
-                    <TableRow key={c.Record_ID} className="hover:bg-purple-950/20">
-                      <TableCell className="font-mono font-bold text-sky-400 text-xs">
-                        {c.Record_ID}
-                      </TableCell>
-                      <TableCell className="font-mono text-xs text-slate-300">
-                        {c.Year}
-                      </TableCell>
-                      <TableCell className="text-xs text-slate-300">
-                        {c.City}, {c.State}
-                      </TableCell>
-                      <TableCell className="text-xs text-slate-300">
-                        {c.Victim_Age}y • {c.Victim_Sex} ({c.Victim_Race})
-                      </TableCell>
-                      <TableCell className="text-xs text-slate-300 max-w-[180px] truncate" title={c.Weapon}>
-                        {c.Weapon}
-                      </TableCell>
-                      <TableCell>
-                        <Badge
-                          variant="default"
-                          className="font-mono text-[10px]"
-                        >
-                          #{c.Cluster_ID}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <span className="font-mono text-emerald-400 font-bold text-xs">
-                          {(c.Similarity_Score * 100).toFixed(1)}% Match
-                        </span>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
+                ))
+              )}
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
     </div>

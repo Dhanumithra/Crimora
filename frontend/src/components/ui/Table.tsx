@@ -6,9 +6,9 @@ export function Table({
   ...props
 }: React.HTMLAttributes<HTMLTableElement>) {
   return (
-    <div className="relative w-full overflow-auto">
+    <div className="relative w-full overflow-auto max-h-[500px]">
       <table
-        className={cn("w-full caption-bottom text-sm text-left", className)}
+        className={cn("w-full caption-bottom text-xs text-left", className)}
         {...props}
       />
     </div>
@@ -21,7 +21,10 @@ export function TableHeader({
 }: React.HTMLAttributes<HTMLTableSectionElement>) {
   return (
     <thead
-      className={cn("border-b border-slate-800 bg-slate-900/90 text-xs font-semibold text-slate-400 uppercase tracking-wider", className)}
+      className={cn(
+        "sticky top-0 z-10 border-b border-slate-800 bg-slate-900 text-[11px] font-medium text-slate-400 uppercase tracking-wider backdrop-blur-sm",
+        className
+      )}
       {...props}
     />
   );
@@ -33,7 +36,7 @@ export function TableBody({
 }: React.HTMLAttributes<HTMLTableSectionElement>) {
   return (
     <tbody
-      className={cn("divide-y divide-slate-800/60 font-sans", className)}
+      className={cn("divide-y divide-slate-800/50 font-sans", className)}
       {...props}
     />
   );
@@ -61,7 +64,7 @@ export function TableHead({
   return (
     <th
       className={cn(
-        "h-10 px-4 text-left align-middle font-medium text-slate-400 [&:has([role=checkbox])]:pr-0",
+        "h-8 px-3 text-left align-middle font-medium text-slate-400 [&:has([role=checkbox])]:pr-0",
         className
       )}
       {...props}
@@ -75,7 +78,7 @@ export function TableCell({
 }: React.TdHTMLAttributes<HTMLTableCellElement>) {
   return (
     <td
-      className={cn("p-4 align-middle [&:has([role=checkbox])]:pr-0 text-slate-200", className)}
+      className={cn("px-3 py-2 align-middle [&:has([role=checkbox])]:pr-0 text-slate-200", className)}
       {...props}
     />
   );

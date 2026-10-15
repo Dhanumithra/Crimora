@@ -92,14 +92,14 @@ export function CommandPalette() {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-150">
-      <div className="w-full max-w-xl overflow-hidden rounded-xl border border-slate-700/80 bg-slate-900 shadow-2xl">
-        <div className="flex items-center px-4 py-3 border-b border-slate-800">
-          <Search className="h-5 w-5 text-sky-400 mr-3" />
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-150">
+      <div className="w-full max-w-lg overflow-hidden rounded-lg border border-slate-800 bg-slate-900 shadow-xl">
+        <div className="flex items-center px-3.5 py-2.5 border-b border-slate-800">
+          <Search className="h-4 w-4 text-indigo-400 mr-2.5" />
           <input
             type="text"
-            className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-400 outline-none"
-            placeholder="Type a module name or navigate (e.g. Solvability, Hotspots, BBN)..."
+            className="w-full bg-transparent text-xs text-slate-100 placeholder-slate-400 outline-none"
+            placeholder="Search investigative modules or press Esc to close..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             autoFocus
@@ -108,39 +108,39 @@ export function CommandPalette() {
             onClick={() => setIsOpen(false)}
             className="text-slate-400 hover:text-slate-200"
           >
-            <X className="h-4 w-4" />
+            <X className="h-3.5 w-3.5" />
           </button>
         </div>
 
-        <div className="max-h-80 overflow-y-auto p-2">
+        <div className="max-h-72 overflow-y-auto p-1.5">
           {filteredItems.length === 0 ? (
-            <div className="p-4 text-center text-xs text-slate-400">
+            <div className="p-4 text-center text-xs text-slate-500">
               No matching modules or actions found.
             </div>
           ) : (
-            <div className="space-y-1">
+            <div className="space-y-0.5">
               {filteredItems.map((item, idx) => {
                 const Icon = item.icon;
                 return (
                   <button
                     key={idx}
                     onClick={() => navigateTo(item.href)}
-                    className="w-full flex items-center justify-between p-2.5 rounded-lg text-left text-sm text-slate-200 hover:bg-slate-800/80 hover:text-sky-300 transition-colors group"
+                    className="w-full flex items-center justify-between p-2 rounded-md text-left text-xs text-slate-200 hover:bg-slate-800/80 hover:text-indigo-300 transition-colors group"
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="p-1.5 rounded-md bg-slate-800 text-sky-400 group-hover:bg-sky-500/10">
-                        <Icon className="h-4 w-4" />
+                    <div className="flex items-center gap-2.5">
+                      <div className="p-1 rounded bg-slate-800 text-indigo-400 group-hover:bg-indigo-500/10">
+                        <Icon className="h-3.5 w-3.5" />
                       </div>
                       <div>
-                        <div className="font-medium text-slate-200 group-hover:text-sky-300">
+                        <div className="font-medium text-slate-200 group-hover:text-indigo-300">
                           {item.title}
                         </div>
-                        <div className="text-[11px] text-slate-500">
+                        <div className="text-[10px] text-slate-500">
                           {item.category}
                         </div>
                       </div>
                     </div>
-                    <CornerDownLeft className="h-3.5 w-3.5 text-slate-500 group-hover:text-sky-400" />
+                    <CornerDownLeft className="h-3 w-3 text-slate-500 group-hover:text-indigo-400" />
                   </button>
                 );
               })}
@@ -148,9 +148,9 @@ export function CommandPalette() {
           )}
         </div>
 
-        <div className="flex items-center justify-between px-4 py-2 border-t border-slate-800 bg-slate-950/60 text-[11px] text-slate-400 font-mono">
-          <span>CRIMORA Command v2.0</span>
-          <span>Use ESC to close</span>
+        <div className="flex items-center justify-between px-3.5 py-1.5 border-t border-slate-800 bg-slate-950 text-[10px] text-slate-500 font-mono">
+          <span>CRIMORA Command System</span>
+          <span>Esc to exit</span>
         </div>
       </div>
     </div>

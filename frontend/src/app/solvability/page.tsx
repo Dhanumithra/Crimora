@@ -37,12 +37,12 @@ import { crimoraApi } from "@/lib/api_client";
 import { SolvabilityPayload, SolvabilityResult } from "@/types/api";
 
 const leadWindowRetentionData = [
-  { window: "0-24h (Immediate)", clearance_pct: 88, historical_avg: 75 },
-  { window: "24-72h (Critical)", clearance_pct: 79, historical_avg: 68 },
-  { window: "3-7 Days (Active)", clearance_pct: 64, historical_avg: 55 },
-  { window: "1-4 Weeks (Follow-up)", clearance_pct: 46, historical_avg: 40 },
-  { window: "1-6 Months (Extended)", clearance_pct: 28, historical_avg: 25 },
-  { window: "6M+ (Cold Archive)", clearance_pct: 14, historical_avg: 12 },
+  { window: "0-24h", clearance_pct: 88, historical_avg: 75 },
+  { window: "24-72h", clearance_pct: 79, historical_avg: 68 },
+  { window: "3-7 Days", clearance_pct: 64, historical_avg: 55 },
+  { window: "1-4 Wks", clearance_pct: 46, historical_avg: 40 },
+  { window: "1-6 Mos", clearance_pct: 28, historical_avg: 25 },
+  { window: "6M+ Archive", clearance_pct: 14, historical_avg: 12 },
 ];
 
 export default function SolvabilityPage() {
@@ -82,7 +82,7 @@ export default function SolvabilityPage() {
   const getTriageBadge = (tier: string) => {
     switch (tier) {
       case "TIER-1":
-        return <Badge variant="success">Tier-1 Immediate Clearance Target</Badge>;
+        return <Badge variant="success">Tier-1 Immediate Clearance</Badge>;
       case "TIER-2":
         return <Badge variant="warning">Tier-2 High Priority</Badge>;
       default:
@@ -110,53 +110,53 @@ export default function SolvabilityPage() {
   };
 
   return (
-    <div className="space-y-5 animate-in fade-in duration-300">
-      {/* Header - Compact */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-slate-800">
+    <div className="space-y-4 animate-in fade-in duration-200">
+      {/* Header - Enterprise Clean */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2.5 border-b border-slate-800">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <Badge variant="default" className="font-mono text-[10px]">
-              INCIDENT TRIAGE
-            </Badge>
-            <Badge variant="secondary" className="font-mono text-[10px]">
-              SOLVABILITY SCORING
-            </Badge>
+          <div className="flex items-center gap-2 mb-0.5">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-indigo-400">
+              Clearance &amp; Triage
+            </span>
+            <span className="text-slate-600">&bull;</span>
+            <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">
+              Active Incident Scorer
+            </span>
           </div>
-          <h1 className="text-xl md:text-2xl font-extrabold tracking-tight text-white flex items-center gap-2.5">
-            <Scale className="h-6 w-6 text-sky-400" />
+          <h1 className="text-xl font-semibold tracking-tight text-slate-100 flex items-center gap-2">
+            <Scale className="h-5 w-5 text-indigo-400" />
             Case Solvability &amp; Triage Priority
           </h1>
-          <p className="text-xs text-slate-400 max-w-2xl">
-            Assess incident clearance likelihood, establish golden investigation time targets, and prioritize detective resource allocation.
-          </p>
         </div>
 
-        <Button
-          onClick={() => handlePredict()}
-          isLoading={loading}
-          size="sm"
-          className="gap-2 shrink-0"
-        >
-          <Sparkles className="h-4 w-4" />
-          Run Solvability Triage
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            onClick={() => handlePredict()}
+            isLoading={loading}
+            size="sm"
+            className="gap-1.5"
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+            Run Solvability Triage
+          </Button>
+        </div>
       </div>
 
-      {/* Main Grid: Form Left, Results & Charts Right */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-        {/* Left Form: 5 Cols */}
-        <div className="lg:col-span-5 space-y-4">
+      {/* Split-Screen Workspace: 4 Cols Left, 8 Cols Right */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        {/* Left Column (4 cols): Incident Parameters */}
+        <div className="lg:col-span-4 space-y-4">
           <Card>
-            <CardHeader className="p-4 pb-2">
-              <CardTitle className="text-base">Case Attributes &amp; Incident Parameters</CardTitle>
-              <CardDescription className="text-xs">
-                Select incident characteristics to calculate clearance probability.
+            <CardHeader>
+              <CardTitle>Incident Parameters</CardTitle>
+              <CardDescription>
+                Provide crime scene details to evaluate case clearance likelihood.
               </CardDescription>
             </CardHeader>
-            <CardContent className="p-4 pt-1">
-              <form onSubmit={handlePredict} className="space-y-3.5">
+            <CardContent>
+              <form onSubmit={handlePredict} className="space-y-3">
                 <Select
-                  label="Investigative Triage Mode"
+                  label="Triage Analysis Mode"
                   value={formData.model}
                   onChange={(e) =>
                     setFormData({ ...formData, model: e.target.value })
@@ -168,20 +168,20 @@ export default function SolvabilityPage() {
                   ]}
                 />
 
-                <div className="pt-1">
+                <div className="pt-0.5">
                   <Slider
                     label="Victim Age"
                     value={formData.victim_age}
                     min={1}
                     max={95}
-                    unit="years"
+                    unit="yrs"
                     onChange={(val) =>
                       setFormData({ ...formData, victim_age: val })
                     }
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-2">
                   <Select
                     label="Victim Sex"
                     value={formData.victim_sex}
@@ -196,7 +196,7 @@ export default function SolvabilityPage() {
                   />
 
                   <Select
-                    label="Victim Demographic"
+                    label="Demographic"
                     value={formData.victim_race}
                     onChange={(e) =>
                       setFormData({ ...formData, victim_race: e.target.value })
@@ -205,50 +205,46 @@ export default function SolvabilityPage() {
                       { label: "General", value: "White" },
                       { label: "Metropolitan", value: "Black" },
                       { label: "Regional", value: "Asian" },
-                      { label: "Indigenous", value: "Native American" },
                       { label: "Unspecified", value: "Unknown" },
                     ]}
                   />
                 </div>
 
                 <Select
-                  label="Weapon / M.O. Modality"
+                  label="Weapon / M.O. Signature"
                   value={formData.weapon}
                   onChange={(e) =>
                     setFormData({ ...formData, weapon: e.target.value })
                   }
                   options={[
                     { label: "Handgun - pistol, revolver", value: "Handgun - pistol, revolver, etc" },
-                    { label: "Knife or cutting instrument", value: "Knife or cutting instrument" },
-                    { label: "Blunt object - hammer, club", value: "Blunt object - hammer, club, etc" },
+                    { label: "Knife / Cutting Instrument", value: "Knife or cutting instrument" },
+                    { label: "Blunt Object (Club/Hammer)", value: "Blunt object - hammer, club, etc" },
                     { label: "Firearm, unspecified", value: "Firearm, type not stated" },
-                    { label: "Shotgun", value: "Shotgun" },
-                    { label: "Rifle", value: "Rifle" },
-                    { label: "Strangulation - hanging", value: "Strangulation - hanging" },
-                    { label: "Personal weapons (hands, fists)", value: "Personal weapons, includes beating" },
+                    { label: "Shotgun / Rifle", value: "Shotgun" },
+                    { label: "Personal Weapons (Hands/Fists)", value: "Personal weapons, includes beating" },
                   ]}
                 />
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-2">
                   <Select
-                    label="Incident Circumstance"
+                    label="Circumstance"
                     value={formData.circumstance}
                     onChange={(e) =>
                       setFormData({ ...formData, circumstance: e.target.value })
                     }
                     options={[
                       { label: "Robbery / Theft", value: "Robbery" },
-                      { label: "Domestic / Triangle", value: "Lover triangle" },
-                      { label: "Brawl / Altercation", value: "Brawl due to influence of alcohol" },
+                      { label: "Domestic Altercation", value: "Lover triangle" },
+                      { label: "Brawl / Dispute", value: "Brawl due to influence of alcohol" },
                       { label: "Narcotics / Contraband", value: "Narcotic drug laws" },
                       { label: "Financial Dispute", value: "Argument over money" },
-                      { label: "Other Arguments", value: "Other arguments" },
-                      { label: "Organized Crime / Gang", value: "Gangland killings" },
+                      { label: "Gangland / Organized", value: "Gangland killings" },
                     ]}
                   />
 
                   <Select
-                    label="Suspect Relationship"
+                    label="Relationship"
                     value={formData.relationship}
                     onChange={(e) =>
                       setFormData({ ...formData, relationship: e.target.value })
@@ -257,17 +253,15 @@ export default function SolvabilityPage() {
                       { label: "Acquaintance", value: "Acquaintance" },
                       { label: "Stranger", value: "Stranger" },
                       { label: "Spouse / Partner", value: "Wife" },
-                      { label: "Significant Other", value: "Girlfriend" },
-                      { label: "Friend / Associate", value: "Friend" },
                       { label: "Family Relative", value: "Family" },
-                      { label: "Unknown / Unestablished", value: "Unknown" },
+                      { label: "Unknown", value: "Unknown" },
                     ]}
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-2">
                   <Select
-                    label="Jurisdiction / City"
+                    label="Jurisdiction City"
                     value={formData.city}
                     onChange={(e) =>
                       setFormData({ ...formData, city: e.target.value })
@@ -283,7 +277,7 @@ export default function SolvabilityPage() {
                   />
 
                   <Select
-                    label="State / Province"
+                    label="Region / State"
                     value={formData.state}
                     onChange={(e) =>
                       setFormData({ ...formData, state: e.target.value })
@@ -310,58 +304,72 @@ export default function SolvabilityPage() {
           </Card>
         </div>
 
-        {/* Right Output: 7 Cols */}
-        <div className="lg:col-span-7 space-y-4">
-          {result ? (
+        {/* Right Column (8 cols): Primary Investigation Triage Output */}
+        <div className="lg:col-span-8 space-y-4">
+          {loading ? (
+            <Card className="p-6 space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="h-4 w-36 bg-slate-800 animate-pulse rounded" />
+                <div className="h-6 w-24 bg-slate-800 animate-pulse rounded" />
+              </div>
+              <div className="h-8 w-48 bg-slate-800 animate-pulse rounded" />
+              <div className="h-2 w-full bg-slate-800 animate-pulse rounded" />
+              <div className="grid grid-cols-2 gap-3 pt-2">
+                <div className="h-16 bg-slate-800/60 animate-pulse rounded" />
+                <div className="h-16 bg-slate-800/60 animate-pulse rounded" />
+              </div>
+              <div className="h-32 bg-slate-800/40 animate-pulse rounded mt-2" />
+            </Card>
+          ) : result ? (
             <>
               {/* Verdict Summary Card */}
-              <Card className="border-sky-500/30 bg-gradient-to-br from-slate-900 via-slate-900/90 to-sky-950/20">
-                <CardHeader className="p-4 pb-2">
+              <Card className="border-slate-850 bg-slate-900">
+                <CardHeader>
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="text-[11px] uppercase font-mono tracking-wider text-sky-400">
-                        Investigation Clearance Verdict
-                      </div>
-                      <CardTitle className="text-lg mt-0.5">
+                      <span className="text-[10px] font-mono uppercase tracking-wider text-indigo-400">
+                        Investigation Triage Verdict
+                      </span>
+                      <CardTitle className="text-base mt-0.5">
                         Clearance Likelihood: {result.clearance_percentage}%
                       </CardTitle>
                     </div>
                     {getTriageBadge(result.triage_tier)}
                   </div>
                 </CardHeader>
-                <CardContent className="p-4 pt-2 space-y-4">
+                <CardContent className="space-y-4">
                   {/* Progress Gauge */}
                   <div>
-                    <div className="flex justify-between text-xs font-semibold mb-1 text-slate-300">
-                      <span>Clearance Probability Gauge</span>
-                      <span className="font-mono text-sky-400 font-bold">
+                    <div className="flex justify-between text-xs font-medium mb-1 text-slate-300">
+                      <span>Clearance Probability Score</span>
+                      <span className="font-mono text-indigo-400 font-semibold">
                         {result.clearance_percentage}%
                       </span>
                     </div>
-                    <div className="w-full h-3 bg-slate-800 rounded-full overflow-hidden border border-slate-700/60 p-0.5">
+                    <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
                       <div
-                        className="h-full rounded-full bg-gradient-to-r from-sky-500 via-teal-400 to-emerald-400 transition-all duration-700 shadow-glow"
+                        className="h-full rounded-full bg-indigo-600 transition-all duration-500"
                         style={{ width: `${Math.max(5, result.clearance_percentage)}%` }}
                       />
                     </div>
                   </div>
 
-                  {/* Priority & Window Target */}
+                  {/* Priority & Golden Window Targets */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div className="p-3 rounded-lg border border-slate-800 bg-slate-950/60">
-                      <div className="flex items-center gap-2 text-xs text-slate-400">
-                        <AlertCircle className="h-4 w-4 text-amber-400" />
-                        <span>Triage Priority</span>
+                    <div className="p-3 rounded-md border border-slate-800 bg-slate-950">
+                      <div className="flex items-center gap-1.5 text-xs text-slate-400">
+                        <AlertCircle className="h-3.5 w-3.5 text-amber-400" />
+                        <span className="text-[11px] uppercase font-medium">Triage Priority</span>
                       </div>
                       <div className="text-sm font-semibold text-slate-200 mt-1 font-mono">
                         {result.triage_priority}
                       </div>
                     </div>
 
-                    <div className="p-3 rounded-lg border border-slate-800 bg-slate-950/60">
-                      <div className="flex items-center gap-2 text-xs text-slate-400">
-                        <Clock className="h-4 w-4 text-sky-400" />
-                        <span>Golden Window Target</span>
+                    <div className="p-3 rounded-md border border-slate-800 bg-slate-950">
+                      <div className="flex items-center gap-1.5 text-xs text-slate-400">
+                        <Clock className="h-3.5 w-3.5 text-indigo-400" />
+                        <span className="text-[11px] uppercase font-medium">Golden Response Window</span>
                       </div>
                       <div className="text-sm font-semibold text-slate-200 mt-1 font-mono">
                         {result.time_window_target}
@@ -369,19 +377,19 @@ export default function SolvabilityPage() {
                     </div>
                   </div>
 
-                  {/* Operational Verdicts Breakdown */}
+                  {/* Operational Verdicts Breakdown Table */}
                   {result.verdicts && result.verdicts.length > 0 && (
-                    <div className="space-y-1.5">
-                      <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-                        Investigative Verdict Breakdown
+                    <div className="space-y-1">
+                      <div className="text-[11px] font-medium uppercase tracking-wider text-slate-400 mb-1">
+                        Consensus Engine Analysis Breakdown
                       </div>
                       <Table>
                         <TableHeader>
                           <TableRow>
-                            <TableHead className="text-xs">Analysis Engine</TableHead>
-                            <TableHead className="text-xs">Likelihood</TableHead>
-                            <TableHead className="text-xs">Clearance Verdict</TableHead>
-                            <TableHead className="text-xs">Confidence</TableHead>
+                            <TableHead>Analysis Engine</TableHead>
+                            <TableHead>Likelihood</TableHead>
+                            <TableHead>Verdict</TableHead>
+                            <TableHead>Confidence</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -390,15 +398,15 @@ export default function SolvabilityPage() {
                               <TableCell className="font-medium text-xs text-slate-300">
                                 {getOperationalModelName(v.model_name, v.model_key)}
                               </TableCell>
-                              <TableCell className="font-mono text-xs text-sky-400 font-bold">
+                              <TableCell className="font-mono text-xs text-indigo-400 font-semibold">
                                 {(v.probability * 100).toFixed(1)}%
                               </TableCell>
                               <TableCell className="text-xs">
                                 <span
                                   className={
                                     v.prediction === 1
-                                      ? "text-emerald-400 font-semibold"
-                                      : "text-rose-400 font-semibold"
+                                      ? "text-emerald-400 font-medium"
+                                      : "text-rose-400 font-medium"
                                   }
                                 >
                                   {v.clearance_verdict}
@@ -414,18 +422,18 @@ export default function SolvabilityPage() {
                     </div>
                   )}
 
-                  {/* Tactical Guidelines */}
+                  {/* Detective Action Protocol */}
                   <div className="space-y-1.5">
-                    <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                    <div className="text-[11px] font-medium uppercase tracking-wider text-slate-400">
                       Recommended Detective Action Protocol
                     </div>
                     <div className="space-y-1">
                       {result.investigative_guidelines.map((guide, idx) => (
                         <div
                           key={idx}
-                          className="flex items-start gap-2 p-2 rounded-lg bg-slate-950/50 border border-slate-800 text-xs text-slate-300"
+                          className="flex items-start gap-2 p-2 rounded-md bg-slate-950 border border-slate-800 text-xs text-slate-300"
                         >
-                          <ChevronRight className="h-3.5 w-3.5 text-sky-400 shrink-0 mt-0.5" />
+                          <ChevronRight className="h-3.5 w-3.5 text-indigo-400 shrink-0 mt-0.5" />
                           <span>{guide}</span>
                         </div>
                       ))}
@@ -433,71 +441,68 @@ export default function SolvabilityPage() {
                   </div>
                 </CardContent>
               </Card>
+
+              {/* Response Window Clearance Retention Curve */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Case Clearance Probability by Lead Response Window</CardTitle>
+                  <CardDescription>
+                    Resolution probability drops significantly as lead response exceeds initial 72 hours.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="h-44">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={leadWindowRetentionData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+                      <defs>
+                        <linearGradient id="indigoGrad" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.6} />
+                          <stop offset="95%" stopColor="#4f46e5" stopOpacity={0.0} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+                      <XAxis dataKey="window" stroke="#64748b" fontSize={10} />
+                      <YAxis stroke="#64748b" fontSize={10} domain={[0, 100]} unit="%" />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "#0f172a",
+                          borderColor: "#1e293b",
+                          borderRadius: "6px",
+                          fontSize: "11px",
+                        }}
+                        formatter={(val: any) => [`${val}%`, "Clearance Probability"]}
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="clearance_pct"
+                        stroke="#4f46e5"
+                        strokeWidth={2}
+                        fillOpacity={1}
+                        fill="url(#indigoGrad)"
+                        name="Clearance Probability"
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="historical_avg"
+                        stroke="#64748b"
+                        strokeDasharray="4 4"
+                        name="Historical Average"
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
             </>
           ) : (
-            <Card className="border-dashed border-slate-800 bg-slate-900/30 flex flex-col items-center justify-center p-8 text-center h-64">
-              <Scale className="h-10 w-10 text-slate-600 mb-2" />
+            <Card className="border-dashed border-slate-800 bg-slate-900/40 flex flex-col items-center justify-center p-8 text-center h-72">
+              <Scale className="h-8 w-8 text-slate-600 mb-2" />
               <h3 className="text-sm font-semibold text-slate-300">
                 Awaiting Case Parameters
               </h3>
               <p className="text-xs text-slate-500 max-w-sm mt-1">
-                Configure the case parameters on the left and select &quot;Calculate Clearance Likelihood&quot; to generate triage priority.
+                Configure incident metadata in the left workspace and click &quot;Run Solvability Triage&quot; to calculate clearance priority.
               </p>
             </Card>
           )}
-
-          {/* Practical Response Window Clearance Curve */}
-          <Card>
-            <CardHeader className="p-4 pb-2">
-              <CardTitle className="text-sm flex items-center gap-2">
-                <TrendingUp className="h-4 w-4 text-sky-400" />
-                Case Clearance Probability by Lead Response Window
-              </CardTitle>
-              <CardDescription className="text-xs">
-                Historical resolution probability drops steeply outside the golden 48-hour response window.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="p-4 pt-1 h-56">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={leadWindowRetentionData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="clearanceGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#38bdf8" stopOpacity={0.8} />
-                      <stop offset="95%" stopColor="#38bdf8" stopOpacity={0.05} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                  <XAxis dataKey="window" stroke="#64748b" fontSize={10} />
-                  <YAxis stroke="#64748b" fontSize={10} domain={[0, 100]} unit="%" />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "#0d1322",
-                      borderColor: "#1e293b",
-                      borderRadius: "8px",
-                      fontSize: "11px",
-                    }}
-                    formatter={(val: any) => [`${val}%`, "Clearance Probability"]}
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="clearance_pct"
-                    stroke="#38bdf8"
-                    strokeWidth={2}
-                    fillOpacity={1}
-                    fill="url(#clearanceGrad)"
-                    name="Priority Triage Clearance"
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="historical_avg"
-                    stroke="#64748b"
-                    strokeDasharray="4 4"
-                    name="Historical Average"
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
         </div>
       </div>
     </div>

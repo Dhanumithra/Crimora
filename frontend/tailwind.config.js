@@ -9,38 +9,40 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: "#070b14",
-        card: "#0d1322",
-        "card-hover": "#131b30",
+        background: "#090d16",
+        card: "#0f172a",
+        "card-hover": "#1e293b",
         border: "#1e293b",
-        "border-glow": "#2563eb40",
+        "border-subtle": "#1e293b80",
         primary: {
-          DEFAULT: "#38bdf8",
-          foreground: "#030712",
+          DEFAULT: "#4f46e5",
+          hover: "#6366f1",
+          foreground: "#ffffff",
         },
         secondary: {
-          DEFAULT: "#0ea5e9",
+          DEFAULT: "#1e293b",
+          hover: "#334155",
           foreground: "#f8fafc",
         },
         accent: {
           DEFAULT: "#10b981",
-          foreground: "#f8fafc",
+          foreground: "#ffffff",
         },
         warning: "#f59e0b",
-        danger: "#ef4444",
+        danger: "#f43f5e",
         muted: {
           DEFAULT: "#64748b",
           foreground: "#94a3b8",
         },
       },
       fontFamily: {
-        sans: ["var(--font-sans)", "Inter", "system-ui", "sans-serif"],
+        sans: ["var(--font-sans)", "Inter", "system-ui", "-apple-system", "sans-serif"],
         mono: ["var(--font-mono)", "JetBrains Mono", "monospace"],
       },
-      boxShadow: {
-        glow: "0 0 20px -5px rgba(56, 189, 248, 0.3)",
-        "glow-emerald": "0 0 20px -5px rgba(16, 185, 129, 0.3)",
-        "glow-red": "0 0 20px -5px rgba(239, 68, 68, 0.3)",
+      borderRadius: {
+        lg: "0.5rem",
+        md: "0.375rem",
+        sm: "0.25rem",
       },
       keyframes: {
         pulseSlow: {
