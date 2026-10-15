@@ -94,6 +94,8 @@ Thumbs.db
 *.log
 *.tmp
 *.bak
+~$*
+~$*.docx
 scratch/
 
 # Testing caches
